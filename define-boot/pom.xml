@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.kamomileware.define</groupId>
-        <artifactId>define-parent</artifactId>
+        <artifactId>define-project</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../define-parent</relativePath>
+
     </parent>
     <artifactId>define-boot</artifactId>
     <packaging>pom</packaging>
