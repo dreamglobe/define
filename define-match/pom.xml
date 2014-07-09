@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>define-project</artifactId>
         <groupId>com.kamomileware.define</groupId>
-        <version>0.3</version>
+        <version>1.0-SNAPSHOT</version>
 
     </parent>
     <artifactId>define-match</artifactId>
 
     <scm>
-        <connection>scm:svn:http://pepe@karma-server/define/tags/define-project-0.3/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://pepe@karma-server/define/${project.artifactId}/tags/define-project-0.3/${project.artifactId}</developerConnection>
-        <url>[ http://karma-server/websvn/listing.php/tags/define-project-0.3/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
+        <connection>scm:svn:http://pepe@karma-server/define/trunk/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://pepe@karma-server/define/${project.artifactId}</developerConnection>
+        <url>[ http://karma-server/websvn/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
     </scm>
 
     <properties>
@@ -404,7 +406,7 @@
                         <argument>-Dorg.aspectj.tracing.factory=default</argument>
                         <argument>-Djava.library.path=/opt/typesafe-console-developer-1.3.1/lib/sigar</argument>
                         <argument>-classpath</argument>
-                        <classpath />
+                        <classpath/>
                         <argument>com.kamomileware.define.Application</argument>
                     </arguments>
                 </configuration>
