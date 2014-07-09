@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>define-project</artifactId>
         <groupId>com.kamomileware.define</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1</version>
 
     </parent>
     <artifactId>define-match</artifactId>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/trunk/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}</developerConnection>
-        <url>[ http://karma-server/websvn/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
+        <connection>scm:svn:http://karma-server/svn/define/tags/v.0.1/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/tags/v.0.1/${project.artifactId}</developerConnection>
+        <url>[ http://karma-server/websvn/listing.php/tags/v.0.1/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
     </scm>
 
     <properties>
@@ -406,7 +404,7 @@
                         <argument>-Dorg.aspectj.tracing.factory=default</argument>
                         <argument>-Djava.library.path=/opt/typesafe-console-developer-1.3.1/lib/sigar</argument>
                         <argument>-classpath</argument>
-                        <classpath/>
+                        <classpath />
                         <argument>com.kamomileware.define.Application</argument>
                     </arguments>
                 </configuration>
