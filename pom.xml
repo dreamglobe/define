@@ -16,8 +16,8 @@
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:svn:http://pepe@karma-server/define/trunk</connection>
-        <developerConnection>scm:svn:http://pepe@karma-server/define/trunk</developerConnection>
+        <connection>scm:svn:http://karma-server/svn/define/trunk</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/trunk</developerConnection>
         <url>http://karma-server/websvn/listing.php?repname=define</url>
     </scm>
 
