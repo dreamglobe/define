@@ -1,0 +1,63 @@
+<p>This is the result view.</p>
+
+<hr/>
+<h4>Resultados</h4>
+
+<h5>Definición correcta</h5>
+<table>
+    <thead><td>Definición Correcta</td><td>Veces votada</td></thead>
+    <tbody><tr><td>{{getDefinition(correctDefId)}}</td><td>{{correctNumVotes}}</td></tr></tbody>
+</table>
+<br/>
+<h5>Definiciones de los jugadores</h5>
+<table>
+    <thead><td></td><td>Jugador</td><td>Definición</td><td>Votos recibidos</td></thead>
+    <tr ng-repeat="score in result | orderBy : '-turnPoints' " ng-class="{on: score.pid == user.id}">
+        <td>{{$index+1}}</td>
+        <td>{{userNames[score.pid]}}</td>
+        <td>{{getDefinition(score.defId)}}</td>
+        <td>{{score.votePoints}}</td>
+    </tr>
+</table>
+<br/>
+<h5>Puntuaciones del turno</h5>
+<table>
+    <thead><td></td><td>Jugador</td><td>Puntos</td><td>Definición</td><td>Votos de</td></thead>
+    <tr ng-repeat="score in result | orderBy : '-turnPoints' " ng-class="{on: score.pid == user.id}">
+        <td>{{$index+1}}</td>
+        <td>{{userNames[score.pid]}}</td>
+        <td>+{{score.turnPoints}}</td>
+        <td>
+            <span ng-show="score.correctDefinition"
+                  class="glyphicon glyphicon-ok"/>
+            <span ng-show="!score.correctDefinition"
+                  class="glyphicon glyphicon-ko"/>
+        </td>
+        <td>
+            <span ng-repeat="j in score.pidVoters">
+                {{userNames[j]}}
+            </span>
+            <span ng-show="score.pidVoters.length == 0">-</span>
+        </td>
+    </tr>
+    <tr>
+        <td/><td/><td/><td/>
+        <td>
+            <button ng-click="toggleReady()" ng-class="{on:ready.state}">{{ready.label}}</button>
+        </td>
+    </tr>
+</table>
+
+
+<hr/>
+<h4>Parrilla</h4>
+<table>
+    <tr ng-repeat='(key,value) in userNames'>
+        <td ng-class="{on:isReady[key]}">{{value}} - {{result[key]}}</td>
+    </tr>
+</table>
+
+
+<hr/>
+<h4>Timeout</h4>
+<span>{{counter}}</span> Seg.

@@ -1,0 +1,20 @@
+<p>This is the answer view.</p>
+<h4>Answer</h4>
+<input ngbk-focus ng-model="response"></input>
+<button ng-click="sendDefinition(response)">Enviar</button>
+
+<hr/>
+<h4>Parrilla</h4>
+<table>
+    <thead><td>Jugador</td><td>Definición</td><td>Puntos</td><td>Última ronda</td></thead>
+    <tr ng-repeat=' (key, value) in userNames' ng-class="{on:isResponsed[key]}">
+        <td ng-class="{on:isResponsed[key]}">{{value}}</td>
+        <td><span ng-show="isResponsed[key]" class="glyphicon glyphicon-ok"></span></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+<hr/>
+<h4>Timeout</h4>
+<span>{{counter}}</span> Seg.
