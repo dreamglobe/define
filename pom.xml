@@ -10,13 +10,13 @@
 
     <groupId>com.kamomileware.define</groupId>
     <artifactId>define-project</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/tags/v.0.1</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/tags/v.0.1</developerConnection>
-        <url>http://karma-server/websvn/listing.php/tags/v.0.1?repname=define</url>
+        <connection>scm:svn:http://karma-server/svn/define/trunk</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/trunk</developerConnection>
+        <url>http://karma-server/websvn/listing.php?repname=define</url>
     </scm>
 
     <modules>
