@@ -14,9 +14,9 @@
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/trunk</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/trunk</developerConnection>
-        <url>http://karma-server/websvn/listing.php?repname=define</url>
+        <connection>scm:svn:http://karma-server/svn/define/branches/dev-T64-modelo-memoria-v.0.2</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/branches/dev-T64-modelo-memoria-v.0.2</developerConnection>
+        <url>http://karma-server/websvn/listing.php/branches/dev-T64-modelo-memoria-v.0.2?repname=define</url>
     </scm>
 
     <modules>
