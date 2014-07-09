@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.kamomileware.define</groupId>
-        <artifactId>define-project</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>com.kamomileware.maven</groupId>
+        <artifactId>maven-parent</artifactId>
+        <version>1</version>
     </parent>
 
     <groupId>com.kamomileware.define</groupId>
