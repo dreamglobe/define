@@ -4,15 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>deffine-parent</artifactId>
-        <groupId>com.kamomileware.deffine</groupId>
+        <artifactId>define-parent</artifactId>
+        <groupId>com.kamomileware.define</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../define-parent</relativePath>
     </parent>
     <artifactId>define-match</artifactId>
 
+    <scm>
+        <connection>scm:svn:http://karma-server/define/trunk/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://karma-server/define/${project.artifactId}</developerConnection>
+        <url>[ http://karma-server/websvn/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
+    </scm>
+
     <properties>
         <spring-boot.version>1.1.3.RELEASE</spring-boot.version>
-        <start-class>com.kamomileware.deffine.Application</start-class>
+        <start-class>com.kamomileware.define.Application</start-class>
     </properties>
 
     <dependencyManagement>
