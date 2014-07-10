@@ -1,6 +1,6 @@
 {
-  "name": "deffine",
-  "version": "0.0.0",
+  "name": "define-client",
+  "version": "0.2.0",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.1",
