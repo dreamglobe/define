@@ -1,6 +1,9 @@
 package com.kamomileware.define.model;
 
+import com.kamomileware.define.model.round.PlayerData;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -12,7 +15,7 @@ public class PlayerScore {
     private final List<String> pidVoters;
     private final boolean correctDefinition;
 
-    public PlayerScore(String pid, int defId, int votePoints, int turnPoints, int totalPoints, List<String> pidVoters, boolean correctDefinition) {
+    private PlayerScore(String pid, int defId, int votePoints, int turnPoints, int totalPoints, List<String> pidVoters, boolean correctDefinition) {
         this.pid = pid;
         this.defId = defId;
         this.votePoints = votePoints;
@@ -20,6 +23,16 @@ public class PlayerScore {
         this.totalPoints = totalPoints;
         this.pidVoters = pidVoters;
         this.correctDefinition = correctDefinition;
+    }
+
+    private PlayerScore(PlayerData.Score score){
+        pid = score.getPlayerData().getPid();
+        defId = score.getPlayerData().getDefinition().getId();
+        votePoints = score.getVoteScore();
+        turnPoints = score.getTurnScore();
+        totalPoints = score.getTotalScore();
+        pidVoters = score.getVoters();
+        correctDefinition = score.isCorrectVote();
     }
 
     public String getPid() {
@@ -48,5 +61,13 @@ public class PlayerScore {
 
     public boolean isCorrectDefinition() {
         return correctDefinition;
+    }
+
+    public static PlayerScore createPlayerScore(PlayerData.Score score) {
+        return new PlayerScore(score);
+    }
+
+    public static List<PlayerScore> createPlayersScore(List<PlayerData.Score> scores) {
+        return scores.stream().map(s -> new PlayerScore(s)).collect(Collectors.toList()) ;
     }
 }

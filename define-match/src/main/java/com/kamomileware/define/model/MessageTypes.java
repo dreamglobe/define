@@ -3,10 +3,13 @@ package com.kamomileware.define.model;
 import com.fasterxml.jackson.annotation.*;
 import com.kamomileware.define.model.ItemDefinition;
 import com.kamomileware.define.model.PlayerScore;
+import com.kamomileware.define.model.round.TermDefinition;
+import com.kamomileware.define.model.term.Term;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by pepe on 29/06/14.
@@ -182,20 +185,20 @@ public class MessageTypes {
     public static class Result extends PhaseDeffineMessage {
         private static final long serialVersionUID = -7914974657516737999L;
         private final int correctDefId;
-        private final int correctNumVotes;
+        private final long correctNumVotes;
         private final List<PlayerScore> scores;
-        public Result(int correctDefId, int correctNumVotes, List<PlayerScore> scores, long millis) {
+        public Result(int correctDefId, List<PlayerScore> scores, long millis) {
             super(millis);
             this.scores = scores;
             this.correctDefId = correctDefId;
-            this.correctNumVotes = correctNumVotes;
+            this.correctNumVotes = scores.stream().filter(ps -> ps.isCorrectDefinition()).count();
         }
 
         public int getCorrectDefId() {
             return correctDefId;
         }
 
-        public int getCorrectNumVotes() {
+        public long getCorrectNumVotes() {
             return correctNumVotes;
         }
 
@@ -206,21 +209,17 @@ public class MessageTypes {
 
     public static class ResultForRegisterUser extends Result {
         private final List<ItemDefinition> definitions;
-        private final ItemDefinition playerDefinition;
 
-        public ResultForRegisterUser(List<ItemDefinition> definitions, ItemDefinition playerDefinition, int correctDefId, int correctNumVotes, List<PlayerScore> scores, long millis) {
-            super(correctDefId, correctNumVotes, scores, millis);
+        public ResultForRegisterUser(int correctDefId, List<PlayerScore> scores,
+                                     List<ItemDefinition> definitions, long millis) {
+            super(correctDefId, scores, millis);
             this.definitions = definitions;
-            this.playerDefinition = playerDefinition;
         }
 
         public List<ItemDefinition> getDefinitions() {
             return definitions;
         }
 
-        public ItemDefinition getPlayerDefinition() {
-            return playerDefinition;
-        }
     }
 
     /**
@@ -241,20 +240,23 @@ public class MessageTypes {
 
     public static class StartDefinition extends PhaseDeffineMessage {
         private static final long serialVersionUID = 8232869194624432443L;
-        public StartDefinition(long millis){super(millis);}
-    }
+        private final Term term;
 
-    public final static StartDefinition START_RESPONSE = new StartDefinition(60000);
+        public StartDefinition(long millis, Term term){
+            super(millis);
+            this.term = term;
+        }
+    }
 
     public static class StartVote extends PhaseDeffineMessage {
         private static final long serialVersionUID = 1097452098031248677L;
         private final List<ItemDefinition> definitions;
         private final ItemDefinition playerDefinition;
 
-        public StartVote(long millis, List<ItemDefinition> definitions, int playerDefId, String playerDefinition){
+        public StartVote(long millis, List<ItemDefinition> definitions, ItemDefinition playerDefinition ){
             super(millis);
             this.definitions = definitions;
-            this.playerDefinition = new ItemDefinition(playerDefId, playerDefinition);
+            this.playerDefinition = playerDefinition;
         }
 
         public List<ItemDefinition> getDefinitions(){
@@ -273,6 +275,15 @@ public class MessageTypes {
         private static final long serialVersionUID = -1010573446123056025L;
         private final String userId;
         private final String response;
+
+        /**
+         * Constructor for informing the rest of the players
+         * @param userId
+         */
+        public UserDefinition(String userId) {
+            this.userId = userId;
+            this.response=null;
+        }
 
         public UserDefinition(String userId, String response) {
             this.userId = userId;

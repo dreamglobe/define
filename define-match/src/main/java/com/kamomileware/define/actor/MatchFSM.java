@@ -25,15 +25,13 @@ public abstract class MatchFSM extends UntypedActor{
     private long startPhaseTime = 0;
 
 
-    protected enum State { STOPPED, PHASE_RESPONSE, PHASE_VOTE, PHASE_RESULT; }
-
-    private State state = State.STOPPED;
+    private RoundPhase state = RoundPhase.STOPPED;
 
     protected void init(){
         ;
     }
 
-    protected void setState(State s){
+    protected void setState(RoundPhase s){
         transition(this.state, s);
         markStartPhaseTime();
         if(this.state != s){
@@ -47,16 +45,16 @@ public abstract class MatchFSM extends UntypedActor{
     }
 */
 
-    abstract protected void transition(State oldState, State newState);
+    abstract protected void transition(RoundPhase oldState, RoundPhase newState);
 
 
     private void markStartPhaseTime(){
         this.startPhaseTime = System.currentTimeMillis();
     }
 
-    protected long getPhaseMillisLeft(FiniteDuration duration){
-        long timeleft = duration.toMillis() - (System.currentTimeMillis()-this.startPhaseTime);
-        return timeleft < 0? 0 : timeleft;
+    protected long getPhaseMillisLeft(long phaseMilis){
+        long timeleft = phaseMilis - (System.currentTimeMillis()-this.startPhaseTime);
+        return timeleft < 0 ? 0 : timeleft;
     }
 
     protected int startLatch(){

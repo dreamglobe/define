@@ -1,9 +1,13 @@
 package com.kamomileware.define.model.round;
 
 import akka.actor.ActorRef;
+import com.kamomileware.define.actor.RoundPhase;
+import com.kamomileware.define.model.ItemDefinition;
 import com.kamomileware.define.model.term.Term;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Created by pepe on 10/07/14.
@@ -15,13 +19,12 @@ public class Round implements DefinitionResolver {
     private final List<PlayerData> players;
     private final Map<ActorRef, PlayerData> playersByRef;
     private final Map<String, PlayerData> playersByPid;
+    private final Map<String, String> playerNamesByPid;
 
     private final Term term;
-    private final Map<Integer, TermDefinition> termDefinitionMap;
     private final List<TermDefinition> roundDefinitions;
 
     private final MatchConfiguration matchConf;
-
 
     /**
      * First round constructor
@@ -35,8 +38,8 @@ public class Round implements DefinitionResolver {
         this.players = null;
         this.playersByPid = null;
         this.playersByRef = null;
-        this.termDefinitionMap = null;
         roundDefinitions = null;
+        playerNamesByPid = null;
     }
 
     /**
@@ -51,33 +54,36 @@ public class Round implements DefinitionResolver {
         this.players = new ArrayList<>(previousRound.getPlayers());
         this.playersByPid = new HashMap<>(previousRound.getPlayersByPid());
         this.playersByRef = new HashMap<>(previousRound.getPlayersByRef());
-        this.termDefinitionMap = null;
+        playerNamesByPid = new HashMap<>(previousRound.getPlayerNamesByPid());;
         roundDefinitions = null;
     }
 
     public boolean addPlayerData(ActorRef playerRef, String name, String pid){
-        boolean added = false;
-        if (!playersByRef.containsKey(playerRef) && !playersByPid.containsKey(pid)) {
-            PlayerData newPlayerData = PlayerData.createPlayerData(playerRef, name, pid, this);
-            this.players.add(newPlayerData);
-            this.playersByPid.put(pid, newPlayerData);
-            this.playersByRef.put(playerRef, newPlayerData);
-            added = true;
+        boolean alreadyExists = playersByRef.containsKey(playerRef) || playersByPid.containsKey(pid);
+        if (!alreadyExists) {
+            PlayerData player = PlayerData.createPlayerData(playerRef, name, pid, this);
+            this.players.add(player);
+            this.playersByPid.put(pid, player);
+            this.playersByRef.put(playerRef, player);
+            this.playerNamesByPid.put(pid, name);
         }
-        return added;
+        return !alreadyExists;
     }
 
-    public boolean removePlayerData(PlayerData playerData){
-        boolean removed = false;
+    public int removePlayerData(PlayerData playerData){
         final ActorRef ref = playerData.getRef();
         final String pid = playerData.getPid();
         if (players.contains(playerData) && playersByPid.containsKey(pid) && playersByRef.containsKey(ref)) {
             players.remove(playerData);
             playersByPid.remove(pid);
             playersByRef.remove(ref);
-            removed = true;
+            playerNamesByPid.remove(pid);
         }
-        return removed;
+        return players.size();
+    }
+
+    public int removePlayerData(ActorRef ref) {
+        return removePlayerData(playersByRef.remove(ref));
     }
 
     public PlayerData getPlayerDataByRef(ActorRef playerRef) {
@@ -108,40 +114,125 @@ public class Round implements DefinitionResolver {
         return players;
     }
 
+    public Map<String,String> getPlayerNamesByPid() {
+        return Collections.unmodifiableMap(playerNamesByPid);
+    }
+
+    public String getPlayerPidByRef(ActorRef sender) {
+        return getPlayerDataByRef(sender).getPid();
+    }
+
     public Term getTerm() {
         return term;
     }
 
+    @Override
     public MatchConfiguration getMatchConf() {
         return matchConf;
+    }
+
+    @Override
+    public Optional<TermDefinition> findDefinitionById(Integer idDef) {
+        return players.stream()
+                .map(PlayerData::getDefinition)
+                .filter(d -> idDef.equals(d.getId()))
+                .findFirst();
     }
 
     public int getRoundNumber() {
         return roundNumber;
     }
 
-    TermDefinition getDefinitionById(Integer definitionId) {
-        return termDefinitionMap.get(definitionId);
+    public void setPlayerDefinition(ActorRef playerRef, String definition) {
+        final PlayerData player = playersByRef.get(playerRef);
+        if(player!=null){
+            player.setDefinition(term, definition);
+        }
     }
 
-    public void setRoundDefinitions(){
-        this.roundDefinitions.addAll(shuffleDefinitions());
+    public void buildRoundDefinitions(){
+        this.roundDefinitions.addAll(players.stream()
+                .map(p -> p.getDefinition())
+                .filter(td -> td == null)
+                .collect(Collectors.toList()));
+        this.roundDefinitions.add(getCorrectDefinition());
+        Collections.shuffle(roundDefinitions);
     }
 
-    List<TermDefinition> shuffleDefinitions(){
-        final ArrayList<TermDefinition> result = new ArrayList<TermDefinition>(termDefinitionMap.values());
-        Collections.shuffle(result);
-        return result;
+    public TermDefinition getCorrectDefinition() {
+        return new TermDefinition(term);
     }
 
-    List<TermDefinition> getShuffleDefinitionsForPlayer(String pid){
-        List<TermDefinition> playerDefinitions = new ArrayList<>(this.shuffleDefinitions());
-        playerDefinitions.remove(playersByPid.get(pid).getDefinition());
-        return playerDefinitions;
+    public void playerVote(ActorRef playerRef, Integer voteId){
+        playersByRef.get(playerRef).vote(voteId);
     }
 
-    @Override
-    public TermDefinition resolveDefinitionId(Integer id) {
-        return getDefinitionById(id);
+    private List<ItemDefinition> transformTermInItemDefinition(List<TermDefinition> definitions) {
+        return definitions.stream().map(d -> new ItemDefinition(d.getId(),d.getDefinition()))
+                .collect(Collectors.toList());
+    }
+
+    public List<ItemDefinition> getRoundItemDefinitions(){
+        return transformTermInItemDefinition(roundDefinitions);
+    }
+
+    public List<ItemDefinition> getDefinitionsForPlayer(PlayerData player){
+        List<TermDefinition> playerDefinitions = new ArrayList<>(roundDefinitions);
+        playerDefinitions.remove(player.getDefinition());
+        return transformTermInItemDefinition(playerDefinitions);
+    }
+
+    public List<PlayerData.Score> applyVotesAndBuildRoundResults() {
+        players.stream().forEach(p -> p.getVote().ifPresent(VoteDefinition::applyVote));
+        return getScores();
+    }
+
+    public List<PlayerData.Score> getScores() {
+        return players.stream().map(PlayerData::getScore).collect(Collectors.toList());
+    }
+
+    public boolean isPlayerReadyInResult(ActorRef playerRef){
+        return getPlayerDataByRef(playerRef).isReadyInResult();
+    }
+
+    public boolean setPlayerReadyInResult(ActorRef playerRef, boolean isReady){
+        getPlayerDataByRef(playerRef).setReadyInResult(isReady);
+        return isReady;
+    }
+
+    public void applyPlayers(Consumer<PlayerData> p){
+        players.forEach(p);
+    }
+
+    public void applyPlayersRefs(Consumer<ActorRef> p){
+        players.stream().map(PlayerData::getRef).forEach(p);
+    }
+
+    public boolean hasAnyoneResponse() {
+        return players.stream().anyMatch(p -> p.hasResponse());
+    }
+
+    public boolean hasEveryoneResponse() {
+        return players.stream().allMatch(p -> p.hasResponse());
+    }
+
+    public boolean hasEveryonrVote() {
+        return players.stream().allMatch(p -> p.hasVote());
+    }
+
+    public boolean isEveryoneReadyInResult() {
+        return players.stream().allMatch(p -> p.isReadyInResult());
+    }
+
+    public boolean canExtendPhase(RoundPhase state) {
+        return matchConf.getPhaseConf(state).canExtend(this);
+    }
+
+    public void extendPhase(RoundPhase state) {
+        matchConf.getPhaseConf(state).setExtended(true);
+    }
+
+    public long getPhaseTotalDuration(RoundPhase state) {
+        return matchConf.getPhaseConf(state).getTotalDuration();
     }
 }

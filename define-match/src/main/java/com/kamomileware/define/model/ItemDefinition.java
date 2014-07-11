@@ -1,5 +1,7 @@
 package com.kamomileware.define.model;
 
+import com.kamomileware.define.model.round.TermDefinition;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +26,4 @@ public class ItemDefinition {
         return this.definition;
     }
 
-    public static List<ItemDefinition> convertToList(Map<Integer, String> definitions) {
-        List<ItemDefinition> result = new ArrayList<>(definitions.size());
-        definitions.forEach( (k,v) -> result.add(new ItemDefinition(k,v)));
-        return result;
-    }
 }

@@ -11,6 +11,11 @@ public class Term {
     private TermCategory category;
     private CardDefinition card;
 
+    public Term(String name, String definition, TermCategory ch) {
+        this.name = name;
+        this.definition = definition;
+        this.category = ch;
+    }
 
     public String getDefinition() {
         return definition;

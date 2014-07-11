@@ -5,6 +5,8 @@ import com.kamomileware.define.model.MessageTypes;
 import com.kamomileware.define.model.MessageTypes.ClientMessage;
 import com.kamomileware.define.model.MessageTypes.ClientReady;
 import com.kamomileware.define.model.MessageTypes.ClientResponse;
+import com.kamomileware.define.model.term.Term;
+import com.kamomileware.define.model.term.TermCategory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -47,7 +49,8 @@ public class TestJacksonParser {
         System.out.println(mapper.writeValueAsString(new MessageTypes.UsersList(new HashMap<>())));
         System.out.println(mapper.writeValueAsString(new MessageTypes.RegisterUser("userId","userName")));
         System.out.println(mapper.writeValueAsString(new MessageTypes.Latch(2, 30)));
-        System.out.println(mapper.writeValueAsString(MessageTypes.START_RESPONSE));
+        final Term term = new Term("Term", "Definicion de term", TermCategory.AB);
+        System.out.println(mapper.writeValueAsString(new MessageTypes.StartDefinition(60000, term)));
         System.out.println(mapper.writeValueAsString(MessageTypes.START));
         System.out.println(mapper.writeValueAsString(MessageTypes.STOP));
     }

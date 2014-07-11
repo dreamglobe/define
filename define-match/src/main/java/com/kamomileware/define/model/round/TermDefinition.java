@@ -60,7 +60,7 @@ public class TermDefinition {
         return definition;
     }
 
-    public Integer getDefinitionId() {
+    public Integer getId() {
         return definitionId;
     }
 
