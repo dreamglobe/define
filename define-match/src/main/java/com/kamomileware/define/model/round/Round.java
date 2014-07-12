@@ -3,6 +3,7 @@ package com.kamomileware.define.model.round;
 import akka.actor.ActorRef;
 import com.kamomileware.define.actor.RoundPhase;
 import com.kamomileware.define.model.ItemDefinition;
+import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.term.Term;
 
 import java.util.*;
@@ -32,14 +33,14 @@ public class Round implements DefinitionResolver {
      * @param matchConf
      */
     public Round(Term term, MatchConfiguration matchConf) {
-        this.roundNumber = 1;
+        this.roundNumber = 0;
         this.term = term;
         this.matchConf = matchConf;
-        this.players = null;
-        this.playersByPid = null;
-        this.playersByRef = null;
-        roundDefinitions = null;
-        playerNamesByPid = null;
+        this.players = new ArrayList<>();
+        this.playersByPid = new HashMap<>();
+        this.playersByRef = new HashMap<>();
+        this.roundDefinitions = new ArrayList<>();
+        this.playerNamesByPid = new HashMap<>();
     }
 
     /**
@@ -49,14 +50,20 @@ public class Round implements DefinitionResolver {
      */
     public Round(Term term, Round previousRound) {
         this.term = term;
-        this.roundNumber = previousRound.getRoundNumber();
+        this.roundNumber = previousRound.getRoundNumber()+1;
         this.matchConf = previousRound.getMatchConf();
-        this.players = new ArrayList<>(previousRound.getPlayers());
-        this.playersByPid = new HashMap<>(previousRound.getPlayersByPid());
-        this.playersByRef = new HashMap<>(previousRound.getPlayersByRef());
-        playerNamesByPid = new HashMap<>(previousRound.getPlayerNamesByPid());;
-        roundDefinitions = null;
+        this.players = previousRound.getPlayers();
+        this.playersByPid = previousRound.getPlayersByPid();
+        this.playersByRef = previousRound.getPlayersByRef();
+        this.playerNamesByPid = previousRound.getPlayerNamesByPid();
+        this.roundDefinitions = new ArrayList<>();
+        this.players.forEach(p -> p.prepareNextRound(this));
     }
+
+    /**
+     * Prepare Players data for next round
+     */
+
 
     public boolean addPlayerData(ActorRef playerRef, String name, String pid){
         boolean alreadyExists = playersByRef.containsKey(playerRef) || playersByPid.containsKey(pid);
@@ -83,7 +90,7 @@ public class Round implements DefinitionResolver {
     }
 
     public int removePlayerData(ActorRef ref) {
-        return removePlayerData(playersByRef.remove(ref));
+        return removePlayerData(playersByRef.get(ref));
     }
 
     public PlayerData getPlayerDataByRef(ActorRef playerRef) {
@@ -115,6 +122,10 @@ public class Round implements DefinitionResolver {
     }
 
     public Map<String,String> getPlayerNamesByPid() {
+        return this.playerNamesByPid;
+    }
+
+    public Map<String,String> getPlayerMap(){
         return Collections.unmodifiableMap(playerNamesByPid);
     }
 
@@ -133,9 +144,8 @@ public class Round implements DefinitionResolver {
 
     @Override
     public Optional<TermDefinition> findDefinitionById(Integer idDef) {
-        return players.stream()
-                .map(PlayerData::getDefinition)
-                .filter(d -> idDef.equals(d.getId()))
+        return roundDefinitions.stream()
+                .filter(d -> d.getId().equals(idDef))
                 .findFirst();
     }
 
@@ -153,7 +163,7 @@ public class Round implements DefinitionResolver {
     public void buildRoundDefinitions(){
         this.roundDefinitions.addAll(players.stream()
                 .map(p -> p.getDefinition())
-                .filter(td -> td == null)
+                .filter(td -> td != null)
                 .collect(Collectors.toList()));
         this.roundDefinitions.add(getCorrectDefinition());
         Collections.shuffle(roundDefinitions);
@@ -182,13 +192,17 @@ public class Round implements DefinitionResolver {
         return transformTermInItemDefinition(playerDefinitions);
     }
 
-    public List<PlayerData.Score> applyVotesAndBuildRoundResults() {
+    public List<PlayerScore> applyVotesAndBuildRoundResults() {
         players.stream().forEach(p -> p.getVote().ifPresent(VoteDefinition::applyVote));
-        return getScores();
+        return createPlayersScores();
     }
 
     public List<PlayerData.Score> getScores() {
         return players.stream().map(PlayerData::getScore).collect(Collectors.toList());
+    }
+
+    public List<PlayerScore> createPlayersScores() {
+        return players.stream().map(PlayerData::createPlayerScore).collect(Collectors.toList());
     }
 
     public boolean isPlayerReadyInResult(ActorRef playerRef){
@@ -235,4 +249,5 @@ public class Round implements DefinitionResolver {
     public long getPhaseTotalDuration(RoundPhase state) {
         return matchConf.getPhaseConf(state).getTotalDuration();
     }
+
 }

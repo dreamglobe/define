@@ -33,11 +33,11 @@ public class TermDefinition {
      * @param term the term for
      */
     public TermDefinition(Term term) {
+        this.correct = true;
         this.playerData = null;
         this.definition = term.getDefinition();
         this.definitionId = calculateDefinitionId(definition);
         this.term = term;
-        this.correct = true;
     }
 
     private Integer calculateDefinitionId(String definition) {

@@ -27,6 +27,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import java.util.Optional;
+
 import static com.fasterxml.jackson.databind.MapperFeature.USE_ANNOTATIONS;
 import static com.kamomileware.define.extension.SpringWSocketClientExtension.SpringExtProvider;
 import static com.kamomileware.define.model.MessageTypes.*;
@@ -100,26 +102,27 @@ public class Player extends AbstractClientActor {
 
         @Autowired
         private ActorSystem system;
-        private ActorRef player = null;
+        private Optional<ActorRef> player = null;
         private String name = null;
 
         @Override
         public void afterConnectionEstablished(WebSocketSession session) throws Exception {
             final SpringWSocketClientExtension.SpringExt springExt = SpringExtProvider.get(system);
             name = session.getPrincipal().getName();
-            this.player = system.actorOf(springExt.props(session, "userActor"), name);
-            this.player.tell(MessageTypes.START, player);
+            this.player = Optional.ofNullable(system.actorOf(springExt.props(session, "userActor"), name));
+            this.sendMessageToPlayer(MessageTypes.START);
+
         }
 
         @Override
         protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
             MessageTypes.ClientMessage clientMsg = buildMessage(message.getPayload());
-            this.player.tell(clientMsg, ActorRef.noSender());
+            this.sendMessageToPlayer(clientMsg, ActorRef.noSender());
         }
 
         @Override
         public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-            this.player.tell(MessageTypes.STOP, ActorRef.noSender());
+            this.sendMessageToPlayer(MessageTypes.STOP, ActorRef.noSender());
         }
 
         @RequestMapping("/login")
@@ -135,5 +138,14 @@ public class Player extends AbstractClientActor {
         private MessageTypes.ClientMessage buildMessage(String messageStr) throws java.io.IOException {
             return objectMapper.readValue(messageStr, MessageTypes.ClientMessage.class);
         }
+
+        private void sendMessageToPlayer(Object message) {
+            this.player.ifPresent(p -> p.tell(message, p));
+        }
+
+        private void sendMessageToPlayer(Object message, ActorRef sender) {
+            this.player.ifPresent(p -> p.tell(message, sender));
+        }
+
     }
 }

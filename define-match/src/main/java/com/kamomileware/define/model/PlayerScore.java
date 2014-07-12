@@ -1,21 +1,19 @@
 package com.kamomileware.define.model;
 
-import com.kamomileware.define.model.round.PlayerData;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- *
+ * TODO: Remove PlayerData.Score reference
  */
 public class PlayerScore {
     private final String pid;
-    private final int defId;
+    private final Integer defId;
     private final int votePoints, turnPoints, totalPoints;
     private final List<String> pidVoters;
     private final boolean correctDefinition;
 
-    private PlayerScore(String pid, int defId, int votePoints, int turnPoints, int totalPoints, List<String> pidVoters, boolean correctDefinition) {
+    private PlayerScore(String pid, Integer defId, int votePoints, int turnPoints,
+                        int totalPoints, List<String> pidVoters, boolean correctDefinition) {
         this.pid = pid;
         this.defId = defId;
         this.votePoints = votePoints;
@@ -25,21 +23,11 @@ public class PlayerScore {
         this.correctDefinition = correctDefinition;
     }
 
-    private PlayerScore(PlayerData.Score score){
-        pid = score.getPlayerData().getPid();
-        defId = score.getPlayerData().getDefinition().getId();
-        votePoints = score.getVoteScore();
-        turnPoints = score.getTurnScore();
-        totalPoints = score.getTotalScore();
-        pidVoters = score.getVoters();
-        correctDefinition = score.isCorrectVote();
-    }
-
     public String getPid() {
         return pid;
     }
 
-    public int getDefId() {
+    public Integer getDefId() {
         return defId;
     }
 
@@ -63,11 +51,8 @@ public class PlayerScore {
         return correctDefinition;
     }
 
-    public static PlayerScore createPlayerScore(PlayerData.Score score) {
-        return new PlayerScore(score);
-    }
-
-    public static List<PlayerScore> createPlayersScore(List<PlayerData.Score> scores) {
-        return scores.stream().map(s -> new PlayerScore(s)).collect(Collectors.toList()) ;
+    public static PlayerScore create(String pid, Integer defId, int voteScore, int turnScore,
+                                     int totalScore, List<String> voters, boolean correctVote) {
+        return new PlayerScore(pid, defId, voteScore, turnScore, totalScore, voters, correctVote);
     }
 }

@@ -67,7 +67,7 @@ public class Match extends MatchFSM {
             round = null;
             this.switchBehaviour(this.stopBehavior);
         } else if (next == PHASE_RESPONSE) {
-            round = round==null? new Round(term, MatchConfiguration.createMatchConfiguration()) : new Round(term, round);
+            round = new Round(term, round);
             this.sendUsers(new StartDefinition(round.getPhaseTotalDuration(PHASE_RESPONSE), term));
             this.switchBehaviour(this.waitResponseBehavior);
             this.startLatch();
@@ -95,13 +95,10 @@ public class Match extends MatchFSM {
      */
     private class StoppedBehaviour implements Procedure<Object> {
         public void apply(Object message) {
-            if (message instanceof Start) {
-                setState(PHASE_RESPONSE);
-            } else if (message instanceof RegisterUser) {
-                if (round == null) {
-                    self().tell(START, self());
-                }
+            if (message instanceof RegisterUser) {
+                round = new Round(term, MatchConfiguration.createMatchConfiguration());
                 handleRegisterUser((RegisterUser) message, sender());
+                setState(PHASE_RESPONSE);
             } else {
                 aunhandled(message);
             }
@@ -203,7 +200,7 @@ public class Match extends MatchFSM {
                 final List<PlayerData.Score> scores = round.getScores();
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESULT));
                 sender().tell(new ResultForRegisterUser(
-                        defId, PlayerScore.createPlayersScore(scores),
+                        defId, round.createPlayersScores(),
                         round.getRoundItemDefinitions(),
                         phaseMillisLeft), self());
             } else {
@@ -216,7 +213,7 @@ public class Match extends MatchFSM {
     private void handleRegisterUser(RegisterUser message, ActorRef sender) {
         this.sendUsers(message);
         round.addPlayerData(sender(), message.getUserName(), message.getUserId());
-        sender.tell(round.getPlayerNamesByPid(), this.self());
+        sender.tell(new UsersList(round.getPlayerMap()), this.self());
     }
 
     private void handleUserResponse(String definition, ActorRef sender) {
@@ -249,9 +246,9 @@ public class Match extends MatchFSM {
      * Send th message to al register player actor in the match
      */
     private void sendUsersResults() {
-        List<PlayerData.Score> scores = round.applyVotesAndBuildRoundResults();
+        List<PlayerScore> scores = round.applyVotesAndBuildRoundResults();
         final int defId = round.getCorrectDefinition().getId();
-        this.sendUsers(new Result(defId, PlayerScore.createPlayersScore(scores), PHASE_DURATION.toMillis()));
+        this.sendUsers(new Result(defId, scores, PHASE_DURATION.toMillis()));
     }
 
     /**

@@ -2,6 +2,7 @@ package com.kamomileware.define.model.round;
 
 import akka.actor.ActorRef;
 import com.kamomileware.define.model.ItemDefinition;
+import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.term.Term;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class PlayerData {
     private TermDefinition definition;
     private VoteDefinition vote;
 
-    private final DefinitionResolver resolver;
+    private DefinitionResolver resolver;
 
     private PlayerData(ActorRef ref, String name, String pid, DefinitionResolver round) {
         this.ref = ref;
@@ -65,7 +66,7 @@ public class PlayerData {
         return Optional.ofNullable(vote);
     }
 
-    void vote(int definitionId) {
+    void vote(Integer definitionId) {
         final Optional<TermDefinition> termDefinitionOptional = resolver.findDefinitionById(definitionId);
         if(termDefinitionOptional.isPresent()) {
             this.vote = VoteDefinition.createVoteDefinition(this, termDefinitionOptional.get());
@@ -96,13 +97,17 @@ public class PlayerData {
         this.readyInResult = readyInResult;
     }
 
-    public void updateScore(){
-        final TermDefinition selectedDefinition = vote.getSelectedDefinition();
-        if(selectedDefinition.isCorrect()){
-            this.score.correctVote();
-        }else{
+    public PlayerScore createPlayerScore(){
+        Integer defId = definition!=null? definition.getId():null;
+        return PlayerScore.create(pid, defId, score.getVoteScore(), score.getTurnScore(),
+                score.getTotalScore(), score.getVoters(), score.isCorrectVote());
+    }
 
-        }
+    protected void prepareNextRound(DefinitionResolver newRound){
+        this.definition = null;
+        this.vote = null;
+        this.score.consolidateRound();
+        this.resolver = newRound;
     }
 
     public class Score{
@@ -137,13 +142,19 @@ public class PlayerData {
         }
 
         public int correctVote(){
-            turnScore += matchConf.getCorrectVoteValue();
             correctVote = true;
+            turnScore += matchConf.getCorrectVoteValue();
             return turnScore;
         }
 
-        public boolean endRound(){
+        public void consolidateRound(){
+            correctVote = false;
+            voters = new ArrayList<>();
             totalScore += turnScore;
+            turnScore = 0;
+        }
+
+        public boolean isWinner(){
             return totalScore >= matchConf.getGoalPoints();
         }
 
