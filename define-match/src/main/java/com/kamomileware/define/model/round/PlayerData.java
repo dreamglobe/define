@@ -2,6 +2,8 @@ package com.kamomileware.define.model.round;
 
 import akka.actor.ActorRef;
 import com.kamomileware.define.model.ItemDefinition;
+import com.kamomileware.define.model.MessageInfoFactory;
+import com.kamomileware.define.model.PlayerInfo;
 import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.term.Term;
 
@@ -12,7 +14,7 @@ import java.util.Optional;
 /**
  * Created by pepe on 10/07/14.
  */
-public class PlayerData {
+public class PlayerData implements MessageInfoFactory {
 
     private final String name;
     private final ActorRef ref;
@@ -34,51 +36,11 @@ public class PlayerData {
         this.score = new Score();
     }
 
-    public ActorRef getRef() {
-        return ref;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public TermDefinition getDefinition() {
-        return definition;
-    }
-
-    public ItemDefinition getItemDefinition() {
-        return new ItemDefinition(definition.getId(), definition.getDefinition());
-    }
-
-    public void setDefinition(Term term, String definition) {
-        this.definition = new TermDefinition(this, definition, term);
-    }
-
-    void setDefinition(TermDefinition definition){
-        this.definition = definition;
-    }
-
-    public Optional<VoteDefinition> getVote() {
-        return Optional.ofNullable(vote);
-    }
-
     void vote(Integer definitionId) {
         final Optional<TermDefinition> termDefinitionOptional = resolver.findDefinitionById(definitionId);
         if(termDefinitionOptional.isPresent()) {
             this.vote = VoteDefinition.createVoteDefinition(this, termDefinitionOptional.get());
         }
-    }
-
-    public Score getScore() {
-        return score;
-    }
-
-    public static PlayerData createPlayerData(ActorRef playerRef, String name, String pid, DefinitionResolver resolver) {
-        return new PlayerData(playerRef, name, pid, resolver);
     }
 
     public boolean hasResponse() {
@@ -97,10 +59,21 @@ public class PlayerData {
         this.readyInResult = readyInResult;
     }
 
+    @Override
+    public ItemDefinition createItemDefinition() {
+        return new ItemDefinition(definition.getId(), definition.getDefinition());
+    }
+
+    @Override
     public PlayerScore createPlayerScore(){
         Integer defId = definition!=null? definition.getId():null;
         return PlayerScore.create(pid, defId, score.getVoteScore(), score.getTurnScore(),
                 score.getTotalScore(), score.getVoters(), score.isCorrectVote());
+    }
+
+    @Override
+    public PlayerInfo createPlayerInfo() {
+        return new PlayerInfo(this.pid, this.name, this.score.getTotalScore(), this.score.getLastTurnScore());
     }
 
     protected void prepareNextRound(DefinitionResolver newRound){
@@ -110,30 +83,51 @@ public class PlayerData {
         this.resolver = newRound;
     }
 
+    public ActorRef getRef() {
+        return ref;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public TermDefinition getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(Term term, String definition) {
+        this.definition = new TermDefinition(this, definition, term);
+    }
+
+    void setDefinition(TermDefinition definition){
+        this.definition = definition;
+    }
+
+    public Optional<VoteDefinition> getVote() {
+        return Optional.ofNullable(vote);
+    }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public static PlayerData createPlayerData(ActorRef playerRef, String name, String pid, DefinitionResolver resolver) {
+        return new PlayerData(playerRef, name, pid, resolver);
+    }
+
     public class Score{
         final MatchConfiguration matchConf = resolver.getMatchConf();
         private int turnScore = 0;
         private int totalScore = 0;
+        private int lastTurnScore = 0;
         private boolean correctVote;
         List<String> voters = new ArrayList<>();
 
         Score(){}
-
-        public int getTurnScore() {
-            return turnScore;
-        }
-
-        public int getTotalScore() {
-            return totalScore;
-        }
-
-        public int getVoteScore() {
-            return correctVote? turnScore - matchConf.getCorrectVoteValue() : turnScore;
-        }
-
-        public boolean isCorrectVote() {
-            return correctVote;
-        }
 
         public int voteObtained(String voterPid){
             turnScore += matchConf.getVoteValue();
@@ -151,6 +145,7 @@ public class PlayerData {
             correctVote = false;
             voters = new ArrayList<>();
             totalScore += turnScore;
+            lastTurnScore = turnScore;
             turnScore = 0;
         }
 
@@ -164,6 +159,26 @@ public class PlayerData {
 
         public List<String> getVoters() {
             return voters;
+        }
+
+        public int getTurnScore() {
+            return turnScore;
+        }
+
+        public int getTotalScore() {
+            return totalScore;
+        }
+
+        public int getVoteScore() {
+            return correctVote? turnScore - matchConf.getCorrectVoteValue() : turnScore;
+        }
+
+        public int getLastTurnScore() {
+            return lastTurnScore;
+        }
+
+        public boolean isCorrectVote() {
+            return correctVote;
         }
     }
 }

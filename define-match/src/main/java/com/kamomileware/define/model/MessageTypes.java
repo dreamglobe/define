@@ -227,13 +227,13 @@ public class MessageTypes {
      */
     public static class UsersList extends DeffineMessage {
         private static final long serialVersionUID = -5759721640234426466L;
-        final Map<String, String> users;
+        final List<PlayerInfo> users;
 
-        public UsersList(Map<String, String> responses) {
-            this.users = responses;
+        public UsersList(List<PlayerInfo> playersList) {
+            this.users = playersList;
         }
 
-        public Map<String, String> getUsers() {
+        public List<PlayerInfo> getUsers() {
             return users;
         }
     }

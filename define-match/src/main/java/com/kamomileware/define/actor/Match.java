@@ -197,7 +197,6 @@ public class Match extends MatchFSM {
             } else if (message instanceof RegisterUser) {
                 handleRegisterUser((RegisterUser) message, sender());
                 final int defId = round.getCorrectDefinition().getId();
-                final List<PlayerData.Score> scores = round.getScores();
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESULT));
                 sender().tell(new ResultForRegisterUser(
                         defId, round.createPlayersScores(),
@@ -213,7 +212,7 @@ public class Match extends MatchFSM {
     private void handleRegisterUser(RegisterUser message, ActorRef sender) {
         this.sendUsers(message);
         round.addPlayerData(sender(), message.getUserName(), message.getUserId());
-        sender.tell(new UsersList(round.getPlayerMap()), this.self());
+        sender.tell(new UsersList(round.createPlayersInfo()), this.self());
     }
 
     private void handleUserResponse(String definition, ActorRef sender) {
@@ -227,7 +226,7 @@ public class Match extends MatchFSM {
         round.applyPlayers(p -> p.getRef().tell(
                 new StartVote(PHASE_DURATION.toMillis(),
                         round.getDefinitionsForPlayer(p),
-                        p.getItemDefinition()),
+                        p.createItemDefinition()),
                 this.self()));
     }
 

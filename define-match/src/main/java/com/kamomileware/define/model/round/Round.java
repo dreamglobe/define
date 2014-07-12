@@ -3,6 +3,7 @@ package com.kamomileware.define.model.round;
 import akka.actor.ActorRef;
 import com.kamomileware.define.actor.RoundPhase;
 import com.kamomileware.define.model.ItemDefinition;
+import com.kamomileware.define.model.PlayerInfo;
 import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.term.Term;
 
@@ -125,8 +126,8 @@ public class Round implements DefinitionResolver {
         return this.playerNamesByPid;
     }
 
-    public Map<String,String> getPlayerMap(){
-        return Collections.unmodifiableMap(playerNamesByPid);
+    public List<PlayerInfo> createPlayersInfo(){
+        return players.stream().map(PlayerData::createPlayerInfo).collect(Collectors.toList());
     }
 
     public String getPlayerPidByRef(ActorRef sender) {
