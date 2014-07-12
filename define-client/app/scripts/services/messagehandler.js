@@ -61,7 +61,7 @@ angular.module('deffineApp')
                     case 'UserDefinition':
                         $rootScope.isResponsed[packet.userId] = true;
                         $rootScope.$apply();
-                        Console.log('User '+ $rootScope.userNames[packet.userId] + ' has answered');
+                        Console.log('User '+ $rootScope.players[packet.userId] + ' has answered');
                         break;
 
                     case 'UserVote':
@@ -73,30 +73,28 @@ angular.module('deffineApp')
                     case 'UserReady':
                         $rootScope.isReady[packet.userId] = packet.ready;
                         $rootScope.$apply();
-                        Console.log('User '+ $rootScope.userNames[packet.userId] + ' is ready');
+                        Console.log('User '+ $rootScope.players[packet.userId] + ' is ready');
                         break;
 
                     case 'RegisterUser':
-                        $rootScope.userNames[packet.userId] = packet.userName;
+                        $rootScope.players[packet.userId] = packet.userName;
                         $rootScope.$apply();
                         Console.log('New user: ' + packet.userName + ' / ' + packet.userId);
                         break;
 
                     case 'RemoveUser':
-                        Console.log('User ' + $rootScope.userNames[packet.userId] + ' leaves');
-                        delete $rootScope.userNames[packet.userId];
+                        Console.log('User ' + $rootScope.players[packet.userId] + ' leaves');
+                        delete $rootScope.players[packet.userId];
                         delete $rootScope.isReady[packet.userId];
                         delete $rootScope.isResponsed[packet.userId];
                         $rootScope.$apply();
                         break;
 
                     case 'UsersList':
-                        $rootScope.userNames = {};
-                        for(var userKey in packet.users){
-                            $rootScope.userNames[userKey] = packet.users[userKey];
-                            if($rootScope.user.name == packet.users[userKey]){
-                                $rootScope.user.id = userKey;
-                            }
+                        $rootScope.players = {};
+                        var users = packet.users;
+                        for(var i in  users){
+                            $rootScope.players[users[i].pid]= users[i];
                         }
                         $rootScope.$apply();
                         Console.logUserList(packet.users);

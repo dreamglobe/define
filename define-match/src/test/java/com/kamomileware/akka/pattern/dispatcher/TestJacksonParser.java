@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -46,7 +47,7 @@ public class TestJacksonParser {
 
     @Test
     public void testUsertMessage () throws IOException {
-        System.out.println(mapper.writeValueAsString(new MessageTypes.UsersList(new HashMap<>())));
+        System.out.println(mapper.writeValueAsString(new MessageTypes.UsersList(new ArrayList<>())));
         System.out.println(mapper.writeValueAsString(new MessageTypes.RegisterUser("userId","userName")));
         System.out.println(mapper.writeValueAsString(new MessageTypes.Latch(2, 30)));
         final Term term = new Term("Term", "Definicion de term", TermCategory.AB);

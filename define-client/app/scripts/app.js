@@ -67,8 +67,8 @@ angular
             $rootScope.socket = null;
             $rootScope.user = {};
             $rootScope.user.name = null;
-            $rootScope.user.id = null;
-            $rootScope.userNames = {};
+            $rootScope.user.pid = null;
+            $rootScope.players = {};
             $rootScope.definitions = {};
             $rootScope.playerDefinition = {};
             $rootScope.isReady = {};

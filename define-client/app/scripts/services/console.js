@@ -34,14 +34,14 @@ angular.module('deffineApp')
         logResults: function(responses){
             this.log('Results:');
             for(var key in responses){
-                this.log($rootScope.userNames[key] + ': ' + responses[key]);
+                this.log($rootScope.players[key] + ': ' + responses[key]);
             }
         },
         logUserList: function(users){
             this.log('Users:\n');
             var list = '<ul>';
             for(var userKey in users){
-                list += '<li>'+ $rootScope.userNames[userKey] + '</li>\n';
+                list += '<li>'+ $rootScope.players[userKey] + '</li>\n';
             }
             list += '</ul>'
             this.log(list);

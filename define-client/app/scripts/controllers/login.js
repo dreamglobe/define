@@ -21,7 +21,7 @@ angular.module('deffineApp')
                 } else {
                     $rootScope.SessionId = sessionId;
                     $rootScope.user = $scope.user;
-                    $rootScope.userNames={};
+                    $rootScope.players={};
                     Console.log('Registering user');
                     var socket = new SockJS(wsBroker, undefined,
                                     {debug:true,
