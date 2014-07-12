@@ -91,8 +91,8 @@
                         Console.log("User "+ UserNames[packet.pid] + " has answered");
                         break;
                     case 'RegisterUser':
-                        UserNames[packet.pid] = packet.userName;
-                        Console.log('New user: ' + packet.userName);
+                        UserNames[packet.pid] = packet.name;
+                        Console.log('New user: ' + packet.name);
                         break;
                     case 'RemoveUser':
                         Console.log('User ' + UserNames[packet.pid] + " leaves");

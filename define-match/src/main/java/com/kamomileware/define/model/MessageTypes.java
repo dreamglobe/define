@@ -1,15 +1,10 @@
 package com.kamomileware.define.model;
 
 import com.fasterxml.jackson.annotation.*;
-import com.kamomileware.define.model.ItemDefinition;
-import com.kamomileware.define.model.PlayerScore;
-import com.kamomileware.define.model.round.TermDefinition;
 import com.kamomileware.define.model.term.Term;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by pepe on 29/06/14.
@@ -146,20 +141,32 @@ public class MessageTypes {
      */
     public static class RegisterUser extends DeffineMessage {
         private static final long serialVersionUID = 1958789168037278074L;
-        private final String userId;
-        private final String userName;
+        private final String pid;
+        private final String name;
+        private final int lastPhasePoints;
+        private final int totalPoints ;
 
-        public RegisterUser(String userId, String userName) {
-            this.userId = userId;
-            this.userName = userName;
+        public RegisterUser(String pid, String name) {
+            this.pid = pid;
+            this.name = name;
+            lastPhasePoints = 0;
+            totalPoints = 0;
         }
 
-        public String getUserId() {
-            return userId;
+        public String getPid() {
+            return pid;
         }
 
-        public String getUserName() {
-            return userName;
+        public String getName() {
+            return name;
+        }
+
+        public int getLastPhasePoints() {
+            return lastPhasePoints;
+        }
+
+        public int getTotalPoints() {
+            return totalPoints;
         }
     }
 

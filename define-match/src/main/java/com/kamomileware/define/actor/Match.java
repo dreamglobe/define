@@ -7,7 +7,6 @@ import akka.event.LoggingAdapter;
 import akka.japi.Procedure;
 import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.round.MatchConfiguration;
-import com.kamomileware.define.model.round.PlayerData;
 import com.kamomileware.define.model.round.Round;
 import com.kamomileware.define.model.term.Term;
 import com.kamomileware.define.model.term.TermCategory;
@@ -211,7 +210,7 @@ public class Match extends MatchFSM {
     /* Private methods for handling message */
     private void handleRegisterUser(RegisterUser message, ActorRef sender) {
         this.sendUsers(message);
-        round.addPlayerData(sender(), message.getUserName(), message.getUserId());
+        round.addPlayerData(sender(), message.getName(), message.getPid());
         sender.tell(new UsersList(round.createPlayersInfo()), this.self());
     }
 

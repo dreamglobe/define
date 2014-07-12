@@ -37,14 +37,14 @@
 <h4>Parrilla</h4>
 <table>
     <thead><td>Jugador</td><td>Votacion</td><td>Puntos</td><td>Última ronda</td></thead>
-    <tr ng-repeat='(key,value) in userNames' ng-class="{on:isReady[key]}">
-        <td>{{value}}</td>
+    <tr ng-repeat='(key,player) in players' ng-class="{on:isReady[key]}">
+        <td>{{player.name}}</td>
         <td>
             {{votesEmitted[key]?letterSelected(key):''}}
             <span ng-show="hasVoteForMe(votesEmitted[key])"
                   class="glyphicon glyphicon-ok"></span>
-        <td></td>
-        <td></td>
+        <td>{{player.totalPoints}}</td>
+        <td>{{player.lastPhasePoints}}</td>
     </tr>
 </table>
 

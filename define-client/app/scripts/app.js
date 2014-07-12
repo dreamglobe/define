@@ -109,6 +109,16 @@ angular
                 $rootScope.mytimeout = $timeout($rootScope.onTimeout,frecuency==0?1000:frecuency);
             };
         };
+        $rootScope.updateResults = function (){
+            $rootScope.correctDefId = null;
+            $rootScope.correctNumVotes = 0;
+            for( var i in $rootScope.result){
+                var score = $rootScope.result[i];
+                var turnPoints =  score.turnPoints;
+                $rootScope.players[score.pid].totalPoints += turnPoints;
+                $rootScope.players[score.pid].lastPhasePoints = turnPoints;
+            }
+        };
         $rootScope.reset($rootScope, $location, Console);
         $rootScope.Console = Console;
         $rootScope.timeout = $timeout;

@@ -26,6 +26,7 @@ angular.module('deffineApp')
                 switch (packet.type) {
 
                     case 'StartDefinition':
+                        $rootScope.updateResults();
                         $rootScope.isResponsed = {};
                         $location.path('/answer');
                         Console.log('Response phase started ' + packet.time);
@@ -33,13 +34,13 @@ angular.module('deffineApp')
                         break;
 
                     case 'StartVote':
+                        $rootScope.isReady = {};
                         $rootScope.canVote=true;
                         $rootScope.votesEmitted = {};
-                        $rootScope.isReady = {};
                         $rootScope.definitions = packet.definitions;
                         $rootScope.playerDefinition = packet.playerDefinition;
-                        $location.path('/vote');
                         $rootScope.resetTimeout(packet.time);
+                        $location.path('/vote');
                         Console.log('Vote phase started ' + packet.time);
                         break;
 
@@ -54,14 +55,13 @@ angular.module('deffineApp')
                         $rootScope.correctDefId = packet.correctDefId;
                         $rootScope.correctNumVotes = packet.correctNumVotes;
                         $location.path('/result');
-                        //$rootScope.$apply();
                         Console.logResults(packet.scores);
                         break;
 
                     case 'UserDefinition':
                         $rootScope.isResponsed[packet.userId] = true;
                         $rootScope.$apply();
-                        Console.log('User '+ $rootScope.players[packet.userId] + ' has answered');
+                        Console.log('User '+ $rootScope.players[packet.userId].name + ' has answered');
                         break;
 
                     case 'UserVote':
@@ -73,13 +73,13 @@ angular.module('deffineApp')
                     case 'UserReady':
                         $rootScope.isReady[packet.userId] = packet.ready;
                         $rootScope.$apply();
-                        Console.log('User '+ $rootScope.players[packet.userId] + ' is ready');
+                        Console.log('User '+ $rootScope.players[packet.userId].name + ' is ready');
                         break;
 
                     case 'RegisterUser':
-                        $rootScope.players[packet.userId] = packet.userName;
+                        $rootScope.players[packet.pid] = packet;
                         $rootScope.$apply();
-                        Console.log('New user: ' + packet.userName + ' / ' + packet.userId);
+                        Console.log('New user: ' + packet.name + ' ( ' + packet.pid + ')');
                         break;
 
                     case 'RemoveUser':

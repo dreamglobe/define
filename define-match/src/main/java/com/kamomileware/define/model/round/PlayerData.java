@@ -81,6 +81,7 @@ public class PlayerData implements MessageInfoFactory {
         this.vote = null;
         this.score.consolidateRound();
         this.resolver = newRound;
+        this.readyInResult = false;
     }
 
     public ActorRef getRef() {

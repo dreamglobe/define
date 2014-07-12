@@ -41,7 +41,8 @@ angular.module('deffineApp')
             this.log('Users:\n');
             var list = '<ul>';
             for(var userKey in users){
-                list += '<li>'+ $rootScope.players[userKey] + '</li>\n';
+                var user = users[userKey];
+                list += '<li>'+ user.name +' (' + user.pid + ')' + '</li>\n';
             }
             list += '</ul>'
             this.log(list);
