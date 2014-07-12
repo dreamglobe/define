@@ -211,7 +211,7 @@ public class Match extends MatchFSM {
     private void handleRegisterUser(RegisterUser message, ActorRef sender) {
         this.sendUsers(message);
         round.addPlayerData(sender(), message.getName(), message.getPid());
-        sender.tell(new UsersList(round.createPlayersInfo()), this.self());
+        sender.tell(new PlayerList(round.createPlayersInfo()), this.self());
     }
 
     private void handleUserResponse(String definition, ActorRef sender) {

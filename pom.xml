@@ -25,6 +25,8 @@
         <module>define-boot</module>
         <module>define-terms</module>
         <module>define-stats</module>
+        <module>../../workspaces-intellij-idea/define/define-project/define-match-client</module>
+        <module>define-match-client</module>
     </modules>
 
 

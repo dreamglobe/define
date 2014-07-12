@@ -8,7 +8,7 @@
  * Service in the deffineApp.
  */
 angular.module('deffineApp')
-  .service('Messagehandler', function Messagehandler($rootScope, Console, $location) {
+  .service('Messagehandler', function Messagehandler($rootScope, Console, Player, $location) {
     return {
             onConnect : function(){
                 Console.log('Connection open');
@@ -34,9 +34,8 @@ angular.module('deffineApp')
                         break;
 
                     case 'StartVote':
-                        $rootScope.isReady = {};
+                        Player.resetReady();
                         $rootScope.canVote=true;
-                        $rootScope.votesEmitted = {};
                         $rootScope.definitions = packet.definitions;
                         $rootScope.playerDefinition = packet.playerDefinition;
                         $rootScope.resetTimeout(packet.time);
@@ -49,7 +48,7 @@ angular.module('deffineApp')
                         $rootScope.playerDefinition = packet.playerDefinition;
 
                     case 'Result':
-                        $rootScope.isReady = {};
+                        Player.resetReady();
                         $rootScope.resetTimeout(packet.time);
                         $rootScope.result = packet.scores;
                         $rootScope.correctDefId = packet.correctDefId;
@@ -65,39 +64,27 @@ angular.module('deffineApp')
                         break;
 
                     case 'UserVote':
-                        $rootScope.votesEmitted[packet.userId] = packet.voteId;
-                        $rootScope.isReady[packet.userId] = packet.voteId!=null;
-                        $rootScope.$apply();
+                        Player.get(packet.userId).setVote(packet.voteId);
                         break;
 
                     case 'UserReady':
-                        $rootScope.isReady[packet.userId] = packet.ready;
-                        $rootScope.$apply();
+                        Player.get(packet.userId).setReady(packet.ready);
                         Console.log('User '+ $rootScope.players[packet.userId].name + ' is ready');
                         break;
 
                     case 'RegisterUser':
-                        $rootScope.players[packet.pid] = packet;
-                        $rootScope.$apply();
+                        Player.build(packet);
                         Console.log('New user: ' + packet.name + ' ( ' + packet.pid + ')');
                         break;
 
                     case 'RemoveUser':
                         Console.log('User ' + $rootScope.players[packet.userId] + ' leaves');
-                        delete $rootScope.players[packet.userId];
-                        delete $rootScope.isReady[packet.userId];
-                        delete $rootScope.isResponsed[packet.userId];
-                        $rootScope.$apply();
+                        Player.remove(packet.userId);
                         break;
 
-                    case 'UsersList':
-                        $rootScope.players = {};
-                        var users = packet.users;
-                        for(var i in  users){
-                            $rootScope.players[users[i].pid]= users[i];
-                        }
-                        $rootScope.$apply();
-                        Console.logUserList(packet.users);
+                    case 'PlayerList':
+                        Player.buildList(packet.players);
+                        Console.logUserList(packet.players);
                         break;
 
                     case 'Start':
@@ -108,7 +95,7 @@ angular.module('deffineApp')
                         $rootScope.mytimeout.cancel();
                         break;
                     default:
-                        Console.log('Unkonwn message: ' + packet.type);
+                        Console.log('Unkonwn message: ' + packet.type + " -- " + packet);
                 }
             }
         };

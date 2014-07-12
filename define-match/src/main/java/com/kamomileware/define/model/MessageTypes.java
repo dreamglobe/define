@@ -232,16 +232,16 @@ public class MessageTypes {
     /**
      * Created by pepe on 12/06/14.
      */
-    public static class UsersList extends DeffineMessage {
+    public static class PlayerList extends DeffineMessage {
         private static final long serialVersionUID = -5759721640234426466L;
-        final List<PlayerInfo> users;
+        final List<PlayerInfo> players;
 
-        public UsersList(List<PlayerInfo> playersList) {
-            this.users = playersList;
+        public PlayerList(List<PlayerInfo> playersList) {
+            this.players = playersList;
         }
 
-        public List<PlayerInfo> getUsers() {
-            return users;
+        public List<PlayerInfo> getPlayers() {
+            return players;
         }
     }
 

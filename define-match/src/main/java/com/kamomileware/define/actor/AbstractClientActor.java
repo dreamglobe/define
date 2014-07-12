@@ -38,7 +38,11 @@ public abstract class AbstractClientActor extends UntypedActor implements Client
     }
 
     protected void sendClient(Object message) throws IOException {
-        log.debug("Sending client %s message %s".format(this.name, message));
-        wsSession.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
+        if(wsSession.isOpen()) {
+            log.debug("Sending client %s message %s".format(this.name, message));
+            wsSession.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
+        } else {
+            log.warning("Not sending client %s message %s. The session is close".format(this.name, message));
+        }
     }
 }

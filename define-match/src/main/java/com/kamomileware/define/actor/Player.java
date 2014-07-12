@@ -57,7 +57,7 @@ public class Player extends AbstractClientActor {
 
         if(message instanceof RegisterUser
         || message instanceof RemoveUser
-        || message instanceof UsersList
+        || message instanceof PlayerList
         || message instanceof UserDefinition
         || message instanceof UserVote
         || message instanceof UserReady

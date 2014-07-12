@@ -73,7 +73,7 @@ public class PlayerData implements MessageInfoFactory {
 
     @Override
     public PlayerInfo createPlayerInfo() {
-        return new PlayerInfo(this.pid, this.name, this.score.getTotalScore(), this.score.getLastTurnScore());
+        return new PlayerInfo(this.pid, this.name, this.isReadyInResult(), this.score.getTotalScore(), this.score.getLastTurnScore());
     }
 
     protected void prepareNextRound(DefinitionResolver newRound){

@@ -6,12 +6,14 @@ package com.kamomileware.define.model;
 public class PlayerInfo {
     private final String pid;
     private final String name;
+    private final boolean isReady;
     private final int totalPoints;
     private final int lastPhasePoints;
 
-    public PlayerInfo(String pid, String name, int totalPoints, int lastPhasePoints) {
+    public PlayerInfo(String pid, String name, boolean isReady, int totalPoints, int lastPhasePoints) {
         this.pid = pid;
         this.name = name;
+        this.isReady = isReady;
         this.totalPoints = totalPoints;
         this.lastPhasePoints = lastPhasePoints;
     }
@@ -22,6 +24,10 @@ public class PlayerInfo {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isReady() {
+        return isReady;
     }
 
     public int getTotalPoints() {

@@ -62,20 +62,17 @@ angular
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }])
-    .run(function($rootScope, $location, Console, $timeout){
-        $rootScope.reset = function($rootScope, $location, Console) {
+    .run(function($rootScope, $location, Console, $timeout, Player){
+        $rootScope.reset = function($rootScope, $location, Console, Player) {
             $rootScope.socket = null;
             $rootScope.user = {};
             $rootScope.user.name = null;
             $rootScope.user.pid = null;
-            $rootScope.players = {};
+            $rootScope.players = Player.getPlayersByPid();
+            $rootScope.isResponsed = {};
             $rootScope.definitions = {};
             $rootScope.playerDefinition = {};
-            $rootScope.isReady = {};
-            $rootScope.isResponsed = {};
-            $rootScope.votesEmitted = {};
             $rootScope.result = {};
-            $rootScope.canVote = true;
             $rootScope.checkLogin = function () {
                 if (!$rootScope.socket) {
                     $location.path('/');
@@ -109,6 +106,7 @@ angular
                 $rootScope.mytimeout = $timeout($rootScope.onTimeout,frecuency==0?1000:frecuency);
             };
         };
+
         $rootScope.updateResults = function (){
             $rootScope.correctDefId = null;
             $rootScope.correctNumVotes = 0;
@@ -119,7 +117,14 @@ angular
                 $rootScope.players[score.pid].lastPhasePoints = turnPoints;
             }
         };
-        $rootScope.reset($rootScope, $location, Console);
+
+        $rootScope.setPlayersReady = function (){
+            for( (pid, player) in $rootScope.players ){
+                player.ready = false;
+            }
+        };
+
+        $rootScope.reset($rootScope, $location, Console, Player);
         $rootScope.Console = Console;
         $rootScope.timeout = $timeout;
     });
