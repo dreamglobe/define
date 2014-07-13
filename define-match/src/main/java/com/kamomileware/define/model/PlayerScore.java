@@ -8,16 +8,16 @@ import java.util.List;
 public class PlayerScore {
     private final String pid;
     private final Integer defId;
-    private final int votePoints, turnPoints, totalPoints;
+    private final int voteScore, turnScore, totalPoints;
     private final List<String> pidVoters;
     private final boolean correctDefinition;
 
-    private PlayerScore(String pid, Integer defId, int votePoints, int turnPoints,
+    private PlayerScore(String pid, Integer defId, int voteScore, int turnScore,
                         int totalPoints, List<String> pidVoters, boolean correctDefinition) {
         this.pid = pid;
         this.defId = defId;
-        this.votePoints = votePoints;
-        this.turnPoints = turnPoints;
+        this.voteScore = voteScore;
+        this.turnScore = turnScore;
         this.totalPoints = totalPoints;
         this.pidVoters = pidVoters;
         this.correctDefinition = correctDefinition;
@@ -31,12 +31,12 @@ public class PlayerScore {
         return defId;
     }
 
-    public int getVotePoints() {
-        return votePoints;
+    public int getVoteScore() {
+        return voteScore;
     }
 
-    public int getTurnPoints() {
-        return turnPoints;
+    public int getTurnScore() {
+        return turnScore;
     }
 
     public int getTotalPoints() {

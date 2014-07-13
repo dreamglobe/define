@@ -102,7 +102,7 @@ public class Player extends AbstractClientActor {
 
         @Autowired
         private ActorSystem system;
-        private Optional<ActorRef> player = null;
+        private Optional<ActorRef> player = Optional.ofNullable(null);
         private String name = null;
 
         @Override

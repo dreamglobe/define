@@ -143,14 +143,21 @@ public class MessageTypes {
         private static final long serialVersionUID = 1958789168037278074L;
         private final String pid;
         private final String name;
-        private final int lastPhasePoints;
-        private final int totalPoints ;
+        private final int totalScore;
+        private final int turnScore;
 
         public RegisterUser(String pid, String name) {
             this.pid = pid;
             this.name = name;
-            lastPhasePoints = 0;
-            totalPoints = 0;
+            this.totalScore = 0;
+            this.turnScore = 0;
+        }
+
+        public RegisterUser(String pid, String name, int totalScore, int turnScore) {
+            this.pid = pid;
+            this.name = name;
+            this.totalScore = totalScore;
+            this.turnScore = turnScore;
         }
 
         public String getPid() {
@@ -161,12 +168,12 @@ public class MessageTypes {
             return name;
         }
 
-        public int getLastPhasePoints() {
-            return lastPhasePoints;
+        public int getTurnScore() {
+            return turnScore;
         }
 
-        public int getTotalPoints() {
-            return totalPoints;
+        public int getTotalScore() {
+            return totalScore;
         }
     }
 
@@ -175,14 +182,14 @@ public class MessageTypes {
      */
     public static class RemoveUser extends DeffineMessage {
         private static final long serialVersionUID = -329444905850140400L;
-        private final String userId;
+        private final String pid;
 
-        public RemoveUser(String userId) {
-            this.userId = userId;
+        public RemoveUser(String pid) {
+            this.pid = pid;
         }
 
-        public String getUserId() {
-            return userId;
+        public String getPid() {
+            return pid;
         }
     }
 
@@ -194,6 +201,7 @@ public class MessageTypes {
         private final int correctDefId;
         private final long correctNumVotes;
         private final List<PlayerScore> scores;
+
         public Result(int correctDefId, List<PlayerScore> scores, long millis) {
             super(millis);
             this.scores = scores;

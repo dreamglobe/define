@@ -82,7 +82,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 //                    .rememberMeServices(rememberMeServices)
 //                    .key(env.getProperty("jhipster.security.rememberme.key"))
 //                    .and()
-                .formLogin()
+                    .formLogin()
                     .loginProcessingUrl("/app/authentication")
 //                    .successHandler(ajaxAuthenticationSuccessHandler)
 //                    .failureHandler(ajaxAuthenticationFailureHandler)
@@ -90,17 +90,17 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
                     .passwordParameter("passwd")
                     .permitAll()
                     .and()
-                .logout()
+                    .logout()
                     .logoutUrl("/app/logout")
 //                    .logoutSuccessHandler(ajaxLogoutSuccessHandler)
                     .deleteCookies("JSESSIONID")
                     .permitAll()
                     .and()
-                .csrf()
+                    .csrf()
                     .disable()
                     .headers()
                     .frameOptions().disable()
-                .authorizeRequests()
+                    .authorizeRequests()
                     .antMatchers("/app/rest/register").permitAll()
                     .antMatchers("/app/rest/activate").permitAll()
                     .antMatchers("/app/rest/authenticate").permitAll()
@@ -134,7 +134,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
                     .antMatchers("/swagger-ui/**")
                     .antMatchers("/console/**");
         }
-        
+
         /*@Override
         protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
             authManagerBuilder.inMemoryAuthentication()
