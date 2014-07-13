@@ -3,7 +3,7 @@
 describe('Service: Player', function () {
 
   // load the service's module
-  beforeEach(module('deffineApp'));
+  beforeEach(module('defineMatchClientApp'));
 
   // instantiate service
   var Player;

@@ -1,0 +1,13 @@
+
+<form name="userLogin" ng-submit="doLogin()" ng-controller="LoginCtrl">
+
+    <label for="name">Nombre</label>
+    <input id="name"
+           ng-model="user.name"
+           ngbk-focus="true"
+           required  />
+    <input type="submit" ng-disabled="!userLogin.$valid"/>
+
+</form>
+<hr/>
+<div ng-show="message" ng-bind="message"></div>
