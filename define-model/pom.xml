@@ -7,7 +7,7 @@
         <version>0.3-SNAPSHOT</version>
 
     </parent>
-    <artifactId>define-terms</artifactId>
+    <artifactId>define-model</artifactId>
     <packaging>jar</packaging>
 
     <scm>
@@ -29,12 +29,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>define-match</artifactId>
-        </dependency>
     </dependencies>
 
-
+    
 </project>
