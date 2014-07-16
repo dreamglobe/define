@@ -4,16 +4,16 @@
     <parent>
         <groupId>com.kamomileware.define</groupId>
         <artifactId>define-project</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.2</version>
 
     </parent>
     <artifactId>define-stats</artifactId>
     <packaging>jar</packaging>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</developerConnection>
-        <url>[ http://karma-server/websvn/listing.php/branches/dev-T64-modelo-memoria-v.0.2/listing.php?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F</url>
+        <connection>scm:svn:http://karma-server/svn/define/tags/define-project-0.2/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/tags/define-project-0.2/${project.artifactId}</developerConnection>
+        <url>[ http://karma-server/websvn/listing.php/tags/define-project-0.2/listing.php?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F</url>
     </scm>
 
 </project>
