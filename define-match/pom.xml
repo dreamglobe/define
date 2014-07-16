@@ -4,15 +4,15 @@
     <parent>
         <artifactId>define-project</artifactId>
         <groupId>com.kamomileware.define</groupId>
-        <version>0.2</version>
+        <version>0.3-SNAPSHOT</version>
 
     </parent>
     <artifactId>define-match</artifactId>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/tags/define-project-0.2/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/tags/define-project-0.2/${project.artifactId}</developerConnection>
-        <url>[ http://karma-server/websvn/listing.php/tags/define-project-0.2/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
+        <connection>scm:svn:http://karma-server/svn/define/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</developerConnection>
+        <url>[ http://karma-server/websvn/listing.php/branches/dev-T64-modelo-memoria-v.0.2/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
     </scm>
 
     <properties>
