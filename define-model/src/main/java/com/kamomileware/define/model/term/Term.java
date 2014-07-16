@@ -3,6 +3,7 @@ package com.kamomileware.define.model.term;
 /**
  * Created by pepe on 10/07/14.
  */
+
 public class Term {
 
     private Long id;
