@@ -10,9 +10,9 @@
     <artifactId>define-match</artifactId>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/v.0.3-Term_services/${project.artifactId}</developerConnection>
-        <url>[ http://karma-server/websvn/listing.php/branches/v.0.3-Term_services/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
+        <connection>scm:svn:http://karma-server/svn/define/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</developerConnection>
+        <url>[ http://karma-server/websvn/listing.php/branches/dev-T64-modelo-memoria-v.0.2/listing.php?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2${project.artifactId}%2F</url>
     </scm>
 
     <properties>
