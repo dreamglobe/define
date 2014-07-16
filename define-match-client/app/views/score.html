@@ -1,0 +1,86 @@
+<h2>[<span>{{term.category}}</span>]
+    {{term.name}}:
+    <span class="definition">{{termDefinition}}</span>
+    <span ng-show="numCorrectVotes == 1">({{numCorrectVotes}} vez elegido)</span>
+    <span ng-show="numCorrectVotes > 1">({{numCorrectVotes}} veces elegido)</span>
+</h2>
+
+<div class="players-definitions">
+    <h4>Definiciones de los jugadores</h4>
+    <table border="1" width="80%" cellspacing="15 15 15 15" cellpadding="15 15 15 15">
+        <thead>
+        <td></td>
+        <td>Jugador</td>
+        <td>Definición</td>
+        <td>Votos recibidos</td>
+        </thead>
+        <tr ng-repeat="score in scores | orderBy : '-turnPoints' " ng-class="{on: score.pid == user.pid}">
+            <td>{{$index+1}}</td>
+            <td>{{score.player.name}}</td>
+            <td>{{score.definition.text}}</td>
+            <td>{{score.pidVoters.length}}</td>
+        </tr>
+    </table>
+</div>
+<br/>
+
+<div class="turn-scores">
+    <h5>Puntuaciones del turno</h5>
+    <table border="1" width="80%" cellspacing="15 15 15 15" cellpadding="15 15 15 15">
+        <thead>
+        <td></td>
+        <td>Jugador</td>
+        <td>Puntos</td>
+        <td>Acierto</td>
+        <td>Votos de</td>
+        </thead>
+        <tr ng-repeat="score in scores | orderBy : '-turnPoints' " ng-class="{on: score.pid == me.pid}">
+            <td>{{$index+1}}</td>
+            <td>{{score.player.name}}</td>
+            <td>
+                <span ng-show="score.turnScore > 0">+{{score.turnScore}}</span>
+                <span ng-show="score.turnScore == 0">-</span>
+            </td>
+            <td>
+                <span ng-show="score.isCorrectDefinition" class="glyphicon glyphicon-ok"/>
+                <span ng-show="!score.isCorrectDefinition" class="glyphicon glyphicon-ko"/>
+            </td>
+            <td>
+                <span>{{score.getVoters().join(', ')}}</span>
+                <span ng-show="score.pidVoters.length == 0">-</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4"/>
+            <td>
+                <button ng-click="toggleReady()" ng-class="{on:me.ready}">{{readyText}}</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="timer">
+    <h4>Timeout</h4>
+    <span>{{timer.counter}}</span> Seg.
+</div>
+
+<hr/>
+<div class="rooster">
+    <h4>Parrilla</h4>
+    <table border="1" width="80%" cellspacing="15 15 15 15" cellpadding="15 15 15 15">
+        <thead>
+        <td>Jugador</td>
+        <td>Voto</td>
+        <td>Puntos</td>
+        <td>Última ronda</td>
+        </thead>
+        <tr ng-repeat='player in players' ng-class="{on:player.isReady}">
+            <td>{{player.name}}</td>
+            <td>
+                <span ng-show="hasVoteForMe(player.vote)" class="glyphicon glyphicon-ok"></span>
+            <td>{{player.totalScore}}</td>
+            <td>{{player.turnScore}}</td>
+        </tr>
+    </table>
+</div>
+

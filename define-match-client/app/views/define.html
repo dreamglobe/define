@@ -1,0 +1,30 @@
+<h2>[<span>{{term.category}}</span>] {{term.name}}</h2>
+<form ng-submit="sendDefinition()">
+    <label for="playerDefinition">Da una definición:</label>
+    <input id="playerDefinition" ngbk-focus ng-model="definition" required/>
+    <input type="submit" value="Enviar"/>
+</form>
+
+<div class="timer">
+    <h4>Timeout</h4>
+    <span>{{timer.counter}}</span> Seg.
+</div>
+
+<hr/>
+<div class="rooster">
+    <h4>Parrilla</h4>
+    <table border="1" width="80%" cellspacing="15 15 15 15" cellpadding="15 15 15 15" >
+        <thead>
+        <td>Jugador</td>
+        <td>Definición</td>
+        <td>Puntos</td>
+        <td>Última ronda</td>
+        </thead>
+        <tr ng-repeat='player in players' ng-class="{on:player.definition}">
+            <td>{{player.name}}</td>
+            <td><span ng-hide="!player.definition" class="glyphicon glyphicon-ok"></span></td>
+            <td>{{player.totalScore}}</td>
+            <td>{{player.turnScore}}</td>
+        </tr>
+    </table>
+</div>

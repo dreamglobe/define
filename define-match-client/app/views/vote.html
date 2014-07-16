@@ -1,0 +1,51 @@
+<h2>[<span>{{term.category}}</span>] {{term.name}}</h2>
+
+<div class="poll">
+<table border="1" width="80%" cellspacing="15 15 15 15" cellpadding="15 15 15 15" >
+    <thead><td/><td>Definiciones</td></thead>
+    <!-- Definiciones candidatas -->
+    <tr ng-repeat='item in definitions' ng-class="{on:isMyVote(item.defId)}">
+        <td height="28px" width="28px" align="center">
+            <button ng-show="isShowVote(item.defId)" ng-click="vote(item.defId)">{{letter(item.defId)}}</button>
+            <span ng-show="!isShowVote(item.defId)">{{letter(item.defId)}}</span>
+        </td>
+        <td>{{item.text}}</td>
+    </tr>
+    <!-- Definición del usuario -->
+    <tr>
+        <td height="28px" width="28px" align="center">{{letter(myDefinition.defId)}}</td>
+        <td>{{myDefinition.text}}</td>
+    </tr>
+    <!-- Deselección -->
+    <tr>
+        <td height="28px" width="28px" align="center"></td>
+        <td><button ng-hide="!canVote || !me.vote " ng-click="unvote()">No votar</button></td>
+    </tr>
+</table>
+</div>
+
+<div class="timer">
+    <h4>Timeout</h4>
+    <span>{{timer.counter}}</span> Seg.
+</div>
+
+<hr/>
+<div class="rooster">
+    <h4>Parrilla</h4>
+    <table border="1" width="80%" cellspacing="15 15 15 15" cellpadding="15 15 15 15" >
+        <thead>
+        <td>Jugador</td>
+        <td>Voto</td>
+        <td>Puntos</td>
+        <td>Última ronda</td>
+        </thead>
+        <tr ng-repeat='player in players' ng-class="{on:player.vote}">
+            <td>{{player.name}}</td>
+            <td>
+                {{letter(player.vote)}}
+                <span ng-show="hasVoteForMe(player.vote)" class="glyphicon glyphicon-ok"></span>
+            <td>{{player.totalScore}}</td>
+            <td>{{player.turnScore}}</td>
+        </tr>
+    </table>
+</div>
