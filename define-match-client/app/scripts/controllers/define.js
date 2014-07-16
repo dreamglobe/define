@@ -15,7 +15,9 @@ angular.module('defineMatchClientApp')
         $scope.term = Definition.getTerm();
         $scope.players = Player.getPlayers();
         $scope.definition = '';
+        $scope.lastDefinition = '';
         $scope.sendDefinition = function (){
-            MatchServer.sendDefinition($scope.definition);
+            $scope.lastDefinition = $scope.definition;
+            MatchServer.sendDefinition($scope.lastDefinition);
         };
     });

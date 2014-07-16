@@ -5,7 +5,6 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.Procedure;
-import com.kamomileware.define.model.MessageTypes;
 import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.round.MatchConfiguration;
 import com.kamomileware.define.model.round.Round;
@@ -77,7 +76,7 @@ public class Match extends MatchFSM {
             this.switchBehaviour(this.waitVotesBehavior);
             this.startLatch();
         } else if (next == PHASE_RESULT) {
-            this.sendUsersResults();
+            this.sendUsersScores();
             this.switchBehaviour(this.showResultBehavior);
             this.startLatch();
         }
@@ -144,7 +143,12 @@ public class Match extends MatchFSM {
                     round.extendPhase(PHASE_RESPONSE);
                     startLatchExtend();
                 } else {
-                    setState(round.hasAnyoneResponse() ? PHASE_VOTE : PHASE_RESULT);
+                    if (round.hasAnyoneResponse()) {
+                        setState(PHASE_VOTE);
+                    } else {
+                        handleEndVote();
+                        setState(PHASE_RESULT);
+                    }
                 }
             } else if (message instanceof RegisterUser) {
                 // TODO: model phase and time
@@ -166,11 +170,23 @@ public class Match extends MatchFSM {
             if(message instanceof UserVote){
                 handleVote((UserVote) message);
                 if(round.hasEveryonrVote()){
+                    handleEndVote();
                     cancelLatch();
-                    setState(PHASE_RESULT);
+                    if(!round.isFinalRound()) {
+                        setState(PHASE_RESULT);
+                    } else {
+                        setState(STOPPED);
+                    }
+
                 }
             }else if(message instanceof Latch){
-                setState(PHASE_RESULT); // TODO: Config phase
+                handleEndVote();
+                if(!round.isFinalRound()) {
+                    setState(PHASE_RESULT);
+                } else {
+                    setState(STOPPED);
+                }
+
             } else if(message instanceof RegisterUser){
                 handleRegisterUser((RegisterUser) message, sender());
                 long timeLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_VOTE));
@@ -238,6 +254,11 @@ public class Match extends MatchFSM {
         sendUsers(new UserVote(round.getPlayerPidByRef(this.sender()), voteId));
     }
 
+    private void handleEndVote(){
+        this.round.applyVotes();
+        this.round.calculateRoundResult();
+    }
+
     private void handleUserReady(UserReady message, ActorRef sender) {
         boolean isReady = round.setPlayerReadyInResult(sender, message.isReady());
         this.sendUsers(new UserReady(round.getPlayerPidByRef(sender), isReady));
@@ -246,8 +267,8 @@ public class Match extends MatchFSM {
     /**
      * Send th message to al register player actor in the match
      */
-    private void sendUsersResults() {
-        List<PlayerScore> scores = round.applyVotesAndBuildRoundResults();
+    private void sendUsersScores() {
+        List<PlayerScore> scores = this.round.createPlayersScores();
         final int defId = round.getCorrectDefinition().getId();
         this.sendUsers(new StartShowScores(PHASE_DURATION.toMillis(), scores, defId));
     }

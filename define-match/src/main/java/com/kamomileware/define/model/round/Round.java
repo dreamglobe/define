@@ -6,7 +6,11 @@ import com.kamomileware.define.model.ItemDefinition;
 import com.kamomileware.define.model.PlayerInfo;
 import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.term.Term;
+import scala.concurrent.duration.FiniteDuration;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -27,6 +31,9 @@ public class Round implements DefinitionResolver {
     private final List<TermDefinition> roundDefinitions;
 
     private final MatchConfiguration matchConf;
+    private Set<TurnResult> result;
+    private final long matchStartTime;
+    private final long roundStartTime;
 
     /**
      * First round constructor
@@ -42,6 +49,7 @@ public class Round implements DefinitionResolver {
         this.playersByRef = new HashMap<>();
         this.roundDefinitions = new ArrayList<>();
         this.playerNamesByPid = new HashMap<>();
+        this.matchStartTime = this.roundStartTime = System.currentTimeMillis();
     }
 
     /**
@@ -59,6 +67,8 @@ public class Round implements DefinitionResolver {
         this.playerNamesByPid = previousRound.getPlayerNamesByPid();
         this.roundDefinitions = new ArrayList<>();
         this.players.forEach(p -> p.prepareNextRound(this));
+        this.matchStartTime = previousRound.getMatchStartTime();
+        this.roundStartTime = System.currentTimeMillis();
     }
 
     /**
@@ -193,9 +203,27 @@ public class Round implements DefinitionResolver {
         return transformTermInItemDefinition(playerDefinitions);
     }
 
-    public List<PlayerScore> applyVotesAndBuildRoundResults() {
+    public void applyVotes() {
         players.stream().forEach(p -> p.getVote().ifPresent(VoteDefinition::applyVote));
-        return createPlayersScores();
+        players.stream().forEach(p -> p.getScore().applyTurnScore());
+    }
+
+    public boolean isFinalRound() {
+        return result != null && result.size() >0;
+    }
+
+    public boolean hasWinners( ) {
+        return this.matchConf.getGoalPoints().isPresent()
+                && players.stream().anyMatch(
+                p -> p.getScore().getTotalScore() > this.matchConf.getGoalPoints().get());
+    }
+
+    public List<PlayerData> getWinners(){
+        return this.matchConf.getGoalPoints().isPresent()?
+                this.players.stream().filter(
+                    p -> p.getScore().getTotalScore() > this.matchConf.getGoalPoints().get())
+                    .collect(Collectors.toList()):
+                Collections.emptyList();
     }
 
     public List<PlayerData.Score> getScores() {
@@ -251,4 +279,19 @@ public class Round implements DefinitionResolver {
         return matchConf.getPhaseConf(state).getTotalDuration();
     }
 
+    public Set<TurnResult> calculateRoundResult() {
+        return result = matchConf.resolveRound(this);
+    }
+
+    public long getMatchStartTime() {
+        return matchStartTime;
+    }
+
+    public long getRoundStartTime() {
+        return roundStartTime;
+    }
+
+    public long getMatchTime( ) {
+        return System.currentTimeMillis() - this.matchStartTime;
+    }
 }

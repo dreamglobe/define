@@ -8,17 +8,17 @@ import java.util.List;
 public class PlayerScore {
     private final String pid;
     private final Integer defId;
-    private final int voteScore, turnScore, totalPoints;
+    private final int voteScore, turnScore, totalScore;
     private final List<String> pidVoters;
     private final boolean correctDefinition;
 
     private PlayerScore(String pid, Integer defId, int voteScore, int turnScore,
-                        int totalPoints, List<String> pidVoters, boolean correctDefinition) {
+                        int totalScore, List<String> pidVoters, boolean correctDefinition) {
         this.pid = pid;
         this.defId = defId;
         this.voteScore = voteScore;
         this.turnScore = turnScore;
-        this.totalPoints = totalPoints;
+        this.totalScore = totalScore;
         this.pidVoters = pidVoters;
         this.correctDefinition = correctDefinition;
     }
@@ -39,8 +39,8 @@ public class PlayerScore {
         return turnScore;
     }
 
-    public int getTotalPoints() {
-        return totalPoints;
+    public int getTotalScore() {
+        return totalScore;
     }
 
     public List<String> getPidVoters() {

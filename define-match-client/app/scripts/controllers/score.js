@@ -19,10 +19,10 @@ angular.module('defineMatchClientApp')
         $scope.players = Player.getPlayers();
         $scope.me = Player.me();
 
-        $scope.readyText = $scope.me.ready? 'Esperar':'Listo';
+        $scope.readyText = $scope.me.isReady? 'Esperar':'Listo';
         $scope.toggleReady = function(){
-            $scope.me.ready = !$scope.me.ready;
-            $scope.readyText = $scope.me.ready? 'Esperar':'Listo';
-            MatchServer.sendReady($scope.me.ready);
+            $scope.me.isReady = !$scope.me.isReady;
+            $scope.readyText = $scope.me.isReady? 'Esperar':'Listo';
+            MatchServer.sendReady($scope.me.isReady);
         };
   });

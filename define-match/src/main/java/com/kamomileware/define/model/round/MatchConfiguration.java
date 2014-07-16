@@ -2,16 +2,27 @@ package com.kamomileware.define.model.round;
 
 import com.kamomileware.define.actor.RoundPhase;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 /**
  * Created by pepe on 10/07/14.
  */
 public class MatchConfiguration {
     private int voteValue = 1;
     private int correctVoteValue = 2;
-    private int goalPoints = 45;
+    private int minimunPlayers = 2;
+
+    private Optional<Integer> goalPoints = Optional.ofNullable(45);
+    private Optional<Integer> maximunRounds = Optional.ofNullable(null);
+    private Optional<Long> timeLimit = Optional.ofNullable(null);
+
     private PhaseConfiguration responsePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESPONSE, 60, 30, PhaseExtension.NO_PLAYER, true);
     private PhaseConfiguration votePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_VOTE, 60, 0, PhaseExtension.NEVER, true);
     private PhaseConfiguration resultPhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESULT, 40, 0, PhaseExtension.NEVER, true);
+
 
     private MatchConfiguration() {
     }
@@ -36,12 +47,32 @@ public class MatchConfiguration {
         this.correctVoteValue = correctVoteValue;
     }
 
-    public int getGoalPoints() {
+    public Optional<Integer> getGoalPoints() {
         return goalPoints;
     }
 
-    public void setGoalPoints(int goalPoints) {
-        this.goalPoints = goalPoints;
+    public void setGoalPoints(Integer goalPoints) {
+        this.goalPoints = Optional.ofNullable(goalPoints);
+    }
+
+    public int getMinimunPlayers() {
+        return minimunPlayers;
+    }
+
+    public Optional<Integer> getMaximunRounds() {
+        return maximunRounds;
+    }
+
+    public void setMaximunRounds(Integer maximunRounds) {
+        this.maximunRounds = Optional.ofNullable(maximunRounds);
+    }
+
+    public Optional<Long> getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(Long timeLimit) {
+        this.timeLimit = Optional.ofNullable(timeLimit);
     }
 
     public PhaseConfiguration getResponsePhaseConf() {
@@ -82,6 +113,33 @@ public class MatchConfiguration {
                 break;
         }
         return result;
+    }
+
+    public int getMinimumPlayers() {
+        return minimunPlayers;
+    }
+
+    public void setMinimunPlayers(int minimunPlayers) {
+        this.minimunPlayers = minimunPlayers;
+    }
+
+    public Set<TurnResult> resolveRound(Round round) {
+        Set<TurnResult> results = new HashSet<>(TurnResult.values().length);
+        List<PlayerData> players = round.getPlayers();
+        // end match conditions
+        if(players.size() < this.minimunPlayers){
+            results.add(TurnResult.NO_PLAYERS_LEFT);
+        }
+        if (this.goalPoints.isPresent() && round.hasWinners()){
+            results.add(TurnResult.GOAL_REACHED);
+        }
+        if(this.maximunRounds.isPresent() && this.maximunRounds.get() < round.getRoundNumber()){
+            results.add(TurnResult.TURN_LIMIT_REACHED);
+        }
+        if(this.timeLimit.isPresent() && this.timeLimit.get() < round.getMatchTime()){
+            results.add(TurnResult.TIME_LIMIT_REACHED);
+        }
+        return results;
     }
 
     public static enum PhaseExtension {
@@ -180,5 +238,7 @@ public class MatchConfiguration {
         public void setExtended(boolean extended) {
             this.extended = extended;
         }
+
+
     }
 }

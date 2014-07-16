@@ -68,9 +68,8 @@ angular.module('defineMatchClientApp')
                                 this.__.hasChange = true;
                             }
                             var self = this;
-                            $rootScope.$apply(function () {
-                                self.__[fieldName] = newValue;
-                            });
+                            self.__[fieldName] = newValue;
+                            $rootScope.$apply();
                         }
 
                     }
@@ -101,7 +100,6 @@ angular.module('defineMatchClientApp')
 
         // Player methods
         Player.prototype.newRound = function () {
-            this.consolidateScores();
             this.resetReady();
             this.definition = null;
             this.vote = null;
@@ -147,12 +145,8 @@ angular.module('defineMatchClientApp')
 
         Player.createList = function (list, name) {
             players = {};
-            playerPid = _.find(list, function (p) {
-                return p.name === name;
-            }).pid;
-            _.each(list, function (p) {
-                Player.create(p);
-            });
+            playerPid = _.find(list, function (p) {return p.name === name;}).pid;
+            _.each(list, function (p) {Player.create(p);});
             Console.logUserList(players);
             return players;
         };
@@ -167,12 +161,11 @@ angular.module('defineMatchClientApp')
 
         Player.startResultPhase = function () {
             Player.resetReady();
-            // TODO : pass players the scores
         };
 
         Player.resetReady = function () {
             _.each(players, function (p) {
-                p.isReady = false;
+                p.resetReady();
             });
         };
 

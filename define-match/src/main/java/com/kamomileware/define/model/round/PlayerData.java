@@ -145,13 +145,18 @@ public class PlayerData implements MessageInfoFactory {
         public void consolidateRound(){
             correctVote = false;
             voters = new ArrayList<>();
-            totalScore += turnScore;
             lastTurnScore = turnScore;
             turnScore = 0;
         }
 
+        public void applyTurnScore(){
+            if(turnScore>0){
+                totalScore += turnScore;
+            }
+        }
+
         public boolean isWinner(){
-            return totalScore >= matchConf.getGoalPoints();
+            return totalScore > matchConf.getGoalPoints().orElse(Integer.MAX_VALUE);
         }
 
         public PlayerData getPlayerData(){

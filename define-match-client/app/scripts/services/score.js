@@ -14,18 +14,18 @@ angular.module('defineMatchClientApp')
         var correctDefinition;
         var numCorrectVotes;
 
-        function Score(pid, defId, voteScore, turnScore, totalPoints, pidVoters, isCorrectDefinition) {
+        function Score(pid, defId, voteScore, turnScore, totalScore, pidVoters, isCorrectDefinition) {
             this.pid = pid;
             this.defId = defId;
             this.voteScore = voteScore;
             this.turnScore = turnScore;
-            this.totalPoints = totalPoints;
+            this.totalScore = totalScore;
             this.pidVoters = pidVoters;
             this.isCorrectDefinition = isCorrectDefinition;
 
             this.player = Player.get(pid);
             this.player.score = this;
-
+            this.player.consolidateScores();
             this.definition = Definition.get(defId);
         }
 
@@ -43,7 +43,7 @@ angular.module('defineMatchClientApp')
                         s.defId,
                         s.voteScore,
                         s.turnScore,
-                        s.totalPoints,
+                        s.totalScore,
                         s.pidVoters,
                         s.correctDefinition));
             });

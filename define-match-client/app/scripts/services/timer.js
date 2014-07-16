@@ -24,7 +24,6 @@ angular.module('defineMatchClientApp')
         function tick () {
             t.counter--;
             t.timer = $timeout(tick, 1000);
-            //$rootScope.$apply();
         }
 
         function calcMillisInSecond(millis) {
