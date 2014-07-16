@@ -32,8 +32,8 @@ public abstract class MatchFSM extends UntypedActor{
     }
 
     protected void setState(RoundPhase s){
-        transition(this.state, s);
         markStartPhaseTime();
+        transition(this.state, s);
         if(this.state != s){
             this.state = s;
         }
@@ -52,8 +52,8 @@ public abstract class MatchFSM extends UntypedActor{
         this.startPhaseTime = System.currentTimeMillis();
     }
 
-    protected long getPhaseMillisLeft(long phaseMilis){
-        long timeleft = phaseMilis - (System.currentTimeMillis()-this.startPhaseTime);
+    protected long getPhaseMillisLeft(long phaseSeconds){
+        long timeleft = (phaseSeconds*1000) - (System.currentTimeMillis()-this.startPhaseTime);
         return timeleft < 0 ? 0 : timeleft;
     }
 

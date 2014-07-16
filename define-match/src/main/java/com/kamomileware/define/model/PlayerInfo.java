@@ -7,15 +7,15 @@ public class PlayerInfo {
     private final String pid;
     private final String name;
     private final boolean isReady;
-    private final int totalPoints;
-    private final int lastPhasePoints;
+    private final int totalScore;
+    private final int turnScore;
 
     public PlayerInfo(String pid, String name, boolean isReady, int totalPoints, int lastPhasePoints) {
         this.pid = pid;
         this.name = name;
         this.isReady = isReady;
-        this.totalPoints = totalPoints;
-        this.lastPhasePoints = lastPhasePoints;
+        this.totalScore = totalPoints;
+        this.turnScore = lastPhasePoints;
     }
 
     public String getPid() {
@@ -30,11 +30,11 @@ public class PlayerInfo {
         return isReady;
     }
 
-    public int getTotalPoints() {
-        return totalPoints;
+    public int getTotalScore() {
+        return totalScore;
     }
 
-    public int getLastPhasePoints() {
-        return lastPhasePoints;
+    public int getTurnScore() {
+        return turnScore;
     }
 }

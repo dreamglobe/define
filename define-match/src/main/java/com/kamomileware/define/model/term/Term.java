@@ -77,4 +77,8 @@ public class Term {
         result = 31 * result + (category != null ? category.hashCode() : 0);
         return result;
     }
+
+    public Term forClient() {
+        return new Term(this.name, null, this.category);
+    }
 }

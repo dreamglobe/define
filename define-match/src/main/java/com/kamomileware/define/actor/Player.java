@@ -63,7 +63,7 @@ public class Player extends AbstractClientActor {
         || message instanceof UserReady
         || message instanceof StartDefinition
         || message instanceof StartVote
-        || message instanceof Result
+        || message instanceof StartShowScores
                 ){
             sendClient(message);
         } else if(message instanceof ClientResponse){

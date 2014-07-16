@@ -5,6 +5,7 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.Procedure;
+import com.kamomileware.define.model.MessageTypes;
 import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.round.MatchConfiguration;
 import com.kamomileware.define.model.round.Round;
@@ -67,9 +68,10 @@ public class Match extends MatchFSM {
             this.switchBehaviour(this.stopBehavior);
         } else if (next == PHASE_RESPONSE) {
             round = new Round(term, round);
-            this.sendUsers(new StartDefinition(round.getPhaseTotalDuration(PHASE_RESPONSE), term));
             this.switchBehaviour(this.waitResponseBehavior);
             this.startLatch();
+            final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESPONSE));
+            this.sendUsers(new StartDefinition(phaseMillisLeft, term.forClient()));
         } else if (next == PHASE_VOTE) {
             this.sendUsersDefinitions();
             this.switchBehaviour(this.waitVotesBehavior);
@@ -148,7 +150,7 @@ public class Match extends MatchFSM {
                 // TODO: model phase and time
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESPONSE));
                 handleRegisterUser((RegisterUser) message, sender());
-                sender().tell(new StartDefinition(phaseMillisLeft, term), self());
+                sender().tell(new StartDefinition(phaseMillisLeft, term.forClient()), self());
             } else {
                 super.apply(message);
             }
@@ -172,7 +174,8 @@ public class Match extends MatchFSM {
             } else if(message instanceof RegisterUser){
                 handleRegisterUser((RegisterUser) message, sender());
                 long timeLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_VOTE));
-                sender().tell(new StartVote(timeLeft, round.getRoundItemDefinitions(), null), self());
+                final RegisterUserInVote msg = new RegisterUserInVote(timeLeft, term, round.getRoundItemDefinitions(), null);
+                sender().tell(msg, self());
             } else {
                 super.apply(message);
             }
@@ -197,10 +200,10 @@ public class Match extends MatchFSM {
                 handleRegisterUser((RegisterUser) message, sender());
                 final int defId = round.getCorrectDefinition().getId();
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESULT));
-                sender().tell(new ResultForRegisterUser(
-                        defId, round.createPlayersScores(),
-                        round.getRoundItemDefinitions(),
-                        phaseMillisLeft), self());
+                final RegisterUserInShowScores msg = new RegisterUserInShowScores(
+                        phaseMillisLeft, term, round.getRoundItemDefinitions(),
+                        null, round.createPlayersScores(), defId);
+                sender().tell(msg, self());
             } else {
                 super.apply(message);
             }
@@ -246,7 +249,7 @@ public class Match extends MatchFSM {
     private void sendUsersResults() {
         List<PlayerScore> scores = round.applyVotesAndBuildRoundResults();
         final int defId = round.getCorrectDefinition().getId();
-        this.sendUsers(new Result(defId, scores, PHASE_DURATION.toMillis()));
+        this.sendUsers(new StartShowScores(PHASE_DURATION.toMillis(), scores, defId));
     }
 
     /**

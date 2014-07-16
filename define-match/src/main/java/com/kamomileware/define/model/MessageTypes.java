@@ -196,50 +196,6 @@ public class MessageTypes {
     /**
      * Created by pepe on 12/06/14.
      */
-    public static class Result extends PhaseDeffineMessage {
-        private static final long serialVersionUID = -7914974657516737999L;
-        private final int correctDefId;
-        private final long correctNumVotes;
-        private final List<PlayerScore> scores;
-
-        public Result(int correctDefId, List<PlayerScore> scores, long millis) {
-            super(millis);
-            this.scores = scores;
-            this.correctDefId = correctDefId;
-            this.correctNumVotes = scores.stream().filter(ps -> ps.isCorrectDefinition()).count();
-        }
-
-        public int getCorrectDefId() {
-            return correctDefId;
-        }
-
-        public long getCorrectNumVotes() {
-            return correctNumVotes;
-        }
-
-        public List<PlayerScore> getScores() {
-            return scores;
-        }
-    }
-
-    public static class ResultForRegisterUser extends Result {
-        private final List<ItemDefinition> definitions;
-
-        public ResultForRegisterUser(int correctDefId, List<PlayerScore> scores,
-                                     List<ItemDefinition> definitions, long millis) {
-            super(correctDefId, scores, millis);
-            this.definitions = definitions;
-        }
-
-        public List<ItemDefinition> getDefinitions() {
-            return definitions;
-        }
-
-    }
-
-    /**
-     * Created by pepe on 12/06/14.
-     */
     public static class PlayerList extends DeffineMessage {
         private static final long serialVersionUID = -5759721640234426466L;
         final List<PlayerInfo> players;
@@ -260,6 +216,10 @@ public class MessageTypes {
         public StartDefinition(long millis, Term term){
             super(millis);
             this.term = term;
+        }
+
+        public Term getTerm() {
+            return term;
         }
     }
 
@@ -283,25 +243,92 @@ public class MessageTypes {
         }
     }
 
+    public static class RegisterUserInVote extends StartVote {
+        private static final long serialVersionUID = 1097452098031248677L;
+        private final Term term;
+
+        public RegisterUserInVote(long millis, Term term, List<ItemDefinition> definitions, ItemDefinition playerDefinition ){
+            super(millis, definitions, playerDefinition);
+            this.term = term;
+        }
+
+        public Term getTerm() {
+            return term;
+        }
+    }
+
+    /**
+     * Created by pepe on 12/06/14.
+     */
+    public static class StartShowScores extends PhaseDeffineMessage {
+        private static final long serialVersionUID = -7914974657516737999L;
+        private final int correctDefId;
+        private final long numCorrectVotes;
+        private final List<PlayerScore> scores;
+
+        public StartShowScores(long millis, List<PlayerScore> scores, int correctDefId) {
+            super(millis);
+            this.scores = scores;
+            this.correctDefId = correctDefId;
+            this.numCorrectVotes = scores.stream().filter(ps -> ps.isCorrectDefinition()).count();
+        }
+
+        public int getCorrectDefId() {
+            return correctDefId;
+        }
+
+        public long getNumCorrectVotes() {
+            return numCorrectVotes;
+        }
+
+        public List<PlayerScore> getScores() {
+            return scores;
+        }
+    }
+
+    public static class RegisterUserInShowScores extends StartShowScores {
+        private final List<ItemDefinition> definitions;
+        private final Term term;
+        private final ItemDefinition playerDefinition;
+        public RegisterUserInShowScores(long millis, Term term, List<ItemDefinition> definitions, ItemDefinition playerDefinition, List<PlayerScore> scores, int correctDefId) {
+            super(millis, scores, correctDefId);
+            this.term = term;
+            this.definitions = definitions;
+            this.playerDefinition = playerDefinition;
+        }
+
+        public Term getTerm() {
+            return term;
+        }
+
+        public List<ItemDefinition> getDefinitions() {
+            return definitions;
+        }
+
+        public ItemDefinition getPlayerDefinition() {
+            return playerDefinition;
+        }
+    }
+
     /**
      * Created by pepe on 12/06/14.
      */
     public static class UserDefinition extends DeffineMessage {
         private static final long serialVersionUID = -1010573446123056025L;
-        private final String userId;
+        private final String pid;
         private final String response;
 
         /**
          * Constructor for informing the rest of the players
-         * @param userId
+         * @param pid
          */
-        public UserDefinition(String userId) {
-            this.userId = userId;
+        public UserDefinition(String pid) {
+            this.pid = pid;
             this.response=null;
         }
 
-        public UserDefinition(String userId, String response) {
-            this.userId = userId;
+        public UserDefinition(String pid, String response) {
+            this.pid = pid;
             this.response = response;
         }
 
@@ -309,18 +336,18 @@ public class MessageTypes {
             return response;
         }
 
-        public String getUserId() {
-            return userId;
+        public String getPid() {
+            return pid;
         }
     }
 
     public static class UserVote extends DeffineMessage {
         private static final long serialVersionUID = -6486443526196673922L;
-        private final String userId;
+        private final String pid;
         private final Integer voteId;
 
-        public UserVote(String userId, Integer voteId) {
-            this.userId = userId;
+        public UserVote(String pid, Integer voteId) {
+            this.pid = pid;
             this.voteId = voteId;
         }
 
@@ -328,8 +355,8 @@ public class MessageTypes {
             return voteId;
         }
 
-        public String getUserId() {
-            return userId;
+        public String getPid() {
+            return pid;
         }
     }
 
@@ -338,11 +365,11 @@ public class MessageTypes {
      */
     public static class UserReady extends DeffineMessage {
         private static final long serialVersionUID = 7686791648984584553L;
-        private final String userId;
+        private final String pid;
         private final Boolean ready;
 
-        public UserReady(String userId, boolean ready) {
-            this.userId = userId;
+        public UserReady(String pid, boolean ready) {
+            this.pid = pid;
             this.ready = Boolean.valueOf(ready);
         }
 
@@ -350,8 +377,8 @@ public class MessageTypes {
             return ready;
         }
 
-        public String getUserId() {
-            return userId;
+        public String getPid() {
+            return pid;
         }
     }
 }
