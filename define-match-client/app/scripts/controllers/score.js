@@ -11,7 +11,8 @@ angular.module('defineMatchClientApp')
   .controller('ScoreCtrl', function ($scope, Player, Definition, MatchServer, Score, Timer) {
         MatchServer.checkConnection();
 
-        $scope.term = Definition.getTerm();
+        $scope.termName = Definition.getTerm().name;
+        $scope.termCat = Definition.getTerm().category;
         $scope.termDefinition = Score.getCorrectDefinition().text;
         $scope.timer = Timer.start();
         $scope.scores = Score.getList();

@@ -12,7 +12,10 @@ angular.module('defineMatchClientApp')
         MatchServer.checkConnection();
 
         $scope.timer = Timer.start();
-        $scope.term = Definition.getTerm();
+        $scope.termName = Definition.getTerm().name;
+        $scope.termCat = Definition.getTerm().category;
+        $scope.$watch('termName');
+        $scope.$watch('termCat');
         $scope.players = Player.getPlayers();
         $scope.definition = '';
         $scope.lastDefinition = '';

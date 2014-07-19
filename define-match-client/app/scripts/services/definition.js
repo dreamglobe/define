@@ -8,7 +8,7 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .service('Definition', function (_) {
+    .service('Definition', function (_, $rootScope) {
 
         var turnTerm;
         var turnDefinitions = [];
@@ -38,7 +38,8 @@ angular.module('defineMatchClientApp')
                 posByDefId[d.defId] = index;
             });
             if(data.playerDefinition) {
-                Definition.setPlayerDefinition(data.playerDefinition);
+                var playerDef = Definition.setPlayerDefinition(data.playerDefinition);
+                turnDefinitions.push(playerDef);
                 posByDefId[playerDefinition.defId] = data.definitions.length;
             }
             return turnDefinitions;
@@ -51,6 +52,7 @@ angular.module('defineMatchClientApp')
 
         Definition.setTerm = function (term) {
             turnTerm = Term.create(term);
+            $rootScope.$apply();
         };
 
         Definition.getList = function () {
