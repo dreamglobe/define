@@ -61,12 +61,12 @@ public class PlayerData<REF> implements MessageInfoFactory {
 
     @Override
     public ItemDefinition createItemDefinition() {
-        return definition != null ? new ItemDefinition(definition.getId(), definition.getDefinition()) : new ItemDefinition(0,"");
+        return definition != null ? new ItemDefinition(definition.getDefId(), definition.getText()) : new ItemDefinition(0,"");
     }
 
     @Override
     public PlayerScore createPlayerScore(){
-        Integer defId = definition!=null? definition.getId():null;
+        Integer defId = definition!=null? definition.getDefId():null;
         return PlayerScore.create(pid, defId, score.getVoteScore(), score.getTurnScore(),
                 score.getTotalScore(), score.getVoters(), score.isCorrectVote());
     }

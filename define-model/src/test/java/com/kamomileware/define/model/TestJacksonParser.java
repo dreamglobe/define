@@ -1,4 +1,4 @@
-package com.kamomileware.akka.pattern.dispatcher;
+package com.kamomileware.define.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kamomileware.define.model.MessageTypes;

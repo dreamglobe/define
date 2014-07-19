@@ -1,5 +1,6 @@
 package com.kamomileware.define.model.round;
 
+import com.kamomileware.define.model.ItemDefinition;
 import com.kamomileware.define.model.term.Term;
 
 /**
@@ -10,21 +11,23 @@ public class TermDefinition<REF> {
     private final boolean correct;
     private final PlayerData<REF> playerData;
     private final Term term;
-    private final String definition;
-    private final Integer definitionId;
+    private final String text;
+    private final String originalDefinition;
+    private final Integer defId;
 
     /**
      * Player definition
      * @param playerData the player that is giving the definition
-     * @param definition the given definition
+     * @param text the given definition
      * @param term the term the definition correspond
      */
-    public TermDefinition(PlayerData<REF> playerData, String definition, Term term) {
+    public TermDefinition(PlayerData<REF> playerData, String text, Term term) {
         this.playerData = playerData;
         this.playerData.setDefinition(this);
-        this.definition = definition;
+        this.originalDefinition = text;
+        this.text = term.getCategory().format(text);
         this.term = term;
-        this.definitionId = calculateDefinitionId(definition);
+        this.defId = calculateDefinitionId(text);
         this.correct = false;
     }
 
@@ -35,8 +38,9 @@ public class TermDefinition<REF> {
     public TermDefinition(Term term) {
         this.correct = true;
         this.playerData = null;
-        this.definition = term.getDefinition();
-        this.definitionId = calculateDefinitionId(definition);
+        this.originalDefinition = term.getDefinition();
+        this.text = term.getCategory().format(originalDefinition);
+        this.defId = calculateDefinitionId(text);
         this.term = term;
     }
 
@@ -56,15 +60,19 @@ public class TermDefinition<REF> {
         return playerData;
     }
 
-    public String getDefinition() {
-        return definition;
+    public String getText() {
+        return text;
     }
 
-    public Integer getId() {
-        return definitionId;
+    public Integer getDefId() {
+        return defId;
     }
 
     public boolean isCorrect() {
         return correct;
+    }
+
+    public static ItemDefinition createItemDefinition(TermDefinition definition){
+        return new ItemDefinition(definition.getDefId(), definition.getText());
     }
 }

@@ -174,7 +174,6 @@ public class Match extends MatchFSM {
                     } else {
                         setState(STOPPED);
                     }
-
                 }
             }else if(message instanceof Latch){
                 handleEndVote();
@@ -213,7 +212,7 @@ public class Match extends MatchFSM {
                 setState(PHASE_RESPONSE);
             } else if (message instanceof RegisterUser) {
                 handleRegisterUser((RegisterUser) message, sender());
-                final int defId = round.getCorrectDefinition().getId();
+                final int defId = round.getCorrectDefinition().getDefId();
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESULT));
                 final RegisterUserInShowScores msg = new RegisterUserInShowScores(
                         phaseMillisLeft, round.getTerm(), round.getRoundItemDefinitions(),
@@ -239,7 +238,7 @@ public class Match extends MatchFSM {
     }
 
     private void sendUsersDefinitions() {
-        round.buildRoundDefinitions();
+        round.createRoundDefinitions();
         round.applyPlayers(p -> p.getRef().tell(
                 new StartVote(round.getPhaseTotalDuration(PHASE_VOTE),
                         round.getDefinitionsForPlayer(p),
@@ -268,7 +267,7 @@ public class Match extends MatchFSM {
      */
     private void sendUsersScores() {
         List<PlayerScore> scores = this.round.createPlayersScores();
-        final int defId = round.getCorrectDefinition().getId();
+        final int defId = round.getCorrectDefinition().getDefId();
         this.sendUsers(new StartShowScores(round.getPhaseTotalDuration(PHASE_RESULT), scores, defId));
     }
 

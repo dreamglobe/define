@@ -86,7 +86,7 @@ public class Round<REF> implements DefinitionResolver {
     @Override
     public Optional<TermDefinition> findDefinitionById(Integer idDef) {
         return roundDefinitions.stream()
-                .filter(d -> d.getId().equals(idDef))
+                .filter(d -> d.getDefId().equals(idDef))
                 .findFirst();
     }
 
@@ -94,7 +94,7 @@ public class Round<REF> implements DefinitionResolver {
         return roundNumber;
     }
 
-    public void buildRoundDefinitions(){
+    public void createRoundDefinitions(){
         this.roundDefinitions = new ArrayList<>(roundPlayers.getPlayerList().stream()
                 .map(PlayerData::getDefinition)
                 .filter(td -> td != null)
@@ -116,8 +116,7 @@ public class Round<REF> implements DefinitionResolver {
     }
 
     private List<ItemDefinition> transformTermInItemDefinition(List<TermDefinition> definitions) {
-        return definitions.stream().map(d -> new ItemDefinition(d.getId(),d.getDefinition()))
-                .collect(Collectors.toList());
+        return definitions.stream().map(TermDefinition::createItemDefinition).collect(Collectors.toList());
     }
 
     public void setPlayerDefinition(REF playerRef, String definition){
