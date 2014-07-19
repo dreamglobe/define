@@ -4,6 +4,7 @@ import com.kamomileware.define.model.ItemDefinition;
 import com.kamomileware.define.model.PlayerInfo;
 import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.match.MatchConfiguration;
+import com.kamomileware.define.model.match.MatchResolver;
 import com.kamomileware.define.model.term.Term;
 
 import java.util.*;
@@ -34,7 +35,7 @@ public class Round<REF> implements DefinitionResolver {
     public Round(MatchConfiguration matchConf, Term term) {
         this.roundNumber = 0;
         this.term = term;
-        this.roundPlayers = new RoundPlayers();
+        this.roundPlayers = new RoundPlayers<REF>();
         this.matchConf = matchConf;
         this.roundDefinitions = new ArrayList<>();
         this.matchStartTime = this.roundStartTime = System.currentTimeMillis();
@@ -44,7 +45,7 @@ public class Round<REF> implements DefinitionResolver {
      * Consecutive round constructor
      * @param previousRound
      */
-    public Round(Round previousRound, Term term) {
+    public Round(Round<REF> previousRound, Term term) {
         this.roundNumber = previousRound.getRoundNumber()+1;
         this.term = term;
         this.matchConf = previousRound.getMatchConf();
@@ -196,10 +197,6 @@ public class Round<REF> implements DefinitionResolver {
         return matchConf.getPhaseConf(state).getTotalDuration() * 1000;
     }
 
-    public Set<TurnResult> calculateRoundResult() {
-        return result = matchConf.resolveRound(this);
-    }
-
     public long getMatchStartTime() {
         return matchStartTime;
     }
@@ -216,7 +213,11 @@ public class Round<REF> implements DefinitionResolver {
         return roundPlayers.getPlayerList();
     }
 
-    RoundPlayers<REF> nextRoundPlayers(Round newRound) {
+    public void calculateRoundResult(){
+        this.result = MatchResolver.resolve(this);
+    }
+
+    RoundPlayers<REF> nextRoundPlayers(Round<REF> newRound) {
         this.roundPlayers.getPlayerList().forEach(p -> p.prepareNextRound(newRound));
         return roundPlayers;
     }

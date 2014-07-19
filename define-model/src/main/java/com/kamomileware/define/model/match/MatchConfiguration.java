@@ -6,10 +6,7 @@ import com.kamomileware.define.model.round.Round;
 import com.kamomileware.define.model.round.RoundPhase;
 import com.kamomileware.define.model.round.TurnResult;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by pepe on 10/07/14.
@@ -29,10 +26,6 @@ public class MatchConfiguration {
 
 
     private MatchConfiguration() {
-    }
-
-    public static MatchConfiguration createMatchConfiguration() {
-        return new MatchConfiguration();
     }
 
     public int getVoteValue() {
@@ -123,24 +116,22 @@ public class MatchConfiguration {
         return result;
     }
 
-    public Set<TurnResult> resolveRound(Round round) {
-        Set<TurnResult> results = new HashSet<>(TurnResult.values().length);
-        List<PlayerData> players = round.getPlayerList();
-        // end match conditions
-        if(players.size() < this.minimunPlayers){
-            results.add(TurnResult.NO_PLAYERS_LEFT);
-        }
-        if (this.goalPoints.isPresent() && round.hasWinners()){
-            results.add(TurnResult.GOAL_REACHED);
-        }
-        if(this.maximunRounds.isPresent() && this.maximunRounds.get() < round.getRoundNumber()){
-            results.add(TurnResult.TURN_LIMIT_REACHED);
-        }
-        if(this.timeLimit.isPresent() && this.timeLimit.get() < round.getMatchTime()){
-            results.add(TurnResult.TIME_LIMIT_REACHED);
-        }
-        return results;
+    public int getMinimunPlayers() {
+        return minimunPlayers;
     }
+
+    public void setGoalPoints(Optional<Integer> goalPoints) {
+        this.goalPoints = goalPoints;
+    }
+
+    public void setMaximunRounds(Optional<Integer> maximunRounds) {
+        this.maximunRounds = maximunRounds;
+    }
+
+    public void setTimeLimit(Optional<Long> timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+
 
     public static enum PhaseExtension {
         NEVER, NO_PLAYER, SOME_PLAYER, NONE_OR_SOME_PLAYERS, ALWAYS;
@@ -238,7 +229,9 @@ public class MatchConfiguration {
         public void setExtended(boolean extended) {
             this.extended = extended;
         }
+    }
 
-
+    public static MatchConfiguration createDefault() {
+        return new MatchConfiguration();
     }
 }

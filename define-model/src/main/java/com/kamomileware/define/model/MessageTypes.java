@@ -1,6 +1,7 @@
 package com.kamomileware.define.model;
 
 import com.fasterxml.jackson.annotation.*;
+import com.kamomileware.define.model.match.MatchConfiguration;
 import com.kamomileware.define.model.term.Term;
 
 import java.io.Serializable;
@@ -47,6 +48,20 @@ public class MessageTypes {
             @JsonSubTypes.Type(value = ClientVote.class, name = "ClientVote")})
     public abstract static class ClientMessage extends DeffineMessage {
         private static final long serialVersionUID = -4040598146039087356L;
+    }
+
+
+    public static class ClientStartMatch extends ClientMessage {
+        MatchConfiguration config;
+
+        @JsonCreator
+        public ClientStartMatch(@JsonProperty("config") MatchConfiguration config) {
+            this.config = config;
+        }
+
+        public MatchConfiguration getConfig() {
+            return config;
+        }
     }
 
     /**
@@ -206,6 +221,22 @@ public class MessageTypes {
 
         public List<PlayerInfo> getPlayers() {
             return players;
+        }
+    }
+
+    public static class Starting extends DeffineMessage {
+
+        MatchConfiguration config;
+
+        public Starting() {
+        }
+
+        public Starting(MatchConfiguration config) {
+            this.config = config;
+        }
+
+        public MatchConfiguration getConfig() {
+            return config;
         }
     }
 

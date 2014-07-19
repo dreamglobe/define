@@ -9,7 +9,7 @@ public class VoteDefinition<REF> {
 
     private final PlayerData<REF> voterPlayer;
 
-    private VoteDefinition(PlayerData voterPlayer, TermDefinition selectedDefinition) {
+    private VoteDefinition(PlayerData<REF> voterPlayer, TermDefinition selectedDefinition) {
         this.voterPlayer = voterPlayer;
         this.selectedDefinition = selectedDefinition;
     }
@@ -26,7 +26,7 @@ public class VoteDefinition<REF> {
         }
     }
 
-    public static VoteDefinition createVoteDefinition(PlayerData voterPlayer, TermDefinition definition) {
-        return new VoteDefinition(voterPlayer, definition);
+    public static <REF> VoteDefinition createVoteDefinition(PlayerData<REF> voterPlayer, TermDefinition definition) {
+        return new VoteDefinition<REF>(voterPlayer, definition);
     }
 }

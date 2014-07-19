@@ -1,6 +1,6 @@
 package com.kamomileware.define.config;
 
-import com.kamomileware.define.actor.Player.ClientHandler;
+import com.kamomileware.define.actor.PlayerActor.ClientHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

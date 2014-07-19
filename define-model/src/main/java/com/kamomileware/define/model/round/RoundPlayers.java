@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class RoundPlayers<REF extends Object> {
+public class RoundPlayers<REF> {
     final List<PlayerData<REF>> players;
     final Map<REF, PlayerData<REF>> playersByRef;
     final Map<String, PlayerData<REF>> playersByPid;
@@ -23,7 +23,7 @@ public class RoundPlayers<REF extends Object> {
         this.playerNamesByPid = new HashMap<>();
     }
 
-    public RoundPlayers(RoundPlayers previousPlayers) {
+    public RoundPlayers(RoundPlayers<REF> previousPlayers) {
         this.players = previousPlayers.getPlayerList();
         this.playersByPid = previousPlayers.getPlayersByPid();
         this.playersByRef = previousPlayers.getPlayersByRef();
@@ -34,7 +34,7 @@ public class RoundPlayers<REF extends Object> {
     public boolean addRoundPlayer(REF playerRef, String name, String pid) {
         boolean alreadyExists = playersByRef.containsKey(playerRef) || playersByPid.containsKey(pid);
         if (!alreadyExists) {
-            PlayerData player = PlayerData.createPlayerData(playerRef, name, pid, null);
+            PlayerData<REF> player = PlayerData.createPlayerData(playerRef, name, pid, null);
             this.players.add(player);
             this.playersByPid.put(pid, player);
             this.playersByRef.put(playerRef, player);

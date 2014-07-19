@@ -3,7 +3,7 @@ package com.kamomileware.define.config;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import com.kamomileware.define.extension.SpringWSocketClientExtension;
-import com.kamomileware.define.actor.Match;
+import com.kamomileware.define.actor.MatchActor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +34,6 @@ class AppConfiguration {
 
     @Bean @Named("matchActor")
     public ActorRef crossGateActor() {
-        return actorSystem().actorOf(Match.props(), "match");
+        return actorSystem().actorOf(MatchActor.props(), "match");
     }
 }

@@ -101,7 +101,7 @@ public class PlayerData<REF> implements MessageInfoFactory {
     }
 
     public void setDefinition(Term term, String definition) {
-        this.definition = new TermDefinition(this, definition, term);
+        this.definition = new TermDefinition<REF>(this, definition, term);
     }
 
     void setDefinition(TermDefinition definition){

@@ -36,19 +36,19 @@ import static com.kamomileware.define.model.MessageTypes.*;
 /**
  * Created by pepe on 13/06/14.
  */
-@Named("userActor")
+@Named("playerActor")
 @Scope("prototype")
-public class Player extends AbstractClientActor {
+public class PlayerActor extends AbstractClientActor {
 
     private final LoggingAdapter log = Logging.getLogger(context().system(), this);
 
     @Inject @Named("matchActor") ActorRef match;
 
-    protected Player() {
+    protected PlayerActor() {
         super();
     }
 
-    protected Player(WebSocketSession wsSession) {
+    protected PlayerActor(WebSocketSession wsSession) {
         super(wsSession);
     }
 
@@ -88,11 +88,11 @@ public class Player extends AbstractClientActor {
     /** Static Methods **/
 
     static Props props() {
-        return Props.create(Player.class);
+        return Props.create(PlayerActor.class);
     }
 
     static Props props(WebSocketSession wsSession) {
-        return Props.create(Player.class, wsSession);
+        return Props.create(PlayerActor.class, wsSession);
     }
 
     @Controller
@@ -109,7 +109,7 @@ public class Player extends AbstractClientActor {
         public void afterConnectionEstablished(WebSocketSession session) throws Exception {
             final SpringWSocketClientExtension.SpringExt springExt = SpringExtProvider.get(system);
             name = session.getPrincipal().getName();
-            this.player = Optional.ofNullable(system.actorOf(springExt.props(session, "userActor"), name));
+            this.player = Optional.ofNullable(system.actorOf(springExt.props(session, "playerActor"), name));
             this.sendMessageToPlayer(MessageTypes.START);
 
         }

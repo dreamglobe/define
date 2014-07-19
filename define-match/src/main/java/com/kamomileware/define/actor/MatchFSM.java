@@ -57,7 +57,8 @@ public abstract class MatchFSM extends UntypedActor{
     }
 
     protected int startLatch(){
-        this.latchTimer = this.startLatch(this.round.getRoundNumber(), new FiniteDuration(round.getPhaseTotalDuration(state),TimeUnit.SECONDS));
+        final long phaseTotalDuration = round.getPhaseTotalDuration(state);
+        this.latchTimer = this.startLatch(this.round.getRoundNumber(), new FiniteDuration(phaseTotalDuration,TimeUnit.MILLISECONDS));
         return this.counter;
     }
 
