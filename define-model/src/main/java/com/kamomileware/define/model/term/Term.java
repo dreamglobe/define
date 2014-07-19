@@ -1,12 +1,20 @@
 package com.kamomileware.define.model.term;
 
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
+import static com.kamomileware.define.model.term.TermCategory.*;
+
 /**
  * Created by pepe on 10/07/14.
  */
 
 public class Term {
 
-    private Long id;
+    private String id;
     private String name;
     private String definition;
     private TermCategory category;
@@ -25,11 +33,11 @@ public class Term {
         this.definition = definition;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -77,9 +85,5 @@ public class Term {
         result = 31 * result + definition.hashCode();
         result = 31 * result + (category != null ? category.hashCode() : 0);
         return result;
-    }
-
-    public Term forClient() {
-        return new Term(this.name, null, this.category);
     }
 }

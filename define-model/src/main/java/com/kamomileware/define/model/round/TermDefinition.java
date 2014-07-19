@@ -5,10 +5,10 @@ import com.kamomileware.define.model.term.Term;
 /**
  * Created by pepe on 10/07/14.
  */
-public class TermDefinition {
+public class TermDefinition<REF> {
 
     private final boolean correct;
-    private final PlayerData playerData;
+    private final PlayerData<REF> playerData;
     private final Term term;
     private final String definition;
     private final Integer definitionId;
@@ -19,7 +19,7 @@ public class TermDefinition {
      * @param definition the given definition
      * @param term the term the definition correspond
      */
-    public TermDefinition(PlayerData playerData, String definition, Term term) {
+    public TermDefinition(PlayerData<REF> playerData, String definition, Term term) {
         this.playerData = playerData;
         this.playerData.setDefinition(this);
         this.definition = definition;
@@ -52,7 +52,7 @@ public class TermDefinition {
         return term;
     }
 
-    public PlayerData getPlayerData() {
+    public PlayerData<REF> getPlayerData() {
         return playerData;
     }
 

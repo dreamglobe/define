@@ -1,5 +1,7 @@
 package com.kamomileware.define.model.round;
 
+import com.kamomileware.define.model.match.MatchConfiguration;
+
 import java.util.Optional;
 
 /**

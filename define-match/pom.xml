@@ -5,7 +5,6 @@
         <artifactId>define-project</artifactId>
         <groupId>com.kamomileware.define</groupId>
         <version>0.3-SNAPSHOT</version>
-
     </parent>
     <artifactId>define-match</artifactId>
 
@@ -23,6 +22,10 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>define-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>define-terms</artifactId>
         </dependency>
 
         <dependency>

@@ -1,6 +1,10 @@
-package com.kamomileware.define.model.round;
+package com.kamomileware.define.model.match;
 
-import com.kamomileware.define.actor.RoundPhase;
+
+import com.kamomileware.define.model.round.PlayerData;
+import com.kamomileware.define.model.round.Round;
+import com.kamomileware.define.model.round.RoundPhase;
+import com.kamomileware.define.model.round.TurnResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,15 +17,15 @@ import java.util.Set;
 public class MatchConfiguration {
     private int voteValue = 1;
     private int correctVoteValue = 2;
-    private int minimunPlayers = 2;
+    private int minimunPlayers = 1;
 
     private Optional<Integer> goalPoints = Optional.ofNullable(45);
     private Optional<Integer> maximunRounds = Optional.ofNullable(null);
     private Optional<Long> timeLimit = Optional.ofNullable(null);
 
-    private PhaseConfiguration responsePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESPONSE, 60, 30, PhaseExtension.NO_PLAYER, true);
-    private PhaseConfiguration votePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_VOTE, 60, 0, PhaseExtension.NEVER, true);
-    private PhaseConfiguration resultPhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESULT, 40, 0, PhaseExtension.NEVER, true);
+    private PhaseConfiguration responsePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESPONSE, 180, 60, PhaseExtension.NO_PLAYER, true);
+    private PhaseConfiguration votePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_VOTE, 90, 0, PhaseExtension.NEVER, true);
+    private PhaseConfiguration resultPhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESULT, 30, 0, PhaseExtension.NEVER, true);
 
 
     private MatchConfiguration() {
@@ -55,8 +59,12 @@ public class MatchConfiguration {
         this.goalPoints = Optional.ofNullable(goalPoints);
     }
 
-    public int getMinimunPlayers() {
+    public int getMinimumPlayers() {
         return minimunPlayers;
+    }
+
+    public void setMinimunPlayers(int minimunPlayers) {
+        this.minimunPlayers = minimunPlayers;
     }
 
     public Optional<Integer> getMaximunRounds() {
@@ -115,17 +123,9 @@ public class MatchConfiguration {
         return result;
     }
 
-    public int getMinimumPlayers() {
-        return minimunPlayers;
-    }
-
-    public void setMinimunPlayers(int minimunPlayers) {
-        this.minimunPlayers = minimunPlayers;
-    }
-
     public Set<TurnResult> resolveRound(Round round) {
         Set<TurnResult> results = new HashSet<>(TurnResult.values().length);
-        List<PlayerData> players = round.getPlayers();
+        List<PlayerData> players = round.getPlayerList();
         // end match conditions
         if(players.size() < this.minimunPlayers){
             results.add(TurnResult.NO_PLAYERS_LEFT);

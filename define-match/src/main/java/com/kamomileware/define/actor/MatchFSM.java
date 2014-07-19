@@ -1,9 +1,12 @@
 package com.kamomileware.define.actor;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Cancellable;
 import akka.actor.UntypedActor;
 import akka.japi.Procedure;
+import com.kamomileware.define.model.round.Round;
+import com.kamomileware.define.model.round.RoundPhase;
 import scala.concurrent.duration.FiniteDuration;
 
 import java.util.concurrent.TimeUnit;
@@ -18,18 +21,19 @@ import static com.kamomileware.define.model.MessageTypes.Latch;
  */
 public abstract class MatchFSM extends UntypedActor{
 
-    protected static final FiniteDuration PHASE_DURATION = new FiniteDuration(61, TimeUnit.SECONDS);
-    protected static final FiniteDuration EXTEND_DURATION = new FiniteDuration(31, TimeUnit.SECONDS);
     private Cancellable latchTimer;
     private int counter = 1;
     private long startPhaseTime = 0;
 
+    protected Round<ActorRef> round ;
 
     private RoundPhase state = RoundPhase.STOPPED;
 
     protected void init(){
         ;
     }
+
+    abstract protected void transition(RoundPhase oldState, RoundPhase newState);
 
     protected void setState(RoundPhase s){
         markStartPhaseTime();
@@ -39,14 +43,9 @@ public abstract class MatchFSM extends UntypedActor{
         }
     }
 
-/*
-    protected State getState(){
+    protected RoundPhase getState(){
         return this.state;
     }
-*/
-
-    abstract protected void transition(RoundPhase oldState, RoundPhase newState);
-
 
     private void markStartPhaseTime(){
         this.startPhaseTime = System.currentTimeMillis();
@@ -58,12 +57,13 @@ public abstract class MatchFSM extends UntypedActor{
     }
 
     protected int startLatch(){
-        this.latchTimer = this.startLatch(++this.counter, this.PHASE_DURATION);
+        this.latchTimer = this.startLatch(this.round.getRoundNumber(), new FiniteDuration(round.getPhaseTotalDuration(state),TimeUnit.SECONDS));
         return this.counter;
     }
 
     protected int startLatchExtend(){
-        this.latchTimer = this.startLatch(this.counter, this.EXTEND_DURATION);
+        this.latchTimer = this.startLatch(this.round.getRoundNumber(),
+                new FiniteDuration(round.getPhaseTotalDuration(state),TimeUnit.SECONDS));
         return this.counter;
     }
 

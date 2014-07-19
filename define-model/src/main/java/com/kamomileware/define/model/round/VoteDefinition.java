@@ -3,11 +3,11 @@ package com.kamomileware.define.model.round;
 /**
  * Created by pepe on 10/07/14.
  */
-public class VoteDefinition {
+public class VoteDefinition<REF> {
 
     private final TermDefinition selectedDefinition;
 
-    private final PlayerData voterPlayer;
+    private final PlayerData<REF> voterPlayer;
 
     private VoteDefinition(PlayerData voterPlayer, TermDefinition selectedDefinition) {
         this.voterPlayer = voterPlayer;

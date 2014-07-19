@@ -1,10 +1,10 @@
 package com.kamomileware.define.model.round;
 
-import akka.actor.ActorRef;
 import com.kamomileware.define.model.ItemDefinition;
 import com.kamomileware.define.model.MessageInfoFactory;
 import com.kamomileware.define.model.PlayerInfo;
 import com.kamomileware.define.model.PlayerScore;
+import com.kamomileware.define.model.match.MatchConfiguration;
 import com.kamomileware.define.model.term.Term;
 
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.Optional;
 /**
  * Created by pepe on 10/07/14.
  */
-public class PlayerData implements MessageInfoFactory {
+public class PlayerData<REF> implements MessageInfoFactory {
 
     private final String name;
-    private final ActorRef ref;
+    private final REF ref;
     private final String pid;
     private final Score score;
 
@@ -28,7 +28,7 @@ public class PlayerData implements MessageInfoFactory {
 
     private DefinitionResolver resolver;
 
-    private PlayerData(ActorRef ref, String name, String pid, DefinitionResolver round) {
+    private PlayerData(REF ref, String name, String pid, DefinitionResolver round) {
         this.ref = ref;
         this.name = name;
         this.pid = pid;
@@ -61,7 +61,7 @@ public class PlayerData implements MessageInfoFactory {
 
     @Override
     public ItemDefinition createItemDefinition() {
-        return new ItemDefinition(definition.getId(), definition.getDefinition());
+        return definition != null ? new ItemDefinition(definition.getId(), definition.getDefinition()) : new ItemDefinition(0,"");
     }
 
     @Override
@@ -84,7 +84,7 @@ public class PlayerData implements MessageInfoFactory {
         this.readyInResult = false;
     }
 
-    public ActorRef getRef() {
+    public REF getRef() {
         return ref;
     }
 
@@ -112,12 +112,16 @@ public class PlayerData implements MessageInfoFactory {
         return Optional.ofNullable(vote);
     }
 
-    public Score getScore() {
+    public PlayerData<REF>.Score getScore() {
         return score;
     }
 
-    public static PlayerData createPlayerData(ActorRef playerRef, String name, String pid, DefinitionResolver resolver) {
-        return new PlayerData(playerRef, name, pid, resolver);
+    public static <PREF> PlayerData createPlayerData(PREF playerRef, String name, String pid, DefinitionResolver resolver) {
+        return new PlayerData<PREF>(playerRef, name, pid, resolver);
+    }
+
+    public boolean isWinner(){
+        return score.getTotalScore() > resolver.getMatchConf().getGoalPoints().orElse(Integer.MAX_VALUE);
     }
 
     public class Score{
@@ -155,11 +159,7 @@ public class PlayerData implements MessageInfoFactory {
             }
         }
 
-        public boolean isWinner(){
-            return totalScore > matchConf.getGoalPoints().orElse(Integer.MAX_VALUE);
-        }
-
-        public PlayerData getPlayerData(){
+        public PlayerData<REF> getPlayerData(){
             return PlayerData.this;
         }
 

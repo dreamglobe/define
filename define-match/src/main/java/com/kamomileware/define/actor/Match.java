@@ -6,14 +6,14 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.Procedure;
 import com.kamomileware.define.model.PlayerScore;
-import com.kamomileware.define.model.round.MatchConfiguration;
+import com.kamomileware.define.model.match.MatchConfiguration;
 import com.kamomileware.define.model.round.Round;
-import com.kamomileware.define.model.term.Term;
-import com.kamomileware.define.model.term.TermCategory;
+import com.kamomileware.define.model.round.RoundPhase;
 
 import java.util.*;
 
-import static com.kamomileware.define.actor.RoundPhase.*;
+import static com.kamomileware.define.actor.TermRepository.*;
+import static com.kamomileware.define.model.round.RoundPhase.*;
 import static com.kamomileware.define.model.MessageTypes.*;
 
 /**
@@ -27,14 +27,11 @@ public class Match extends MatchFSM {
 
     private final LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
-    private Term term = new Term("recañí", "Ventana", TermCategory.CH);
-
     private final StoppedBehaviour stopBehavior = new StoppedBehaviour();
     private final WaitResponseBehaviour waitResponseBehavior = new WaitResponseBehaviour();
     private final WaitVotesBehaviour waitVotesBehavior = new WaitVotesBehaviour();
     private final ShowResultBehaviour showResultBehavior = new ShowResultBehaviour();
 
-    private Round round ;
 
     /**
      * Sets the initial state becoming {@link com.kamomileware.define.actor.Match.StoppedBehaviour}
@@ -66,11 +63,11 @@ public class Match extends MatchFSM {
             round = null;
             this.switchBehaviour(this.stopBehavior);
         } else if (next == PHASE_RESPONSE) {
-            round = new Round(term, round);
+            round = new Round(round, get(round.getRoundNumber()));
             this.switchBehaviour(this.waitResponseBehavior);
             this.startLatch();
             final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESPONSE));
-            this.sendUsers(new StartDefinition(phaseMillisLeft, term.forClient()));
+            this.sendUsers(new StartDefinition(phaseMillisLeft, round.getTerm()));
         } else if (next == PHASE_VOTE) {
             this.sendUsersDefinitions();
             this.switchBehaviour(this.waitVotesBehavior);
@@ -96,7 +93,7 @@ public class Match extends MatchFSM {
     private class StoppedBehaviour implements Procedure<Object> {
         public void apply(Object message) {
             if (message instanceof RegisterUser) {
-                round = new Round(term, MatchConfiguration.createMatchConfiguration());
+                round = new Round(MatchConfiguration.createMatchConfiguration(), shuffleAndGet());
                 handleRegisterUser((RegisterUser) message, sender());
                 setState(PHASE_RESPONSE);
             } else {
@@ -115,7 +112,7 @@ public class Match extends MatchFSM {
                 sendUsers(message);
                 setState(STOPPED);
             } else if (message instanceof RemoveUser) {
-                int left = round.removePlayerData(sender());
+                int left = round.removeRoundPlayer(sender());
                 sendUsers(message);
                 if ( left == 0) {
                     self().tell(STOP, self());
@@ -154,7 +151,7 @@ public class Match extends MatchFSM {
                 // TODO: model phase and time
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESPONSE));
                 handleRegisterUser((RegisterUser) message, sender());
-                sender().tell(new StartDefinition(phaseMillisLeft, term.forClient()), self());
+                sender().tell(new StartDefinition(phaseMillisLeft, round.getTerm()), self());
             } else {
                 super.apply(message);
             }
@@ -169,7 +166,7 @@ public class Match extends MatchFSM {
         public void apply(Object message){
             if(message instanceof UserVote){
                 handleVote((UserVote) message);
-                if(round.hasEveryonrVote()){
+                if(round.hasEveryoneVote()){
                     handleEndVote();
                     cancelLatch();
                     if(!round.isFinalRound()) {
@@ -190,7 +187,9 @@ public class Match extends MatchFSM {
             } else if(message instanceof RegisterUser){
                 handleRegisterUser((RegisterUser) message, sender());
                 long timeLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_VOTE));
-                final RegisterUserInVote msg = new RegisterUserInVote(timeLeft, term, round.getRoundItemDefinitions(), null);
+                final RegisterUserInVote msg =
+                        new RegisterUserInVote(timeLeft, round.getTerm(),
+                                round.getRoundItemDefinitions(), null);
                 sender().tell(msg, self());
             } else {
                 super.apply(message);
@@ -217,7 +216,7 @@ public class Match extends MatchFSM {
                 final int defId = round.getCorrectDefinition().getId();
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESULT));
                 final RegisterUserInShowScores msg = new RegisterUserInShowScores(
-                        phaseMillisLeft, term, round.getRoundItemDefinitions(),
+                        phaseMillisLeft, round.getTerm(), round.getRoundItemDefinitions(),
                         null, round.createPlayersScores(), defId);
                 sender().tell(msg, self());
             } else {
@@ -229,20 +228,20 @@ public class Match extends MatchFSM {
     /* Private methods for handling message */
     private void handleRegisterUser(RegisterUser message, ActorRef sender) {
         this.sendUsers(message);
-        round.addPlayerData(sender(), message.getName(), message.getPid());
+        round.addRoundPlayer(sender(), message.getName(), message.getPid());
         sender.tell(new PlayerList(round.createPlayersInfo()), this.self());
     }
 
     private void handleUserResponse(String definition, ActorRef sender) {
         round.setPlayerDefinition(sender, definition);
-        final String pid = round.getPlayerPidByRef(sender);
+        final String pid = round.getPlayerPid(sender);
         this.sendUsers(new UserDefinition(pid));
     }
 
     private void sendUsersDefinitions() {
         round.buildRoundDefinitions();
         round.applyPlayers(p -> p.getRef().tell(
-                new StartVote(PHASE_DURATION.toMillis(),
+                new StartVote(round.getPhaseTotalDuration(PHASE_VOTE),
                         round.getDefinitionsForPlayer(p),
                         p.createItemDefinition()),
                 this.self()));
@@ -251,7 +250,7 @@ public class Match extends MatchFSM {
     private void handleVote(UserVote message) {
         final Integer voteId = message.getVoteId();
         round.playerVote(this.sender(), voteId);
-        sendUsers(new UserVote(round.getPlayerPidByRef(this.sender()), voteId));
+        sendUsers(new UserVote(round.getPlayerPid(this.sender()), voteId));
     }
 
     private void handleEndVote(){
@@ -261,7 +260,7 @@ public class Match extends MatchFSM {
 
     private void handleUserReady(UserReady message, ActorRef sender) {
         boolean isReady = round.setPlayerReadyInResult(sender, message.isReady());
-        this.sendUsers(new UserReady(round.getPlayerPidByRef(sender), isReady));
+        this.sendUsers(new UserReady(round.getPlayerPid(sender), isReady));
     }
 
     /**
@@ -270,7 +269,7 @@ public class Match extends MatchFSM {
     private void sendUsersScores() {
         List<PlayerScore> scores = this.round.createPlayersScores();
         final int defId = round.getCorrectDefinition().getId();
-        this.sendUsers(new StartShowScores(PHASE_DURATION.toMillis(), scores, defId));
+        this.sendUsers(new StartShowScores(round.getPhaseTotalDuration(PHASE_RESULT), scores, defId));
     }
 
     /**

@@ -20,9 +20,10 @@
     </scm>
 
     <modules>
-        <module>define-match</module>
         <module>define-boot</module>
+        <module>define-match</module>
         <module>define-terms</module>
+        <module>define-model</module>
         <module>define-stats</module>
         <module>define-match-client</module>
     </modules>
