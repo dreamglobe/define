@@ -42,6 +42,13 @@ angular.module('defineMatchClientApp')
             sendVote: function (voteId) {
                 connector.send('{"type":"ClientVote", "voteId":' + voteId + '}"');
             },
+            sendStartMatch: function (config){
+                //var toJSONProps = ['voteValue', 'correctVoteValue', 'minimumPlayers', 'maximumPlayers', 'goalPoints', 'maximumRounds', 'timeLimit', 'definePhaseConf', 'votePhaseConf', 'resultPhaseConf'];
+                //var configJSON = JSON && JSON.stringify(config, toJSONProps);
+                var configJSON = JSON && JSON.stringify(config);
+                var messageJSON = JSON && JSON.stringify({type:"ClientStartMatch", config : config });
+                connector.send(messageJSON);
+            },
             login: function (username, password) {
                 errorMessage = '';
                 $http.post(authUrl, username, password)

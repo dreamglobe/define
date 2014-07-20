@@ -53,6 +53,10 @@ angular
               templateUrl: 'views/score.html',
               controller: 'ScoreCtrl'
             })
+            .when('/start', {
+              templateUrl: 'views/start.html',
+              controller: 'StartCtrl'
+            })
             .otherwise({
                 redirectTo: '/'
             });

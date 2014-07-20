@@ -52,6 +52,12 @@ angular.module('defineMatchClientApp')
                         $rootScope.$apply();
                         break;
 
+                    case 'Starting':
+                        $rootScope.config = payload.config;
+                        $location.path('/start');
+                        $rootScope.$apply();
+                        break;
+
                     case 'StartDefinition':
                         Timer.set(payload.time);
                         Player.startDefinitionPhase();

@@ -1,0 +1,135 @@
+<div ng-show="hasConfig">
+    <h2>Configuración</h2>
+
+    <form ng-submit="startMatch()">
+        <div>
+            <div>
+                <h3>Configuración de jugadores</h3>
+                <div>
+                    <label for="minPlayers">Mínimo</label>
+                    <input id="minPlayers" size="2" type="text" ng-model="config.minimumPlayers"/>
+                </div>
+                <div>
+                    <label for="maxPlayers">Máximo</label>
+                    <input id="maxPlayers" size="2" type="text" ng-model="config.maximumPlayers"/>
+                </div>
+            </div>
+            <div>
+                <h3>Configuración de puntos</h3>
+                <div>
+                    <label for="voteValue">Puntos por voto</label>
+                    <input id="voteValue" size="2" type="text" ng-model="config.voteValue"/>
+                </div>
+                <div>
+                    <label for="correctVoteValue">Puntos por definición correcta</label>
+                    <input id="correctVoteValue" size="2" type="text" ng-model="config.correctVoteValue"/>
+                </div>
+            </div>
+            <h3>Fin de partida</h3>
+            <div>
+                <input type="checkbox" ng-click="checkFinishPoints" ng-model="pointFinish">Por puntos</input>
+                <span ng-show="pointFinish">
+                    <label for="goalPoints">Puntos</label>
+                    <input id="goalPoints" size="4" type="text" ng-model="config.goalPoints"/>
+                </span>
+            </div>
+            <div>
+                <input type="checkbox" ng-click="checkFinishTime" ng-model="timeFinish">Por tiempo</input>
+                <span ng-show="timeFinish">
+                    <label for="timeLimit">Tiempo máximo</label>
+                    <input id="timeLimit" size="4" type="text" ng-model="config.timeLimit"/> min.
+                </span>
+            </div>
+            <div>
+                <input type="checkbox" ng-click="checkFinishRound" ng-model="roundFinish">Por turnos</input>
+                <span ng-show="roundFinish">
+                    <label for="maximumRounds">Turnos totales</label>
+                    <input id="maximumRounds" size="3" type="text" ng-model="config.maximumRounds"/>
+                </span>
+            </div>
+        </div>
+        <div>
+            <h3>Configuración de fases de turno</h3>
+
+            <div>
+                <h4>Configuración de fase de definición</h4>
+                <div>
+                    <label for="defineDuracion">Duración</label>
+                    <input id="defineDuracion" size="4" ng-model="config.definePhaseConf.duration"/> s.
+                    <input type="checkbox" ng-model="config.definePhaseConf.fastEnd">Finaliza rápido</input>
+                </div>
+                <div>
+                    <label for="defineExtendedWhen">Extensión </label>
+                    <select id="defineExtendedWhen" ng-model="config.definePhaseConf.extendedWhen">
+                        <option value="NEVER">Nunca</option>
+                        <option value="NO_PLAYER">Ningún jugador</option>
+                        <option value="SOME_PLAYER">No todos</option>
+                        <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
+                        <option value="ALWAYS">Siempre</option>
+                    </select>
+                    <span ng-show="config.definePhaseConf.extendedWhen!='NEVER'">
+                        <label for="defineTimeLimit">Duración extendida</label>
+                        <input id="defineTimeLimit" size="4" type="text" ng-model="config.definePhaseConf.duration"/> s.
+                    </span>
+                </div>
+            </div>
+            <div>
+                <h4>Configuración de fase de votación</h4>
+                <div>
+                    <label for="voteDuracion">Duración</label>
+                    <input id="voteDuracion" size="4" ng-model="config.votePhaseConf.duration"/> s.
+                    <input type="checkbox" ng-model="config.votePhaseConf.fastEnd">Finaliza rápido</input>
+                </div>
+                <div>
+                    <label for="VoteExtendedWhen">Extensión </label>
+                    <select id="VoteExtendedWhen" ng-model="config.votePhaseConf.extendedWhen">
+                        <option value="NEVER">Nunca</option>
+                        <option value="NO_PLAYER">Ningún jugador</option>
+                        <option value="SOME_PLAYER">No todos</option>
+                        <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
+                        <option value="ALWAYS">Siempre</option>
+                    </select>
+                    <span ng-show="config.votePhaseConf.extendedWhen!='NEVER'">
+                        <label for="voteTimeLimit">Duración extendida</label>
+                        <input id="voteTimeLimit" size="4" type="text" ng-model="config.votePhaseConf.duration"/> s.
+                    </span>
+                </div>
+            </div>
+            <div>
+                <h4>Configuración de fase de Resultado</h4>
+                <div>
+                    <label for="resultDuracion">Duración</label>
+                    <input id="resultDuracion" size="4" ng-model="config.resultPhaseConf.duration"/> s.
+                    <input type="checkbox" ng-model="config.resultPhaseConf.fastEnd">Finaliza rápido</input>
+                </div>
+                <div>
+                    <label for="resultExtendedWhen">Extensión </label>
+                    <select id="resultExtendedWhen" ng-model="config.resultPhaseConf.extendedWhen">
+                        <option default value="NEVER">Nunca</option>
+                        <option value="NO_PLAYER">Ningún jugador</option>
+                        <option value="SOME_PLAYER">No todos</option>
+                        <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
+                        <option value="ALWAYS">Siempre</option>
+                    </select>
+                    <span ng-show="config.votePhaseConf.extendedWhen!='NEVER'">
+                        <label for="resultTimeLimit">Duración extendida</label>
+                        <input id="resultTimeLimit" size="4" type="text" ng-model="config.resultPhaseConf.duration"/> s.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Comenzar"/>
+    </form>
+</div>
+<div ng-hide="hasConfig"><h2>Esperando inicio</h2></div>
+<div class="rooster">
+    <h3>Parrilla</h3>
+    <table border="1" width="80%" cellspacing="15">
+        <thead>
+        <td>Jugador</td>
+        </thead>
+        <tr ng-repeat='player in players' ng-class="{on:player.definition}">
+            <td>{{player.name}}</td>
+        </tr>
+    </table>
+</div>

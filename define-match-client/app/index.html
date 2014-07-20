@@ -13,7 +13,14 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-    <style>.on {background-color: lightgreen;}</style>
+    <style>
+        .on {background-color: lightgreen;}
+        .select {background-color: lightgray;}
+        td {
+            padding: 5px;
+            border-color: darkgrey;
+        }
+    </style>
 </head>
 <body ng-app="defineMatchClientApp">
 <!--[if lt IE 7]>
@@ -37,6 +44,7 @@
     <div ng-view=""></div>
 
 
+    <p></p>
     <div ng-show="Console.isVisible()">
         <p></p>
         <hr/>
@@ -116,6 +124,7 @@
 <script src="scripts/directives/ngbkfocus.js"></script>
 <script src="scripts/controllers/score.js"></script>
 <script src="scripts/services/score.js"></script>
+<script src="scripts/controllers/start.js"></script>
 <!-- endbuild -->
 </body>
 </html>
