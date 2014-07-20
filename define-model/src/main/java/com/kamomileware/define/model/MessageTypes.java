@@ -45,7 +45,8 @@ public class MessageTypes {
     @JsonSubTypes({
             @JsonSubTypes.Type(value = ClientResponse.class, name = "ClientResponse"),
             @JsonSubTypes.Type(value = ClientReady.class, name = "ClientReady"),
-            @JsonSubTypes.Type(value = ClientVote.class, name = "ClientVote")})
+            @JsonSubTypes.Type(value = ClientVote.class, name = "ClientVote"),
+            @JsonSubTypes.Type(value = ClientStartMatch.class, name = "ClientStartMatch")})
     public abstract static class ClientMessage extends DeffineMessage {
         private static final long serialVersionUID = -4040598146039087356L;
     }
@@ -64,9 +65,6 @@ public class MessageTypes {
         }
     }
 
-    /**
-     *
-     */
     public static class ClientReady extends ClientMessage {
         private static final long serialVersionUID = 7686791648984584553L;
         private final Boolean ready;
@@ -81,9 +79,6 @@ public class MessageTypes {
         }
     }
 
-    /**
-     *
-     */
     public static class ClientResponse extends ClientMessage {
         private static final long serialVersionUID = 7686791648984584553L;
         private final String response;
@@ -237,6 +232,30 @@ public class MessageTypes {
 
         public MatchConfiguration getConfig() {
             return config;
+        }
+    }
+
+    public static class ShowEndScores extends DeffineMessage {
+        private final int correctDefId;
+        private final long numCorrectVotes;
+        private final List<PlayerScore> scores;
+
+        public ShowEndScores(List<PlayerScore> scores, int correctDefId) {
+            this.scores = scores;
+            this.correctDefId = correctDefId;
+            this.numCorrectVotes = scores.stream().filter(ps -> ps.isCorrectDefinition()).count();
+        }
+
+        public int getCorrectDefId() {
+            return correctDefId;
+        }
+
+        public long getNumCorrectVotes() {
+            return numCorrectVotes;
+        }
+
+        public List<PlayerScore> getScores() {
+            return scores;
         }
     }
 

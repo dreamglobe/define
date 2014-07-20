@@ -4,6 +4,8 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Cancellable;
 import akka.actor.UntypedActor;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import akka.japi.Procedure;
 import com.kamomileware.define.model.round.Round;
 import com.kamomileware.define.model.round.RoundPhase;
@@ -21,8 +23,9 @@ import static com.kamomileware.define.model.MessageTypes.Latch;
  */
 public abstract class MatchFSM extends UntypedActor{
 
+    private final LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+
     private Cancellable latchTimer;
-    private int counter = 1;
     private long startPhaseTime = 0;
 
     protected Round<ActorRef> round ;
@@ -36,6 +39,7 @@ public abstract class MatchFSM extends UntypedActor{
     abstract protected void transition(RoundPhase oldState, RoundPhase newState);
 
     protected void setState(RoundPhase s){
+        log.info("Changing State to '{}'", s);
         markStartPhaseTime();
         transition(this.state, s);
         if(this.state != s){
@@ -51,25 +55,33 @@ public abstract class MatchFSM extends UntypedActor{
         this.startPhaseTime = System.currentTimeMillis();
     }
 
-    protected long getPhaseMillisLeft(long phaseSeconds){
-        long timeleft = (phaseSeconds*1000) - (System.currentTimeMillis()-this.startPhaseTime);
+    protected long getPhaseMillisLeft(long phaseMillis){
+        long timeleft = (phaseMillis) - (System.currentTimeMillis()-this.startPhaseTime);
         return timeleft < 0 ? 0 : timeleft;
     }
 
-    protected int startLatch(){
+    protected long startLatch(RoundPhase state){
         final long phaseTotalDuration = round.getPhaseTotalDuration(state);
-        this.latchTimer = this.startLatch(this.round.getRoundNumber(), new FiniteDuration(phaseTotalDuration,TimeUnit.MILLISECONDS));
-        return this.counter;
+        final int roundNumber = this.round.getRoundNumber();
+        log.info("Starting latch '{}' for '{}' millis", state, phaseTotalDuration);
+        this.latchTimer = this.startLatch(roundNumber, new FiniteDuration(phaseTotalDuration,TimeUnit.MILLISECONDS));
+        return phaseTotalDuration;
     }
 
-    protected int startLatchExtend(){
-        this.latchTimer = this.startLatch(this.round.getRoundNumber(),
-                new FiniteDuration(round.getPhaseTotalDuration(state),TimeUnit.SECONDS));
-        return this.counter;
+    protected long startLatchExtend(RoundPhase state){
+        final int roundNumber = this.round.getRoundNumber();
+        final long phaseTotalDuration = round.getPhaseTotalDuration(state);
+        log.info("Starting latch '{}' for '{}' millis", state, phaseTotalDuration);
+        this.latchTimer = this.startLatch(roundNumber,
+                new FiniteDuration(phaseTotalDuration,TimeUnit.SECONDS));
+        return phaseTotalDuration;
     }
 
     protected void cancelLatch() {
-        this.latchTimer.cancel();
+        if(this.latchTimer!=null) {
+            log.info("Cancelling latch for phase '{}' ", state);
+            this.latchTimer.cancel();
+        }
     }
 
     private Cancellable startLatch(int seq, FiniteDuration delay) {

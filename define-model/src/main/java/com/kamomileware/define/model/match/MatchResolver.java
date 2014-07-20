@@ -21,13 +21,13 @@ public class MatchResolver {
         if(players.size() < config.getMinimumPlayers()){
             results.add(TurnResult.NO_PLAYERS_LEFT);
         }
-        if (config.getGoalPoints().isPresent() && round.hasWinners()){
+        if (config.getGoalPointsOpt().isPresent() && round.hasWinners()){
             results.add(TurnResult.GOAL_REACHED);
         }
-        if(config.getMaximunRounds().isPresent() && config.getMaximunRounds().get() < round.getRoundNumber()){
+        if(config.getMaximumRoundsOpt().isPresent() && config.getMaximumRoundsOpt().get() < round.getRoundNumber()){
             results.add(TurnResult.TURN_LIMIT_REACHED);
         }
-        if(config.getTimeLimit().isPresent() && config.getTimeLimit().get() < round.getMatchTime()){
+        if(config.getTimeLimitOpt().isPresent() && config.getTimeLimitOpt().get() < round.getMatchTime()){
             results.add(TurnResult.TIME_LIMIT_REACHED);
         }
         return results;

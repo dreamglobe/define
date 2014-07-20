@@ -1,4 +1,4 @@
-package com.kamomileware.define.actor;
+package com.kamomileware.define.term;
 
 import com.kamomileware.define.model.term.Term;
 
@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.kamomileware.define.model.term.TermCategory.*;
-import static com.kamomileware.define.model.term.TermCategory.AB;
 
 /**
  * Created by pepe on 17/07/14.
@@ -107,38 +106,79 @@ public class TermRepository {
             new Term("Surai", "Ojo", CH),
             new Term("F.I.A.", "Federación Internacional de Astronáutica", SG),
             new Term("Estoicismo", "Resistencia a las adversidades", AB),
-//            new Term("", "", NP),
-//            new Term("", "", CH),
-//            new Term("", "", SG),
-//            new Term("", "", AB),
-//            new Term("", "", NP),
-//            new Term("", "", CH),
-//            new Term("", "", SG),
-//            new Term("", "", AB),
-//            new Term("", "", NP),
-//            new Term("", "", CH),
-//            new Term("", "", SG),
-//            new Term("", "", AB),
-//            new Term("", "", NP),
-//            new Term("", "", CH),
-//            new Term("", "", SG),
-//            new Term("", "", AB),
-//            new Term("", "", NP),
-//            new Term("", "", CH),
-//            new Term("", "", SG),
-//            new Term("", "", AB),
-//            new Term("", "", NP),
-//            new Term("", "", CH),
-//            new Term("", "", SG),
-//            new Term("", "", AB),
+            new Term("Uziel", "Dios es fuerte", NP),
+            new Term("Sacristía", "La bragueta", CH),
+            new Term("E.N.E.A.", "Agencia Europea para la Energia Nuclear", SG),
+            new Term("Celotipia", "Pasión por los celos", AB),
+            new Term("Tirza", "Ciprés", NP),
+            new Term("Raspa", "Persona protestona", CH),
+            new Term("C.I.S.A", "Comisión Internacional para el Salvamento Alpino", SG),
+            new Term("Abandonar", "Entregar la voluntad a alguien", AB),
+            new Term("Sindufo", "El lobo del camino", NP),
+            new Term("Piltreo", "Sueño, acción de dormir", CH),
+            new Term("O.M.S.", "Organización Mundial de la Salud", SG),
+            new Term("Urbanidad", "Educación, cortesía", AB),
+            new Term("Alvaro", "Prudente", NP),
+            new Term("Arrear", "Ponerse en marcha, ir deprisa", CH),
+            new Term("A.J.A.", "Agrupación Juvenil Amanecer", SG),
+            new Term("Arrepentirse", "Sentir pesar por una acción u omisión", AB),
+            new Term("Nereo", "Nadar", NP),
+            new Term("Invento", "Ocurrencia", CH),
+            new Term("S.E.N.P.A.", "Servicio Nacional de Productos Agrarios", SG),
+            new Term("Picardía", "Intención deshonesta", AB),
+            new Term("Emilio", "Amable, gracioso, cortés", NP),
+            new Term("Domingo", "De domingo: elegante", CH),
+            new Term("F.I.C.P.", "Federación Internacional de Clubes de Publicidad", SG),
+            new Term("Fingir", "Dar a entender lo que no es verdad", AB),
+            new Term("Jonás", "Paloma", NP),
+            new Term("Garata", "Escándalo, alboroto", CH),
+            new Term("I.U.C.E", "Instituto Universitario de Ciencias de la Empresa", SG),
+            new Term("Maravilla", "Admiración", AB),
+            new Term("Javier", "Casa nueva", NP),
+            new Term("Gamba", "Billete de 5 euros", CH),
+            new Term("I.N.V.", "Instituto Nacional de la Vivienda", SG),
+            new Term("Malquistar", "Enemistar a 2 personas entre sí", AB),
+            new Term("Israel", "El que dominó a Dios", NP),
+            new Term("Fusca", "Escopeta de cañones recortados", CH),
+            new Term("I.N.L.E.", "Instituto Nacional del Libro Español", SG),
+            new Term("Madurar", "Desarrollarse espiritualmente", AB),
+            new Term("Regina", "Reina", NP),
+            new Term("Monago", "Estómago", CH),
+            new Term("C.E.D.A.", "Confederación Española de Derechos Autónomos", SG),
+            new Term("Resabiar", "Deleitarse en algo", AB),
+            new Term("Pimpinela", "Sandía", NP),
+            new Term("Lisa", "Tener la lisa: tener suerte", CH),
+            new Term("C.I.V.", "Comisión Internacional del Vino", SG),
+            new Term("Recato", "Modestia, honestidad", AB),
+            new Term("Patricia", "Del padre libre o noble", NP),
+            new Term("Lebrel", "Niño pequeño", CH),
+            new Term("A.N.Q.U.E.", "Asociación Nacional de Químicos de España", SG),
+            new Term("Rebato", "Alarma ante un acontecimiento insólito", AB),
+            new Term("Mónica", "Solitaria", NP),
+            new Term("Izarse", "Balancearse", CH),
+            new Term("R.E.D.I.A.", "Red de Itinerarios Asfálticos", SG),
+            new Term("Pereza", "Resistencia al trabajo", AB),
+            new Term("Tabare", "El que vive sólo", NP),
+            new Term("Plajo", "Cigarrillo", CH),
+            new Term("O.I.T.", "Organización Internacional del Trabajo", SG),
+            new Term("Vanidad", "Orgullo", AB),
+            new Term("Milagros", "Maravilla", NP),
+            new Term("Isidro", "Paleto", CH),
+            new Term("P.O.U.", "Policia del Orden Universitario", SG),
+            new Term("Peligro", "Riesgo de que ocurra algún mal", AB),
+            new Term("Natalia", "Día natalicio", NP),
+            new Term("Inflagatas", "Bobo, tonto", CH),
+            new Term("S.E.E.A.", "Sociedad Europea de Energía Atómica", SG),
+            new Term("Pesadumbre", "Motivo de aflicción", AB)
+
     });
 
-    public static Term shuffleAndGet(){
+    public static Term shuffleAndGet() {
         Collections.shuffle(terms);
         return terms.get(0);
     }
 
-    public static Term get(int i){
+    public static Term get(int i) {
         return terms.get(i);
     }
 }

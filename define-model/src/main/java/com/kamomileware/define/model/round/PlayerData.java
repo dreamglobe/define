@@ -33,13 +33,15 @@ public class PlayerData<REF> implements MessageInfoFactory {
         this.name = name;
         this.pid = pid;
         this.resolver = round;
-        this.score = new Score();
+        this.score = new Score(resolver);
     }
 
     void vote(Integer definitionId) {
         final Optional<TermDefinition> termDefinitionOptional = resolver.findDefinitionById(definitionId);
         if(termDefinitionOptional.isPresent()) {
             this.vote = VoteDefinition.createVoteDefinition(this, termDefinitionOptional.get());
+        }else {
+            this.vote = null;
         }
     }
 
@@ -117,22 +119,24 @@ public class PlayerData<REF> implements MessageInfoFactory {
     }
 
     public static <PREF> PlayerData createPlayerData(PREF playerRef, String name, String pid, DefinitionResolver resolver) {
-        return new PlayerData<PREF>(playerRef, name, pid, resolver);
+        return new PlayerData<>(playerRef, name, pid, resolver);
     }
 
     public boolean isWinner(){
-        return score.getTotalScore() > resolver.getMatchConf().getGoalPoints().orElse(Integer.MAX_VALUE);
+        return score.getTotalScore() > resolver.getMatchConf().getGoalPointsOpt().orElse(Integer.MAX_VALUE);
     }
 
     public class Score{
-        final MatchConfiguration matchConf = resolver.getMatchConf();
+        final MatchConfiguration matchConf;
         private int turnScore = 0;
         private int totalScore = 0;
         private int lastTurnScore = 0;
         private boolean correctVote;
         List<String> voters = new ArrayList<>();
 
-        Score(){}
+        Score(DefinitionResolver resolver){
+            matchConf = resolver.getMatchConf();
+        }
 
         public int voteObtained(String voterPid){
             turnScore += matchConf.getVoteValue();

@@ -1,6 +1,9 @@
 package com.kamomileware.define.model.term;
 
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,9 +14,10 @@ import static com.kamomileware.define.model.term.TermCategory.*;
 /**
  * Created by pepe on 10/07/14.
  */
-
+@Document
 public class Term {
 
+    @Id
     private String id;
     private String name;
     private String definition;

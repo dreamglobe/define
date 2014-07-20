@@ -19,10 +19,10 @@ public class Round<REF> implements DefinitionResolver {
     private final int roundNumber;
 
     private final Term term;
-    private final MatchConfiguration matchConf;
+    private MatchConfiguration matchConf;
 
     private final RoundPlayers<REF> roundPlayers;
-    private List<TermDefinition> roundDefinitions;
+    private List<TermDefinition> roundDefinitions = new ArrayList<>();
     private Set<TurnResult> result;
 
     private final long matchStartTime;
@@ -46,33 +46,17 @@ public class Round<REF> implements DefinitionResolver {
      * @param previousRound
      */
     public Round(Round<REF> previousRound, Term term) {
-        this.roundNumber = previousRound.getRoundNumber()+1;
+        this.roundNumber = previousRound.roundNumber+1;
         this.term = term;
-        this.matchConf = previousRound.getMatchConf();
-        this.roundPlayers = previousRound.nextRoundPlayers(this);
+        this.matchConf = previousRound.matchConf;
+        this.roundPlayers = previousRound.prepareNextRoundPlayers(this);
         this.roundDefinitions = new ArrayList<>();
-        this.matchStartTime = previousRound.getMatchStartTime();
+        this.matchStartTime = previousRound.matchStartTime;
         this.roundStartTime = System.currentTimeMillis();
     }
 
-    public boolean addRoundPlayer(REF playerRef, String name, String pid){
-        return roundPlayers.addRoundPlayer(playerRef, name, pid);
-    }
-
-    public int removeRoundPlayer(REF ref) {
-        return roundPlayers.removePlayerData(ref);
-    }
-
-    public PlayerData<REF> getNextHandPlayer() {
-        return roundPlayers.getPlayerList().get((roundNumber + 1) % roundPlayers.getPlayerList().size());
-    }
-
-    public String getPlayerPid(REF sender) {
-        return roundPlayers.getPlayerPidByRef(sender);
-    }
-
-    public List<PlayerInfo> createPlayersInfo(){
-        return roundPlayers.createPlayersInfo();
+    public int getRoundNumber() {
+        return roundNumber;
     }
 
     public Term getTerm() {
@@ -84,6 +68,64 @@ public class Round<REF> implements DefinitionResolver {
         return matchConf;
     }
 
+    public void setMatchConf(MatchConfiguration matchConf) {
+        this.matchConf = matchConf;
+    }
+
+    public List<PlayerData<REF>> getPlayerList(){
+        return roundPlayers;
+    }
+
+    public boolean addPlayer(REF playerRef, String name, String pid){
+        PlayerData<REF> player = PlayerData.createPlayerData(playerRef, name, pid, this);
+        return roundPlayers.add(player);
+    }
+
+    public boolean removePlayer(REF ref) {
+        return roundPlayers.removeByRef(ref);
+    }
+
+    public PlayerData<REF> getNextHandPlayer() {
+        return roundPlayers.get((roundNumber + 1) % roundPlayers.size());
+    }
+
+    public String getPlayerPid(REF ref) {
+        return roundPlayers.getPid(ref);
+    }
+
+    public List<PlayerInfo> createPlayersInfo(){
+        return roundPlayers.createPlayersInfo();
+    }
+
+    public void applyPlayers(Consumer<PlayerData<REF>> p){
+        roundPlayers.applyPlayers(p);
+    }
+
+    public void applyPlayersRefs(Consumer<REF> p){
+        roundPlayers.applyPlayersRefs(p);
+    }
+
+    public boolean hasAnyoneResponse() {
+        return roundPlayers.hasAnyoneResponse();
+    }
+
+    public boolean hasEveryoneResponse() {
+        return roundPlayers.hasEveryoneResponse();
+    }
+
+    public boolean hasEveryoneVote() {
+        return roundPlayers.hasEveryoneVote();
+    }
+
+    public boolean isEveryoneReadyInResult() {
+        return roundPlayers.isEveryoneReadyInResult();
+    }
+
+    RoundPlayers<REF> prepareNextRoundPlayers(Round<REF> newRound) {
+        this.roundPlayers.forEach(p -> p.prepareNextRound(newRound));
+        return new RoundPlayers<>(roundPlayers);
+    }
+
     @Override
     public Optional<TermDefinition> findDefinitionById(Integer idDef) {
         return roundDefinitions.stream()
@@ -91,12 +133,9 @@ public class Round<REF> implements DefinitionResolver {
                 .findFirst();
     }
 
-    public int getRoundNumber() {
-        return roundNumber;
-    }
-
     public void createRoundDefinitions(){
-        this.roundDefinitions = new ArrayList<>(roundPlayers.getPlayerList().stream()
+        this.roundDefinitions.clear();
+        this.roundDefinitions.addAll(roundPlayers.stream()
                 .map(PlayerData::getDefinition)
                 .filter(td -> td != null)
                 .collect(Collectors.toList()));
@@ -139,21 +178,21 @@ public class Round<REF> implements DefinitionResolver {
     }
 
     public boolean hasWinners( ) {
-        return roundPlayers.getPlayerList().stream().anyMatch(PlayerData::isWinner);
+        return roundPlayers.stream().anyMatch(PlayerData::isWinner);
     }
 
     public List<PlayerData<REF>> getWinners(){
-        return this.roundPlayers.getPlayerList().stream()
+        return this.roundPlayers.stream()
                         .filter(PlayerData::isWinner)
                         .collect(Collectors.toList());
     }
 
     public List<PlayerData<REF>.Score> getScores() {
-        return roundPlayers.getPlayerList().stream().map((t) -> t.getScore()).collect(Collectors.toList());
+        return roundPlayers.stream().map((t) -> t.getScore()).collect(Collectors.toList());
     }
 
     public List<PlayerScore> createPlayersScores() {
-        return roundPlayers.getPlayerList().stream().map(PlayerData::createPlayerScore).collect(Collectors.toList());
+        return roundPlayers.stream().map(PlayerData::createPlayerScore).collect(Collectors.toList());
     }
 
     public boolean setPlayerReadyInResult(REF playerRef, boolean isReady){
@@ -161,40 +200,8 @@ public class Round<REF> implements DefinitionResolver {
         return isReady;
     }
 
-    public void applyPlayers(Consumer<PlayerData<REF>> p){
-        roundPlayers.applyPlayers(p);
-    }
-
-    public void applyPlayersRefs(Consumer<REF> p){
-        roundPlayers.applyPlayersRefs(p);
-    }
-
-    public boolean hasAnyoneResponse() {
-        return roundPlayers.hasAnyoneResponse();
-    }
-
-    public boolean hasEveryoneResponse() {
-        return roundPlayers.hasEveryoneResponse();
-    }
-
-    public boolean hasEveryoneVote() {
-        return roundPlayers.hasEveryoneVote();
-    }
-
-    public boolean isEveryoneReadyInResult() {
-        return roundPlayers.isEveryoneReadyInResult();
-    }
-
-    public boolean canExtendPhase(RoundPhase state) {
-        return matchConf.getPhaseConf(state).canExtend(this);
-    }
-
-    public void extendPhase(RoundPhase state) {
-        matchConf.getPhaseConf(state).setExtended(true);
-    }
-
-    public long getPhaseTotalDuration(RoundPhase state) {
-        return matchConf.getPhaseConf(state).getTotalDuration() * 1000;
+    public void calculateRoundResult(){
+        this.result = MatchResolver.resolve(this);
     }
 
     public long getMatchStartTime() {
@@ -209,17 +216,21 @@ public class Round<REF> implements DefinitionResolver {
         return System.currentTimeMillis() - this.matchStartTime;
     }
 
-    public List<PlayerData<REF>> getPlayerList(){
-        return roundPlayers.getPlayerList();
+    public boolean canExtendPhase(RoundPhase state) {
+        return matchConf.getPhaseConf(state).canExtend(this);
     }
 
-    public void calculateRoundResult(){
-        this.result = MatchResolver.resolve(this);
+    public void extendPhase(RoundPhase state) {
+        matchConf.getPhaseConf(state).setExtended(true);
     }
 
-    RoundPlayers<REF> nextRoundPlayers(Round<REF> newRound) {
-        this.roundPlayers.getPlayerList().forEach(p -> p.prepareNextRound(newRound));
-        return roundPlayers;
+    public long getPhaseTotalDuration(RoundPhase state) {
+        return matchConf.getPhaseConf(state).getTotalDuration() * 1000;
     }
 
+    public void endRound(){
+        this.roundPlayers.clear();
+        this.roundDefinitions.clear();
+        this.result.clear();
+    }
 }

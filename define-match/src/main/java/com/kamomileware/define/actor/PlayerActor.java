@@ -55,7 +55,8 @@ public class PlayerActor extends AbstractClientActor {
     @Override
     public void onReceive(Object message) throws Exception {
 
-        if(message instanceof RegisterUser
+        if(message instanceof Starting
+        || message instanceof RegisterUser
         || message instanceof RemoveUser
         || message instanceof PlayerList
         || message instanceof UserDefinition
@@ -64,8 +65,10 @@ public class PlayerActor extends AbstractClientActor {
         || message instanceof StartDefinition
         || message instanceof StartVote
         || message instanceof StartShowScores
-                ){
+                ) {
             sendClient(message);
+        } else if(message instanceof ClientStartMatch){
+            match.tell(message, self());
         } else if(message instanceof ClientResponse){
             final String response = ((ClientResponse) message).getResponse();
             match.tell(new UserDefinition(this.sessionId, response), self());
@@ -75,8 +78,11 @@ public class PlayerActor extends AbstractClientActor {
         } else if(message instanceof ClientReady){
             final Boolean ready = ((ClientReady) message).isReady();
             match.tell(new UserReady(this.sessionId, ready), self());
-        } else if(message instanceof Start){
+        } else if(message instanceof Start) {
             match.tell(new RegisterUser(this.sessionId, this.name), self());
+        }else if(message instanceof ShowEndScores){
+            sendClient(message);
+            getContext().stop(this.self());
         } else if(message instanceof Stop){
             match.tell(new RemoveUser(sessionId), self());
             getContext().stop(this.self());
@@ -111,7 +117,6 @@ public class PlayerActor extends AbstractClientActor {
             name = session.getPrincipal().getName();
             this.player = Optional.ofNullable(system.actorOf(springExt.props(session, "playerActor"), name));
             this.sendMessageToPlayer(MessageTypes.START);
-
         }
 
         @Override

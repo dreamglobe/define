@@ -1,10 +1,11 @@
 package com.kamomileware.define.model.match;
 
 
-import com.kamomileware.define.model.round.PlayerData;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kamomileware.define.model.round.Round;
 import com.kamomileware.define.model.round.RoundPhase;
-import com.kamomileware.define.model.round.TurnResult;
 
 import java.util.*;
 
@@ -14,13 +15,14 @@ import java.util.*;
 public class MatchConfiguration {
     private int voteValue = 1;
     private int correctVoteValue = 2;
-    private int minimunPlayers = 1;
+    private int minimumPlayers = 1;
+    private int maximumPlayers = 10;
 
     private Optional<Integer> goalPoints = Optional.ofNullable(45);
-    private Optional<Integer> maximunRounds = Optional.ofNullable(null);
+    private Optional<Integer> maximumRounds = Optional.ofNullable(null);
     private Optional<Long> timeLimit = Optional.ofNullable(null);
 
-    private PhaseConfiguration responsePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESPONSE, 180, 60, PhaseExtension.NO_PLAYER, true);
+    private PhaseConfiguration definePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESPONSE, 180, 60, PhaseExtension.NO_PLAYER, true);
     private PhaseConfiguration votePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_VOTE, 90, 0, PhaseExtension.NEVER, true);
     private PhaseConfiguration resultPhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESULT, 30, 0, PhaseExtension.NEVER, true);
 
@@ -40,12 +42,17 @@ public class MatchConfiguration {
         return correctVoteValue;
     }
 
-    public void setCorrectVoteValue(int correctVoteValue) {
+    public void setCorrectVoteValue(Integer correctVoteValue) {
         this.correctVoteValue = correctVoteValue;
     }
 
-    public Optional<Integer> getGoalPoints() {
+    @JsonIgnore
+    public Optional<Integer> getGoalPointsOpt() {
         return goalPoints;
+    }
+
+    public Integer getGoalPoints() {
+        return goalPoints.orElse(null);
     }
 
     public void setGoalPoints(Integer goalPoints) {
@@ -53,35 +60,56 @@ public class MatchConfiguration {
     }
 
     public int getMinimumPlayers() {
-        return minimunPlayers;
+        return minimumPlayers;
     }
 
-    public void setMinimunPlayers(int minimunPlayers) {
-        this.minimunPlayers = minimunPlayers;
+    public void setMinimumPlayers(int minimumPlayers) {
+        this.minimumPlayers = minimumPlayers;
     }
 
-    public Optional<Integer> getMaximunRounds() {
-        return maximunRounds;
+    public int getMaximumPlayers() {
+        return maximumPlayers;
     }
 
-    public void setMaximunRounds(Integer maximunRounds) {
-        this.maximunRounds = Optional.ofNullable(maximunRounds);
+    public void setMaximumPlayers(int maximumPlayers) {
+        this.maximumPlayers = maximumPlayers;
     }
 
-    public Optional<Long> getTimeLimit() {
+    @JsonIgnore
+    public Optional<Integer> getMaximumRoundsOpt() {
+        return maximumRounds;
+    }
+
+    public Integer getMaximumRounds() {
+        return maximumRounds.orElse(null);
+    }
+
+    @JsonIgnore
+    public void setMaximumRounds(Integer maximumRounds) {
+        this.maximumRounds = Optional.ofNullable(maximumRounds);
+    }
+
+    @JsonIgnore
+    public Optional<Long> getTimeLimitOpt() {
         return timeLimit;
     }
 
+    public Long getTimeLimit() {
+        return timeLimit.orElse(null);
+    }
+
+    @JsonIgnore
     public void setTimeLimit(Long timeLimit) {
         this.timeLimit = Optional.ofNullable(timeLimit);
     }
 
-    public PhaseConfiguration getResponsePhaseConf() {
-        return responsePhaseConf;
+    public PhaseConfiguration getDefinePhaseConf() {
+        return definePhaseConf;
     }
 
-    public void setResponsePhaseConf(PhaseConfiguration responsePhaseConf) {
-        this.responsePhaseConf = responsePhaseConf;
+
+    public void setDefinePhaseConf(PhaseConfiguration definePhaseConf) {
+        this.definePhaseConf = definePhaseConf;
     }
 
     public PhaseConfiguration getVotePhaseConf() {
@@ -104,7 +132,7 @@ public class MatchConfiguration {
         PhaseConfiguration result = null;
         switch (phase){
             case PHASE_RESPONSE:
-                result = responsePhaseConf;
+                result = definePhaseConf;
                 break;
             case PHASE_VOTE:
                 result = votePhaseConf;
@@ -115,23 +143,6 @@ public class MatchConfiguration {
         }
         return result;
     }
-
-    public int getMinimunPlayers() {
-        return minimunPlayers;
-    }
-
-    public void setGoalPoints(Optional<Integer> goalPoints) {
-        this.goalPoints = goalPoints;
-    }
-
-    public void setMaximunRounds(Optional<Integer> maximunRounds) {
-        this.maximunRounds = maximunRounds;
-    }
-
-    public void setTimeLimit(Optional<Long> timeLimit) {
-        this.timeLimit = timeLimit;
-    }
-
 
     public static enum PhaseExtension {
         NEVER, NO_PLAYER, SOME_PLAYER, NONE_OR_SOME_PLAYERS, ALWAYS;
@@ -146,7 +157,13 @@ public class MatchConfiguration {
         private boolean fastEnd = true;
         private boolean extended = false;
 
-        public PhaseConfiguration(RoundPhase phase, int duration, int extendedDuration, PhaseExtension extendedWhen, boolean fastEnd) {
+        @JsonCreator
+        public PhaseConfiguration(
+                @JsonProperty("phase") RoundPhase phase,
+                @JsonProperty("duration") int duration,
+                @JsonProperty("extendedDuration") int extendedDuration,
+                @JsonProperty("extendedWhen") PhaseExtension extendedWhen,
+                @JsonProperty("fastEnd") boolean fastEnd) {
             this.phase = phase;
             this.duration = duration;
             this.extendedDuration = extendedDuration;
@@ -190,7 +207,7 @@ public class MatchConfiguration {
             return duration;
         }
 
-        public void setDuration(int duration) {
+        public void setDuration(Integer duration) {
             this.duration = duration;
         }
 
@@ -198,10 +215,11 @@ public class MatchConfiguration {
             return extendedDuration;
         }
 
-        public void setExtendedDuration(int extendedDuration) {
+        public void setExtendedDuration(Integer extendedDuration) {
             this.extendedDuration = extendedDuration;
         }
 
+        @JsonIgnore
         public int getTotalDuration(){
             return extended? duration + extendedDuration : duration;
         }
@@ -222,10 +240,12 @@ public class MatchConfiguration {
             this.fastEnd = fastEnd;
         }
 
+        @JsonIgnore
         public boolean isExtended() {
             return extended;
         }
 
+        @JsonIgnore
         public void setExtended(boolean extended) {
             this.extended = extended;
         }

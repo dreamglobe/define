@@ -12,7 +12,7 @@ import com.kamomileware.define.model.round.RoundPhase;
 
 import java.util.*;
 
-import static com.kamomileware.define.actor.TermRepository.*;
+import static com.kamomileware.define.term.TermRepository.*;
 import static com.kamomileware.define.model.round.RoundPhase.*;
 import static com.kamomileware.define.model.MessageTypes.*;
 
@@ -42,16 +42,6 @@ public class MatchActor extends MatchFSM {
     }
 
     /**
-     * Never used because the actor starts becoming {@link MatchActor.StoppedBehaviour}.
-     * Other way send the message to the parent.
-     * @see akka.actor.UntypedActor#onReceive(Object)
-     */
-    @Override
-    public void onReceive(Object message) throws Exception {
-        unhandled(message);
-    }
-
-    /**
      * Contains the logic to apply when state change. Apply the behaviour associated to the state.
      * @param old previous state
      * @param next new state
@@ -64,21 +54,36 @@ public class MatchActor extends MatchFSM {
             round = null;
             this.switchBehaviour(this.stopBehavior);
         } else if (next == CONFIG) {
+            round = new Round<>(MatchConfiguration.createDefault(), shuffleAndGet());
             this.switchBehaviour(this.waitConfigureMatchBehaviour);
         } else if (next == PHASE_RESPONSE) {
             this.switchBehaviour(this.waitResponseBehavior);
-            long leftTime = this.startLatch();
+            long leftTime = this.startLatch(PHASE_RESPONSE);
             this.sendUsersTerm(leftTime);
         } else if (next == PHASE_VOTE) {
             this.switchBehaviour(this.waitVotesBehavior);
-            long leftTime = this.startLatch();
+            long leftTime = this.startLatch(PHASE_VOTE);
             this.sendUsersDefinitions(leftTime);
         } else if (next == PHASE_RESULT) {
             this.switchBehaviour(this.showResultBehavior);
-            long leftTime = this.startLatch();
+            long leftTime = this.startLatch(PHASE_RESULT);
             this.sendUsersScores(leftTime);
-            round = new Round<ActorRef>(round, get(round.getRoundNumber()));
+            round = new Round<>(round, get(round.getRoundNumber()));
+        } else if(next == END_MATCH){
+            this.sendUsersFinalScores();
+            this.round.endRound();
+            self().tell(STOP, self());
         }
+    }
+
+    /**
+     * Never used because the actor starts becoming {@link MatchActor.StoppedBehaviour}.
+     * Other way send the message to the parent.
+     * @see akka.actor.UntypedActor#onReceive(Object)
+     */
+    @Override
+    public void onReceive(Object message) throws Exception {
+        unhandled(message);
     }
 
     /**
@@ -86,7 +91,7 @@ public class MatchActor extends MatchFSM {
      * @param message message to handle in last instance
      */
     public void aunhandled(Object message){
-        log.error("unHandled message: " + message.toString());
+        log.error("unHandled message: {}", message.toString());
     }
 
     /**
@@ -96,9 +101,9 @@ public class MatchActor extends MatchFSM {
         @Override
         public void apply(Object message) {
             if (message instanceof RegisterUser) {
+                setState(CONFIG);
                 handleRegisterUser((RegisterUser) message, sender());
                 sender().tell(new Starting(MatchConfiguration.createDefault()), sender());
-                setState(CONFIG);
             } else {
                 aunhandled(message);
             }
@@ -115,10 +120,12 @@ public class MatchActor extends MatchFSM {
                 sendUsers(message);
                 setState(STOPPED);
             } else if (message instanceof RemoveUser) {
-                int left = round.removeRoundPlayer(sender());
-                sendUsers(message);
-                if ( left == 0) {
+                round.removePlayer(sender());
+                if (round.getPlayerList().isEmpty()) {
+                    round.endRound();
                     self().tell(STOP, self());
+                }else{
+                    sendUsers(message);
                 }
             } else {
                 aunhandled(message);
@@ -132,18 +139,22 @@ public class MatchActor extends MatchFSM {
     private class WaitConfigureMatchBehaviour extends CommonStartedBehaviour {
         @Override
         public void apply(Object message) {
-
             if(message instanceof RegisterUser){
                 handleRegisterUser((RegisterUser) message, sender());
                 sender().tell(new Starting(), self());
             }else if(message instanceof ClientStartMatch) {
-                // First Round
-                round = new Round<ActorRef>(((ClientStartMatch)message).getConfig(), shuffleAndGet());
+                handleConfigureRound((ClientStartMatch)message);
                 setState(PHASE_RESPONSE);
             } else {
                 super.apply(message);
             }
         }
+    }
+
+    private void handleConfigureRound(ClientStartMatch message) {
+        // First Round
+        round = new Round<>(round, get(round.getRoundNumber()));
+        round.setMatchConf(message.getConfig());
     }
 
     /**
@@ -161,7 +172,7 @@ public class MatchActor extends MatchFSM {
             } else if (message instanceof Latch) {
                 if (round.canExtendPhase(PHASE_RESPONSE)) {
                     round.extendPhase(PHASE_RESPONSE);
-                    startLatchExtend();
+                    startLatchExtend(PHASE_RESPONSE);
                 } else {
                     if (round.hasAnyoneResponse()) {
                         setState(PHASE_VOTE);
@@ -195,7 +206,7 @@ public class MatchActor extends MatchFSM {
                     if(!round.isFinalRound()) {
                         setState(PHASE_RESULT);
                     } else {
-                        setState(STOPPED);
+                        setState(END_MATCH);
                     }
                 }
             }else if(message instanceof Latch){
@@ -249,7 +260,7 @@ public class MatchActor extends MatchFSM {
     /* Private methods for handling message */
     private void handleRegisterUser(RegisterUser message, ActorRef sender) {
         this.sendUsers(message);
-        round.addRoundPlayer(sender(), message.getName(), message.getPid());
+        round.addPlayer(sender(), message.getName(), message.getPid());
         sender.tell(new PlayerList(round.createPlayersInfo()), this.self());
     }
 
@@ -293,6 +304,12 @@ public class MatchActor extends MatchFSM {
     private void handleUserReady(UserReady message, ActorRef sender) {
         boolean isReady = round.setPlayerReadyInResult(sender, message.isReady());
         this.sendUsers(new UserReady(round.getPlayerPid(sender), isReady));
+    }
+
+    private void sendUsersFinalScores() {
+        List<PlayerScore> scores = this.round.createPlayersScores();
+        final int defId = round.getCorrectDefinition().getDefId();
+        this.sendUsers(new ShowEndScores(scores, defId));
     }
 
     /**
