@@ -93,6 +93,12 @@ angular.module('defineMatchClientApp')
                         $rootScope.$apply();
                         break;
 
+                    case 'ShowEndScores':
+                        Score.createList(payload);
+                        $location.path('/final');
+                        $rootScope.$apply();
+                        break;
+
                     case 'UserDefinition':
                         Player.get(payload.pid).definition = true;
                         break;

@@ -8,7 +8,7 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .service('MatchServer', function MatchServer($rootScope, $http, $location, MessageHandler, authUrl, wsBroker) {
+    .service('MatchServer', function MatchServer($rootScope, $http, $location, MessageHandler, authUrl, wsBroker, logoutUrl) {
         var connector;
         var sessionId;
         var errorMessage;
@@ -32,6 +32,11 @@ angular.module('defineMatchClientApp')
             return false;
         }
 
+        function errorLogout(response) {
+            errorMessage = response;
+            return false;
+        }
+
         return {
             sendDefinition: function (response) {
                 connector.send('{"type":"ClientResponse", "response":"' + response + '"}"');
@@ -43,10 +48,11 @@ angular.module('defineMatchClientApp')
                 connector.send('{"type":"ClientVote", "voteId":' + voteId + '}"');
             },
             sendStartMatch: function (config){
-                //var toJSONProps = ['voteValue', 'correctVoteValue', 'minimumPlayers', 'maximumPlayers', 'goalPoints', 'maximumRounds', 'timeLimit', 'definePhaseConf', 'votePhaseConf', 'resultPhaseConf'];
-                //var configJSON = JSON && JSON.stringify(config, toJSONProps);
-                var configJSON = JSON && JSON.stringify(config);
-                var messageJSON = JSON && JSON.stringify({type:"ClientStartMatch", config : config });
+                var messageJSON = JSON && JSON.stringify({type:"ClientStartMatch", config : config },
+                function(key, value){
+                    if(value==null) return null;
+                    return value;
+                });
                 connector.send(messageJSON);
             },
             login: function (username, password) {
@@ -55,8 +61,17 @@ angular.module('defineMatchClientApp')
                     .success(registerWs)
                     .error(errorLogin);
             },
-            logout: function () {
-                connector = undefined;
+            logout: function (code, reason) {
+                errorMessage = '';
+                if(MessageHandler.isConnected()) {
+                    connector.close(code, reason);
+                }
+                if(sessionId){
+                    sessionId = null;
+                    $http.get(logoutUrl)
+                        .error(errorLogout);
+                }
+                $rootScope.user = {};
             },
             getErrorMessage: function () {
                 return errorMessage;
