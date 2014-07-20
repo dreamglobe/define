@@ -23,7 +23,7 @@ public class Round<REF> implements DefinitionResolver {
 
     private final RoundPlayers<REF> roundPlayers;
     private List<TermDefinition> roundDefinitions = new ArrayList<>();
-    private Set<TurnResult> result;
+    private Set<TurnResult> result = new HashSet<>();
 
     private final long matchStartTime;
     private final long roundStartTime;
@@ -174,7 +174,7 @@ public class Round<REF> implements DefinitionResolver {
     }
 
     public boolean isFinalRound() {
-        return result != null && result.size() >0;
+        return result.size() >0;
     }
 
     public boolean hasWinners( ) {
@@ -201,7 +201,8 @@ public class Round<REF> implements DefinitionResolver {
     }
 
     public void calculateRoundResult(){
-        this.result = MatchResolver.resolve(this);
+        this.result.clear();
+        this.result.addAll(MatchResolver.resolve(this));
     }
 
     public long getMatchStartTime() {

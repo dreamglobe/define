@@ -1,9 +1,10 @@
 package com.kamomileware.define.model;
 
+import com.kamomileware.define.model.round.PlayerData;
+
 import java.util.List;
 
 /**
- * TODO: Remove PlayerData.Score reference
  */
 public class PlayerScore {
     private final String pid;

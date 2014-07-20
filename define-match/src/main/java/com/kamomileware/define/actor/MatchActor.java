@@ -201,8 +201,8 @@ public class MatchActor extends MatchFSM {
             if(message instanceof UserVote){
                 handleVote((UserVote) message);
                 if(round.hasEveryoneVote()){
-                    handleEndVote();
                     cancelLatch();
+                    handleEndVote();
                     if(!round.isFinalRound()) {
                         setState(PHASE_RESULT);
                     } else {
@@ -216,7 +216,6 @@ public class MatchActor extends MatchFSM {
                 } else {
                     setState(STOPPED);
                 }
-
             } else if(message instanceof RegisterUser){
                 handleRegisterUser((RegisterUser) message, sender());
                 long timeLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_VOTE));

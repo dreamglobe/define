@@ -84,7 +84,7 @@ public class MatchConfiguration {
         return maximumRounds.orElse(null);
     }
 
-    @JsonIgnore
+    //JsonIgnore
     public void setMaximumRounds(Integer maximumRounds) {
         this.maximumRounds = Optional.ofNullable(maximumRounds);
     }
@@ -98,7 +98,7 @@ public class MatchConfiguration {
         return timeLimit.orElse(null);
     }
 
-    @JsonIgnore
+    //JsonIgnore
     public void setTimeLimit(Long timeLimit) {
         this.timeLimit = Optional.ofNullable(timeLimit);
     }

@@ -11,21 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.kamomileware.define.model.round.VoteDefinition.createVoteDefinition;
+
 /**
  * Created by pepe on 10/07/14.
  */
 public class PlayerData<REF> implements MessageInfoFactory {
 
-    private final String name;
     private final REF ref;
+    private final String name;
     private final String pid;
     private final Score score;
-
     private boolean readyInResult ;
-
     private TermDefinition definition;
     private VoteDefinition vote;
-
     private DefinitionResolver resolver;
 
     private PlayerData(REF ref, String name, String pid, DefinitionResolver round) {
@@ -38,11 +37,9 @@ public class PlayerData<REF> implements MessageInfoFactory {
 
     void vote(Integer definitionId) {
         final Optional<TermDefinition> termDefinitionOptional = resolver.findDefinitionById(definitionId);
-        if(termDefinitionOptional.isPresent()) {
-            this.vote = VoteDefinition.createVoteDefinition(this, termDefinitionOptional.get());
-        }else {
-            this.vote = null;
-        }
+        this.vote = termDefinitionOptional.isPresent() ?
+            createVoteDefinition(this, termDefinitionOptional.get()):
+            null;
     }
 
     public boolean hasResponse() {
@@ -59,23 +56,6 @@ public class PlayerData<REF> implements MessageInfoFactory {
 
     public void setReadyInResult(boolean readyInResult) {
         this.readyInResult = readyInResult;
-    }
-
-    @Override
-    public ItemDefinition createItemDefinition() {
-        return definition != null ? new ItemDefinition(definition.getDefId(), definition.getText()) : new ItemDefinition(0,"");
-    }
-
-    @Override
-    public PlayerScore createPlayerScore(){
-        Integer defId = definition!=null? definition.getDefId():null;
-        return PlayerScore.create(pid, defId, score.getVoteScore(), score.getTurnScore(),
-                score.getTotalScore(), score.getVoters(), score.isCorrectVote());
-    }
-
-    @Override
-    public PlayerInfo createPlayerInfo() {
-        return new PlayerInfo(this.pid, this.name, this.isReadyInResult(), this.score.getTotalScore(), this.score.getLastTurnScore());
     }
 
     protected void prepareNextRound(DefinitionResolver newRound){
@@ -114,16 +94,33 @@ public class PlayerData<REF> implements MessageInfoFactory {
         return Optional.ofNullable(vote);
     }
 
-    public PlayerData<REF>.Score getScore() {
+    public Score getScore() {
         return score;
+    }
+
+    public boolean isWinner(){
+        return score.getTotalScore() > resolver.getMatchConf().getGoalPointsOpt().orElse(Integer.MAX_VALUE);
     }
 
     public static <PREF> PlayerData createPlayerData(PREF playerRef, String name, String pid, DefinitionResolver resolver) {
         return new PlayerData<>(playerRef, name, pid, resolver);
     }
 
-    public boolean isWinner(){
-        return score.getTotalScore() > resolver.getMatchConf().getGoalPointsOpt().orElse(Integer.MAX_VALUE);
+    @Override
+    public ItemDefinition createItemDefinition() {
+        return definition != null ? new ItemDefinition(definition.getDefId(), definition.getText()) : new ItemDefinition(0,"");
+    }
+
+    @Override
+    public PlayerScore createPlayerScore(){
+        Integer defId = definition!=null? definition.getDefId():null;
+        return PlayerScore.create(this.pid, defId, this.score.getVoteScore(), this.score.getTurnScore(),
+                this.score.getTotalScore(), this.score.getVoters(), this.score.isCorrectVote());
+    }
+
+    @Override
+    public PlayerInfo createPlayerInfo() {
+        return new PlayerInfo(this.pid, this.name, this.isReadyInResult(), this.score.getTotalScore(), this.score.getLastTurnScore());
     }
 
     public class Score{
