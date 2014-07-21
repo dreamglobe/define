@@ -53,8 +53,8 @@ angular.module('defineMatchClientApp')
             }
         };
 
-        Timer.prototype.timeout = function (name, millis, fn) {
-            this.timers[name] = $timeout(fn, millis);
+        Timer.prototype.timeout = function (name, millis, func) {
+            this.timers[name] = $timeout(func, millis);
         };
 
         Timer.prototype.cancelTimeout = function (name) {

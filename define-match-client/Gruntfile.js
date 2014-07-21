@@ -18,7 +18,7 @@ module.exports = function (grunt) {
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: 'dist'
+    dist: 'dist/static'
   };
 
   // Define the configuration for all the tasks
@@ -60,6 +60,10 @@ module.exports = function (grunt) {
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
+      },
+      karma: {
+          files:['app/scripts/**/*.js','test/spec/**/*.js'],
+          tasks:['karma:unit:run']
       }
     },
 
