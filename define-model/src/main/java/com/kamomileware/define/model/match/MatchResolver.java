@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class MatchResolver {
 
-    public static <REF> Set<TurnResult> resolve(Round round) {
+    public static <REF> Set<TurnResult> resolve(Round<REF> round) {
         MatchConfiguration config = round.getMatchConf();
         Set<TurnResult> results = new HashSet<>(TurnResult.values().length);
         List<PlayerData<REF>> players = round.getPlayerList();

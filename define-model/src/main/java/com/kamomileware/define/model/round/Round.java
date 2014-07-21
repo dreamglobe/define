@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.kamomileware.define.model.round.PlayerData.createPlayerData;
+
 /**
  * Created by pepe on 10/07/14.
  */
@@ -77,7 +79,7 @@ public class Round<REF> implements DefinitionResolver {
     }
 
     public boolean addPlayer(REF playerRef, String name, String pid){
-        PlayerData<REF> player = PlayerData.createPlayerData(playerRef, name, pid, this);
+        PlayerData<REF> player = createPlayerData(playerRef, name, pid, this);
         return roundPlayers.add(player);
     }
 
