@@ -2,28 +2,25 @@
 
 /**
  * @ngdoc function
- * @name defineMatchClientApp.controller:ScoreCtrl
+ * @name defineMatchClientApp.controller:FinalCtrl
  * @description
- * # ScoreCtrl
+ * # FinalCtrl
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-  .controller('ScoreCtrl', function ($scope, Player, Definition, MatchServer, Score, Timer) {
+  .controller('FinalCtrl', function ($scope, Player, Definition, MatchServer, Score) {
         MatchServer.checkConnection();
 
         $scope.termName = Definition.getTerm().name;
         $scope.termCat = Definition.getTerm().category;
         $scope.termDefinition = Score.getCorrectDefinition().text;
-        $scope.timer = Timer.start();
         $scope.scores = Score.getList();
         $scope.numCorrectVotes = Score.getNumCorrectVotes();
         $scope.players = Player.getPlayers();
         $scope.me = Player.me();
 
         $scope.readyText = $scope.me.isReady? 'Esperar':'Listo';
-        $scope.toggleReady = function(){
-            $scope.me.isReady = !$scope.me.isReady;
-            $scope.readyText = $scope.me.isReady? 'Esperar':'Listo';
-            MatchServer.sendReady($scope.me.isReady);
+        $scope.finish = function(){
+            MatchServer.logout("01","User logout");
         };
   });

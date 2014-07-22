@@ -18,6 +18,7 @@ angular
         'ngTouch'
     ])
     .constant('authUrl', 'http://10.1.1.102:8080/login')
+    .constant('logoutUrl', 'http://10.1.1.102:8080/logout')
     .constant('wsBroker', 'http://10.1.1.102:8080/crossgate')
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;
@@ -53,13 +54,22 @@ angular
               templateUrl: 'views/score.html',
               controller: 'ScoreCtrl'
             })
+            .when('/start', {
+              templateUrl: 'views/start.html',
+              controller: 'StartCtrl'
+            })
+            .when('/final', {
+              templateUrl: 'views/final.html',
+              controller: 'FinalCtrl'
+            })
             .otherwise({
                 redirectTo: '/'
             });
     })
-    .run(function ($rootScope, Console) {
+    .run(function ($rootScope, Console, MatchServer) {
         //$rootScope.username = null;
         $rootScope.user = {};
         $rootScope.user.name = null;
         $rootScope.Console = Console;
+        $rootScope.logout = MatchServer.logout;
     });

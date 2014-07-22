@@ -8,11 +8,59 @@
 
     </parent>
     <artifactId>define-match-client</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/v.0.3-Term_services/${project.artifactId}</developerConnection>
-        <url>[ http://karma-server/websvn/listing.php/branches/v.0.3-Term_services/listing.php?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F</url>
+        <connection>scm:svn:http://karma-server/svn/define/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</developerConnection>
+        <url>[ http://karma-server/websvn/listing.php/branches/dev-T64-modelo-memoria-v.0.2/listing.php?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F</url>
     </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.trecloux</groupId>
+                <artifactId>yeoman-maven-plugin</artifactId>
+                <configuration>
+                    <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <classesDirectory>dist</classesDirectory>
+                    <classifier>resources</classifier>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>dist</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>.tmp</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>bower_components</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>node_modules</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>.sass-cache</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

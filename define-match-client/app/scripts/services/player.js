@@ -69,7 +69,7 @@ angular.module('defineMatchClientApp')
                             }
                             var self = this;
                             self.__[fieldName] = newValue;
-                            $rootScope.$apply();
+
                         }
 
                     }

@@ -1,4 +1,4 @@
-<h2>[<span>{{term.category}}</span>] {{term.name}}: {{lastDefinition}}</h2>
+<h2>[<span>{{termCat}}</span>] {{termName}}<span ng-show="lastDefinition">: {{lastDefinition}}</span></h2>
 <form ng-submit="sendDefinition()">
     <label for="playerDefinition">Da una definición:</label>
     <input id="playerDefinition" ngbk-focus ng-model="definition" required/>
@@ -16,9 +16,9 @@
     <table border="1" width="80%" cellspacing="15 15 15 15" cellpadding="15 15 15 15" >
         <thead>
         <td>Jugador</td>
-        <td>Definición</td>
-        <td>Puntos</td>
-        <td>Última ronda</td>
+        <td>Tiene definición</td>
+        <td>Puntos totales</td>
+        <td>Puntos de última ronda</td>
         </thead>
         <tr ng-repeat='player in players' ng-class="{on:player.definition}">
             <td>{{player.name}}</td>

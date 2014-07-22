@@ -52,6 +52,12 @@ angular.module('defineMatchClientApp')
                         $rootScope.$apply();
                         break;
 
+                    case 'Starting':
+                        $rootScope.config = payload.config;
+                        $location.path('/start');
+                        $rootScope.$apply();
+                        break;
+
                     case 'StartDefinition':
                         Timer.set(payload.time);
                         Player.startDefinitionPhase();
@@ -84,6 +90,12 @@ angular.module('defineMatchClientApp')
                         Score.createList(payload);
                         Console.log('Inicio de fase Resultados');
                         $location.path('/score');
+                        $rootScope.$apply();
+                        break;
+
+                    case 'ShowEndScores':
+                        Score.createList(payload);
+                        $location.path('/final');
                         $rootScope.$apply();
                         break;
 

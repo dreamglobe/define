@@ -11,7 +11,8 @@ angular.module('defineMatchClientApp')
     .controller('VoteCtrl', function ($scope, Definition, Player, MatchServer, Timer) {
         MatchServer.checkConnection();
 
-        $scope.term = Definition.getTerm();
+        $scope.termName = Definition.getTerm().name;
+        $scope.termCat = Definition.getTerm().category;
         $scope.timer = Timer.start();
         $scope.players = Player.getPlayers();
         $scope.me = Player.me();
@@ -31,7 +32,7 @@ angular.module('defineMatchClientApp')
         };
 
         $scope.isShowVote = function (defId) {
-            return $scope.canVote && $scope.me.vote !== defId;
+            return $scope.canVote && $scope.me.vote !== defId && Definition.getPlayerDefinition().defId != defId;
         };
         $scope.hasVoteForMe = function (code) {
             return $scope.myDefinition.defId === code;

@@ -1,5 +1,5 @@
 
-<form name="userLogin" ng-submit="doLogin()" ng-controller="LoginCtrl">
+<form name="userLogin" ng-submit="doLogin()">
 
     <label for="name">Nombre</label>
     <input id="name"
@@ -9,5 +9,5 @@
     <input type="submit" ng-disabled="!userLogin.$valid"/>
 
 </form>
-<hr/>
+<p/>
 <div ng-show="message" ng-bind="message"></div>
