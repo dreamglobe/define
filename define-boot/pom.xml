@@ -8,7 +8,6 @@
 
     </parent>
     <artifactId>define-boot</artifactId>
-    <packaging>pom</packaging>
 
     <scm>
         <connection>scm:svn:http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</connection>
