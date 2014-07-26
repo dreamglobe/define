@@ -20,6 +20,7 @@ angular
     .constant('authUrl', 'http://10.1.1.102:8080/login')
     .constant('logoutUrl', 'http://10.1.1.102:8080/logout')
     .constant('wsBroker', 'http://10.1.1.102:8080/crossgate')
+    .constant('debug', true)
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;
         $httpProvider.defaults.useXDomain = true;

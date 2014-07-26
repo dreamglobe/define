@@ -21,6 +21,6 @@ angular.module('defineMatchClientApp')
 
         $scope.readyText = $scope.me.isReady? 'Esperar':'Listo';
         $scope.finish = function(){
-            MatchServer.logout("01","User logout");
+            MatchServer.logout('01','User logout');
         };
   });

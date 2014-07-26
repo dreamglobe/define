@@ -1,30 +1,38 @@
-<h2>[<span>{{termCat}}</span>] {{termName}}<span ng-show="lastDefinition">: {{lastDefinition}}</span></h2>
-<form ng-submit="sendDefinition()">
-    <label for="playerDefinition">Da una definición:</label>
-    <input id="playerDefinition" ngbk-focus ng-model="definition" required/>
-    <input type="submit" value="Enviar"/>
-</form>
+<div ng-include="'views/matchHeader.html'"/>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-primary">
+            <form role="form" name="defineForm" class="" ng-submit="sendDefinition()">
+                <!--div class="panel-heading"><h4 class="panel-title">Tu definición</h4></div-->
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="playerDefinition" class="sr-only">Escribe aquí la definición</label>
+                            <input id="playerDefinition" class="form-control"
+                                   placeholder="Da una definición para {{term.name}}"
+                                   ngbk-focus ng-model="definition"
+                                   required/>
 
-<div class="timer">
-    <h4>Timeout</h4>
-    <span>{{timer.counter}}</span> Seg.
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-block"
+                                        ng-disabled="defineForm.$invalid">&nbsp;
+                                    <span class="glyphicon glyphicon glyphicon-play "/>&nbsp;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="lastDefinition">
+                        <span class="label label-primary">Última definición dada</span>
+
+                        <div class="well well-sm">
+                            <span ng-bind="lastDefinition"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="rooster col-sm-6">
+        <div ng-include="'views/rooster.html'"/>
+    </div>
 </div>
 
-<hr/>
-<div class="rooster">
-    <h4>Parrilla</h4>
-    <table border="1" width="80%" cellspacing="15 15 15 15" cellpadding="15 15 15 15" >
-        <thead>
-        <td>Jugador</td>
-        <td>Tiene definición</td>
-        <td>Puntos totales</td>
-        <td>Puntos de última ronda</td>
-        </thead>
-        <tr ng-repeat='player in players' ng-class="{on:player.definition}">
-            <td>{{player.name}}</td>
-            <td><span ng-hide="!player.definition" class="glyphicon glyphicon-ok"></span></td>
-            <td>{{player.totalScore}}</td>
-            <td>{{player.turnScore}}</td>
-        </tr>
-    </table>
-</div>

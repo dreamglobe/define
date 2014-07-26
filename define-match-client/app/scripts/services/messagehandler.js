@@ -10,6 +10,11 @@
 angular.module('defineMatchClientApp')
     .service('MessageHandler', function MessageHandler($rootScope, $location, Console, Timer, Player, Definition, Score) {
         var isConnected = false;
+        function updateScope(){
+            if(!$rootScope.$$phase) {
+                $rootScope.$apply();
+            }
+        }
         return {
             isConnected: function(){
                 return isConnected;
@@ -39,23 +44,23 @@ angular.module('defineMatchClientApp')
 
                     case 'PlayerList':
                         Player.createList(payload.players, $rootScope.user.name);
-                        $rootScope.$apply();
+                        updateScope();
                         break;
 
                     case 'RemoveUser':
                         Player.remove(payload.pid);
-                        $rootScope.$apply();
+                        updateScope();
                         break;
 
                     case 'RegisterUser':
                         Player.create(payload);
-                        $rootScope.$apply();
+                        updateScope();
                         break;
 
                     case 'Starting':
                         $rootScope.config = payload.config;
                         $location.path('/start');
-                        $rootScope.$apply();
+                        updateScope();
                         break;
 
                     case 'StartDefinition':
@@ -64,7 +69,7 @@ angular.module('defineMatchClientApp')
                         Definition.setTerm(payload.term);
                         Console.log('Inicio de fase Definición');
                         $location.path('/define');
-                        $rootScope.$apply();
+                        updateScope();
                         break;
 
                     case 'RegisterUserInVote':
@@ -77,7 +82,7 @@ angular.module('defineMatchClientApp')
                         Definition.createList(payload);
                         Console.log('Inicio de fase Votación');
                         $location.path('/vote');
-                        $rootScope.$apply();
+                        updateScope();
                         break;
 
                     case 'RegisterUserInShowScores':
@@ -90,13 +95,13 @@ angular.module('defineMatchClientApp')
                         Score.createList(payload);
                         Console.log('Inicio de fase Resultados');
                         $location.path('/score');
-                        $rootScope.$apply();
+                        updateScope();
                         break;
 
                     case 'ShowEndScores':
                         Score.createList(payload);
                         $location.path('/final');
-                        $rootScope.$apply();
+                        updateScope();
                         break;
 
                     case 'UserDefinition':

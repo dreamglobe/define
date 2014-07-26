@@ -19,6 +19,12 @@ angular.module('defineMatchClientApp')
         var fieldsChangeReady = ['definition', 'vote'];
         var allFields = _.union(fields, fieldsWithNotifier, fieldsChangeReady);
 
+        function updateScope(fn){
+            if(!$rootScope.$$phase) {
+                $rootScope.$apply(fn);
+            }
+        }
+
         function Player(pid, name, totalScore, turnScore) {
             Object.defineProperty(this, '__',  // Define property for field values
                 { value: {} });
@@ -87,7 +93,7 @@ angular.module('defineMatchClientApp')
                         var sameValue = this.__.vote === newValue;
                         if (!sameValue) {
                             var self = this;
-                            $rootScope.$apply(function () {
+                            updateScope(function () {
                                 self.__[fieldName] = newValue;
                                 self.__.isReady = newValue !== null;
                                 self.__.hasChange = true;

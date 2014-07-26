@@ -11,10 +11,13 @@ angular.module('defineMatchClientApp')
     .factory('Timer', function (_, $rootScope, $timeout) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
-
         function Timer() {
+            this.started = 0;
             this.millis = 0;
-            this.counter = 0;
+            this.secLeft = 0;
+            this.percent = 0;
+            this.status = '';
+            this.statusChange=0;
             this.timer = null;
             this.timers = {};
         }
@@ -22,14 +25,39 @@ angular.module('defineMatchClientApp')
         var t = new Timer();
 
         function tick () {
-            t.counter--;
+            t.secLeft--;
             t.timer = $timeout(tick, 1000);
+        }
+
+        function progressTick() {
+            t.percent = (t.millisLeft() * 100) / t.millis;
+            t.timers['progress'] = $timeout(progressTick, 100);
+        }
+
+        function changeStatusInfo(){
+            t.status = 'progress-bar-info';
+            t.timers['status'] = $timeout(changeStatusWarn, t.statusChange);
+        }
+        function changeStatusWarn(){
+            t.status = 'progress-bar-warning';
+            t.timers['status'] = $timeout(changeStatusDanger, t.statusChange);
+        }
+        function changeStatusDanger(){
+            t.status = 'progress-bar-danger';
         }
 
         function calcMillisInSecond(millis) {
             var secondFraction = millis % 1000;
             return secondFraction === 0 ? 1000 : secondFraction;
         }
+
+        Timer.prototype.millisLeft = function(){
+            return this.millis - (Date.now() - this.started);
+        };
+
+        Timer.prototype.getSeconds = function(){
+            return Math.abs(this.secLeft);
+        };
 
         Timer.prototype.set = function(millis){
             this.millis = millis;
@@ -42,8 +70,13 @@ angular.module('defineMatchClientApp')
             _.each(this.timers, function (t) {
                 $timeout.cancel(t);
             });
-            this.counter = Math.floor(this.millis / 1000);
+            this.status='';
+            this.statusChange = this.millis/4;
+            this.started = Date.now();
+            this.secLeft = Math.floor(this.millis / 1000);
             this.timer = $timeout(tick, calcMillisInSecond(this.millis));
+            this.timers['progress'] = $timeout(progressTick, 100);
+            this.timers['status'] = $timeout(changeStatusInfo, this.statusChange);
             return this;
         };
 

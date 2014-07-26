@@ -15,6 +15,12 @@ angular.module('defineMatchClientApp')
         var posByDefId = {};
         var playerDefinition;
 
+        function updateScope(fn){
+            if(!$rootScope.$$phase) {
+                $rootScope.$apply(fn);
+            }
+        }
+
         function Definition(defId, text) {
             this.defId = defId;
             this.text = text;
@@ -52,7 +58,7 @@ angular.module('defineMatchClientApp')
 
         Definition.setTerm = function (term) {
             turnTerm = Term.create(term);
-            $rootScope.$apply();
+            updateScope();
         };
 
         Definition.getList = function () {

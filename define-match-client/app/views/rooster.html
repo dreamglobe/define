@@ -1,0 +1,19 @@
+<div class="panel panel-primary">
+    <div class="panel-heading"><h3 class="panel-title">Jugadores</h3></div>
+    <table class="table table-bordered table-striped table-condensed table-hover panel-body">
+        <thead>
+        <td>#</td>
+        <td>Nombre</td>
+        <td>Listo</td>
+        <td>Total</td>
+        <td>Ronda</td>
+        </thead>
+        <tr ng-repeat='player in players'>
+            <td ng-bind="$index+1"></td>
+            <td ng-bind="player.name"></td>
+            <td ng-class="{success : player.definition}"><span ng-bind="playerReady(player)"></span></td>
+            <td ng-bind="player.totalScore"></td>
+            <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'"></td>
+        </tr>
+    </table>
+</div>

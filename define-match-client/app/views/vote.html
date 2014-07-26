@@ -1,5 +1,4 @@
-<h2>[<span>{{termCat}}</span>] {{termName}}</h2>
-
+<div ng-include="'views/matchHeader.html'"/>
 <div class="poll">
 <table border="1" width="80%" cellspacing="15" >
     <thead><td/><td>Definiciones</td></thead>
@@ -11,12 +10,6 @@
         </td>
         <td>{{item.text}}</td>
     </tr>
-    <!-- Definición del usuario
-    <tr>
-        <td height="28px" width="28px" align="center">{{letter(myDefinition.defId)}}</td>
-        <td>{{myDefinition.text}}</td>
-    </tr>
-    -->
     <!-- Deselección -->
     <tr>
         <td height="28px" width="28px" align="center"></td>
@@ -24,29 +17,4 @@
     </tr>
 </table>
 </div>
-
-<div class="timer">
-    <h4>Timeout</h4>
-    <span>{{timer.counter}}</span> Seg.
-</div>
-
-<hr/>
-<div class="rooster">
-    <h4>Parrilla</h4>
-    <table border="1" width="80%" cellspacing="15" >
-        <thead>
-        <td>Jugador</td>
-        <td>Voto</td>
-        <td>Puntos</td>
-        <td>Última ronda</td>
-        </thead>
-        <tr ng-repeat='player in players' ng-class="{on:player.vote}">
-            <td>{{player.name}}</td>
-            <td>
-                {{letter(player.vote)}}
-                <span ng-show="hasVoteForMe(player.vote)" class="glyphicon glyphicon-ok"></span>
-            <td>{{player.totalScore}}</td>
-            <td>{{player.turnScore}}</td>
-        </tr>
-    </table>
-</div>
+<div ng-include="'views/rooster.html'"/>

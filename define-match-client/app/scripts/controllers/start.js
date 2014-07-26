@@ -17,7 +17,7 @@ angular.module('defineMatchClientApp')
             $scope.roundFinish = Boolean($scope.config.maximumRounds).valueOf();
         }
         $scope.checkFinishPoints = function(){
-            $scope.pointFinish = !$scope.pointFinish
+            $scope.pointFinish = !$scope.pointFinish;
         };
         $scope.checkFinishTime = function(){
             $scope.timeFinish = !$scope.timeFinish;

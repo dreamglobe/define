@@ -8,11 +8,25 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-    .controller('VoteCtrl', function ($scope, Definition, Player, MatchServer, Timer) {
+    .controller('VoteCtrl', function ($scope, Definition, Player, MatchServer, Timer, debug) {
         MatchServer.checkConnection();
+        if(debug){
+            Definition.setTerm({name:'DebugTerm', category:{label:'DBG', name:'DEBUG'} });
+            Player.createList(
+                [{pid:1,name:'debug',totalScore:0,turnScore:0},
+                    {pid:2,name:'debug2',totalScore:0,turnScore:1},
+                    {pid:3,name:'debug3',totalScore:0,turnScore:2},
+                    {pid:4,name:'debug4',totalScore:0,turnScore:0}
+                ], 'debug');
+            Definition.createList({definitions:[
+                {defId:2, text:'Definition 2'},
+                {defId:3, text:'Definition 3'},
+                {defId:4, text:'Definition 4'}
+            ], playerDefinition:{defId:1, text:'Definition 1'}});
+            Timer.set(30000);
+        }
 
-        $scope.termName = Definition.getTerm().name;
-        $scope.termCat = Definition.getTerm().category;
+        $scope.term = Definition.getTerm();
         $scope.timer = Timer.start();
         $scope.players = Player.getPlayers();
         $scope.me = Player.me();
@@ -30,9 +44,8 @@ angular.module('defineMatchClientApp')
         $scope.unvote = function () {
             $scope.vote(null);
         };
-
         $scope.isShowVote = function (defId) {
-            return $scope.canVote && $scope.me.vote !== defId && Definition.getPlayerDefinition().defId != defId;
+            return $scope.canVote && $scope.me.vote !== defId && Definition.getPlayerDefinition().defId !== defId;
         };
         $scope.hasVoteForMe = function (code) {
             return $scope.myDefinition.defId === code;
@@ -42,5 +55,12 @@ angular.module('defineMatchClientApp')
         };
         $scope.letter = function (defId) {
             return defId !== null ? Definition.getLetterByDefId(defId) : '';
+        };
+        $scope.playerReady =function(player){
+            var vote = player.vote;
+            if(vote){
+                return $scope.letter(vote) +
+                    ($scope.hasVoteForMe(vote)?'<span class="glyphicon glyphicon-ok"></span>':'');
+            }
         };
     });

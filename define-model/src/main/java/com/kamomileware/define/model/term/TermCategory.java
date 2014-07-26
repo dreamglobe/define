@@ -20,8 +20,8 @@ public enum TermCategory {
 
     AB("Abstracto", Formatters.normalFormatter);
 
-    String label;
-    TermDefinitionFormatter formatter;
+    private String label;
+    private TermDefinitionFormatter formatter;
 
     TermCategory(String label, TermDefinitionFormatter formatter) {
         this.label = label;
@@ -30,6 +30,14 @@ public enum TermCategory {
 
     public String format(String text) {
         return formatter.format(text);
+    }
+
+    public String getName(){
+        return this.name();
+    }
+
+    public String getLabel(){
+        return this.label;
     }
 }
 

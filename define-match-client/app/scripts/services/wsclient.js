@@ -8,7 +8,7 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .service('MatchServer', function MatchServer($rootScope, $http, $location, MessageHandler, authUrl, wsBroker, logoutUrl) {
+    .service('MatchServer', function MatchServer($rootScope, $http, $location, MessageHandler, authUrl, wsBroker, logoutUrl, debug) {
         var connector;
         var sessionId;
         var errorMessage;
@@ -48,9 +48,11 @@ angular.module('defineMatchClientApp')
                 connector.send('{"type":"ClientVote", "voteId":' + voteId + '}"');
             },
             sendStartMatch: function (config){
-                var messageJSON = JSON && JSON.stringify({type:"ClientStartMatch", config : config },
+                var messageJSON = JSON && JSON.stringify({type:'ClientStartMatch', config : config },
                 function(key, value){
-                    if(value==null) return null;
+                    if(!value) {
+                        return null;
+                    }
                     return value;
                 });
                 connector.send(messageJSON);
@@ -80,7 +82,7 @@ angular.module('defineMatchClientApp')
                 return sessionId;
             },
             checkConnection: function(){
-                if(!MessageHandler.isConnected()){
+                if(!debug && !MessageHandler.isConnected()){
                     $location.path('/');
                 }
             }

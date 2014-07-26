@@ -10,7 +10,7 @@
 angular.module('defineMatchClientApp')
     .factory('Term', function () {
 
-        var actualTerm = undefined;
+        var actualTerm = null;
 
         function Term(name, category){
             this.name = name;
