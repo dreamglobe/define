@@ -59,8 +59,7 @@ angular.module('defineMatchClientApp')
         $scope.playerReady =function(player){
             var vote = player.vote;
             if(vote){
-                return $scope.letter(vote) +
-                    ($scope.hasVoteForMe(vote)?'<span class="glyphicon glyphicon-ok"></span>':'');
+                return $scope.letter(vote);
             }
         };
     });

@@ -63,7 +63,7 @@ angular.module('defineMatchClientApp')
             this.millis = millis;
         };
 
-        Timer.prototype.start = function () {
+        Timer.prototype.start = function (keepStatus) {
             this.started = Date.now();
             if (this.timer !== null) {
                 $timeout.cancel(this.timer);
@@ -71,14 +71,14 @@ angular.module('defineMatchClientApp')
             _.each(this.timers, function (t) {
                 $timeout.cancel(t);
             });
-
             this.secLeft = Math.floor(this.millis / 1000);
             this.timer = $timeout(tick, calcMillisInSecond(this.millis));
             this.timers.progress = $timeout(progressTick, 100);
-
             this.status='progress-bar-default';
-            this.statusChange = this.millis/4;
-            this.timeout('status', changeStatusInfo, this.statusChange);
+            if(!keepStatus){
+                this.statusChange = this.millis/4;
+                this.timeout('status', changeStatusInfo, this.statusChange);
+            }
             return this;
         };
 

@@ -1,11 +1,13 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-heading">
-            <h2>
-                <abbr title="{{term.category.name}}">
-                    <span class="label label-info"> <span ng-bind="term.category.label"/></span>
-                </abbr>
-                <strong class="text-info"><span ng-bind="term.name"/></strong>
+            <h2 class="text-info">
+                <span class="">[<span ng-bind="term.category"/>]</span>
+                <strong><span ng-bind="term.name"/></strong><span ng-show="termDefinition">:
+                    <span ng-bind="termDefinition"></span>
+                    <span class="small" ng-show="numCorrectVotes == 1">(<span ng-bind="numCorrectVotes"/> vez elegido)</span>
+                    <span class="small" ng-show="numCorrectVotes > 1">(<span ng-bind="numCorrectVotes"/> veces elegido)</span>
+                </span>
             </h2>
         </div>
         <div class="progress">

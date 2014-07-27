@@ -8,8 +8,15 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-    .controller('StartCtrl', function ($scope, MatchServer, Player) {
+    .controller('StartCtrl', function ($scope, MatchServer, Player, debug) {
         MatchServer.checkConnection();
+        if(debug){
+            $scope.config = {
+                goalPoints:45,
+                timeLimit:200,
+                maximumRounds:20
+            };
+        }
         $scope.hasConfig = Boolean($scope.config).valueOf();
         if($scope.hasConfig) {
             $scope.pointFinish = Boolean($scope.config.goalPoints).valueOf();

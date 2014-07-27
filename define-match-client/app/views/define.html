@@ -8,7 +8,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <label for="playerDefinition" class="sr-only">Escribe aquí la definición</label>
-                            <input id="playerDefinition" class="form-control"
+                            <input id="playerDefinition" class="form-control" spellcheck="true"
                                    placeholder="Da una definición para {{term.name}}"
                                    ngbk-focus ng-model="definition"
                                    required/>
@@ -24,7 +24,7 @@
                         <span class="label label-primary">Última definición dada</span>
 
                         <div class="well well-sm">
-                            <span ng-bind="lastDefinition"/>
+                            <span ng-bind="lastDefinition" spellcheck="true"/>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,26 @@
         </div>
     </div>
     <div class="rooster col-sm-6">
-        <div ng-include="'views/rooster.html'"/>
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title"><strong>Jugadores</strong></h3></div>
+            <table class="table table-bordered table-striped text-info">
+                <thead class="text-info">
+                <tr class="info">
+                    <td width="7%">#</td>
+                    <td><strong>Nombre</strong></td>
+                    <td width="10%"><strong>Turno</strong></td>
+                    <td width="10%"><strong>Total</strong></td>
+                </tr>
+                </thead>
+                <tr ng-repeat='player in players'
+                    ng-class="{warning : player.isReady && player.pid != me.pid, success: player.pid == me.pid}">
+                    <td ng-bind="$index+1" align="right"></td>
+                    <td ng-bind="player.name"></td>
+                    <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'" align="right"></td>
+                    <td ng-bind="player.totalScore" align="right"></td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 
