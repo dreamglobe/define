@@ -23,7 +23,7 @@ angular.module('defineMatchClientApp')
                 {defId:3, text:'Definition 3'},
                 {defId:4, text:'Definition 4'}
             ], playerDefinition:{defId:1, text:'Definition 1'}});
-            Timer.set(30000);
+            Timer.set(10000);
         }
 
         $scope.term = Definition.getTerm();
@@ -32,7 +32,7 @@ angular.module('defineMatchClientApp')
         $scope.me = Player.me();
         $scope.definitions = Definition.getList();
         $scope.myDefinition = Definition.getPlayerDefinition();
-
+        $scope.cssAnim = {transition: 'width ' + $scope.timer/1000 + 's linear', width: '0%'};
         $scope.canVote = true;
         $scope.vote = function (defId) {
             $scope.canVote = false;

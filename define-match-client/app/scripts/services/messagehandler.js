@@ -15,6 +15,25 @@ angular.module('defineMatchClientApp')
                 $rootScope.$apply();
             }
         }
+
+        function startVote(payload) {
+            Timer.set(payload.time);
+            Player.startVotePhase();
+            Definition.createList(payload);
+            Console.log('Inicio de fase Votación');
+            $location.path('/vote');
+            updateScope();
+        }
+
+        function startShowScores(payload) {
+            Timer.set(payload.time);
+            Player.startResultPhase();
+            Score.createList(payload);
+            Console.log('Inicio de fase Resultados');
+            $location.path('/score');
+            updateScope();
+        }
+
         return {
             isConnected: function(){
                 return isConnected;
@@ -75,27 +94,21 @@ angular.module('defineMatchClientApp')
                     case 'RegisterUserInVote':
                         Definition.setTerm(payload.term);
                         Definition.createList(payload);
-                        // extend StartVote
+                        startVote(payload);
+                        break;
+
                     case 'StartVote':
-                        Timer.set(payload.time);
-                        Player.startVotePhase();
-                        Definition.createList(payload);
-                        Console.log('Inicio de fase Votación');
-                        $location.path('/vote');
-                        updateScope();
+                        startVote(payload);
                         break;
 
                     case 'RegisterUserInShowScores':
                         Definition.setTerm(payload.term);
                         Definition.createList(payload);
-                    // extend StartShowScores
+                        startShowScores(payload);
+                        break;
+
                     case 'StartShowScores':
-                        Timer.set(payload.time);
-                        Player.startResultPhase();
-                        Score.createList(payload);
-                        Console.log('Inicio de fase Resultados');
-                        $location.path('/score');
-                        updateScope();
+                        startShowScores(payload);
                         break;
 
                     case 'ShowEndScores':

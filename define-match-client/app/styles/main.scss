@@ -68,6 +68,13 @@ body {
   }
 }
 
+/* Tables with buttons needs to align vertically */
+.table tbody>tr>td.vert-align
+{
+  vertical-align: middle;
+}
+
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
@@ -90,3 +97,4 @@ body {
     border-bottom: 0;
   }
 }
+

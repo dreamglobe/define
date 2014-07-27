@@ -1,20 +1,36 @@
 <div ng-include="'views/matchHeader.html'"/>
-<div class="poll">
-<table border="1" width="80%" cellspacing="15" >
-    <thead><td/><td>Definiciones</td></thead>
-    <!-- Definiciones candidatas -->
-    <tr ng-repeat='item in definitions' ng-class="{on:isMyVote(item.defId)}" ng-click="isShowVote(item.defId) && vote(item.defId)">
-        <td height="28px" width="28px" align="center" >
-            <button ng-show="isShowVote(item.defId)" ng-click="vote(item.defId)">{{letter(item.defId)}}</button>
-            <span ng-show="!isShowVote(item.defId)">{{letter(item.defId)}}</span>
-        </td>
-        <td>{{item.text}}</td>
-    </tr>
-    <!-- Deselección -->
-    <tr>
-        <td height="28px" width="28px" align="center"></td>
-        <td><button ng-hide="!canVote || !me.vote " ng-click="unvote()">No votar</button></td>
-    </tr>
-</table>
+<div class="row">
+    <div class="poll col-sm-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Definiciones</strong></h3>
+
+            </div>
+            <div class="table-responsive">
+                <table  class="table table-condensed table-hover panel-body text-info">
+                    <!-- Definiciones candidatas -->
+                    <tr  ng-repeat='item in definitions' ng-class="{info:isMyVote(item.defId)}"
+                        ng-click="isShowVote(item.defId) && vote(item.defId)">
+                        <td width="10%">
+                            <button class="btn btn-sm bg-primary" ng-disabled="!isShowVote(item.defId)"
+                                    ng-click="vote(item.defId)"><span ng-bind="letter(item.defId)"/>
+                            </button>
+                        </td>
+                        <td class="vert-align"> <span ng-bind="item.text"/></td>
+                    </tr>
+                    <!-- Deselección -->
+                    <tr>
+                        <td colspan="2" ng-click="(canVote && me.vote) && unvote()">
+                            <button class="btn pull-right btn-sm bg-primary" ng-disabled="!canVote || !me.vote ">No votar</button>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="rooster col-sm-6">
+        <div ng-include="'views/rooster.html'"/>
+    </div>
 </div>
-<div ng-include="'views/rooster.html'"/>

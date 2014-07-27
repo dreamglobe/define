@@ -30,17 +30,17 @@ angular.module('defineMatchClientApp')
         }
 
         function progressTick() {
-            t.percent = (t.millisLeft() * 100) / t.millis;
-            t.timers['progress'] = $timeout(progressTick, 100);
+            t.percent = (((t.millisLeft() * 100) / t.millis).toFixed(2));
+            t.timers.progress = $timeout(progressTick, 1000);
         }
 
         function changeStatusInfo(){
             t.status = 'progress-bar-info';
-            t.timers['status'] = $timeout(changeStatusWarn, t.statusChange);
+            t.timeout('status', changeStatusWarn, t.statusChange);
         }
         function changeStatusWarn(){
             t.status = 'progress-bar-warning';
-            t.timers['status'] = $timeout(changeStatusDanger, t.statusChange);
+            t.timeout('status', changeStatusDanger, t.statusChange);
         }
         function changeStatusDanger(){
             t.status = 'progress-bar-danger';
@@ -64,19 +64,21 @@ angular.module('defineMatchClientApp')
         };
 
         Timer.prototype.start = function () {
+            this.started = Date.now();
             if (this.timer !== null) {
                 $timeout.cancel(this.timer);
             }
             _.each(this.timers, function (t) {
                 $timeout.cancel(t);
             });
-            this.status='';
-            this.statusChange = this.millis/4;
-            this.started = Date.now();
+
             this.secLeft = Math.floor(this.millis / 1000);
             this.timer = $timeout(tick, calcMillisInSecond(this.millis));
-            this.timers['progress'] = $timeout(progressTick, 100);
-            this.timers['status'] = $timeout(changeStatusInfo, this.statusChange);
+            this.timers.progress = $timeout(progressTick, 100);
+
+            this.status='progress-bar-default';
+            this.statusChange = this.millis/4;
+            this.timeout('status', changeStatusInfo, this.statusChange);
             return this;
         };
 
@@ -86,7 +88,7 @@ angular.module('defineMatchClientApp')
             }
         };
 
-        Timer.prototype.timeout = function (name, millis, func) {
+        Timer.prototype.timeout = function (name, func, millis) {
             this.timers[name] = $timeout(func, millis);
         };
 
