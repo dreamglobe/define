@@ -8,7 +8,7 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .service('Console', function Console(_) {
+    .service('Console', ['_', function Console(_) {
         var isVisible = false;
         return {
             isVisible: function () {
@@ -48,4 +48,4 @@ angular.module('defineMatchClientApp')
                 console.scrollTop = console.scrollHeight;
             }
         };
-    });
+    }]);

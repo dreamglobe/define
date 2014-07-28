@@ -8,5 +8,5 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-  .controller('MainCtrl', function ($scope ) {
-  });
+  .controller('MainCtrl', ['$scope',function ($scope ) {
+  }]);

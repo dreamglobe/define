@@ -8,7 +8,8 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .factory('Player', function ($rootScope, _, Console) {
+    .factory('Player', ['$rootScope', '_', 'Console',
+        function ($rootScope, _, Console) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         var players = {};
@@ -200,4 +201,4 @@ angular.module('defineMatchClientApp')
         };
 
         return Player;
-    });
+    }]);

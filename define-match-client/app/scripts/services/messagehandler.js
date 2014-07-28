@@ -8,7 +8,8 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .service('MessageHandler', function MessageHandler($rootScope, $location, Console, Timer, Player, Definition, Score) {
+    .service('MessageHandler', ['$rootScope', '$location', 'Console', 'Timer', 'Player', 'Definition', 'Score',
+        function ($rootScope, $location, Console, Timer, Player, Definition, Score) {
         var isConnected = false;
         function updateScope(){
             if(!$rootScope.$$phase) {
@@ -133,4 +134,4 @@ angular.module('defineMatchClientApp')
                 }
             }
         };
-    });
+    }]);

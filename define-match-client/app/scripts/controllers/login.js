@@ -8,9 +8,9 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-    .controller('LoginCtrl', function ($scope, $rootScope, MatchServer) {
+    .controller('LoginCtrl', ['$scope','MatchServer', function ($scope, MatchServer) {
         $scope.doLogin = function(){
-            MatchServer.login($rootScope.user.name);
+            MatchServer.login($scope.user.name);
             $scope.message = MatchServer.getErrorMessage();
         };
-    });
+    }]);

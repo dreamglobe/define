@@ -8,7 +8,8 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-    .controller('StartCtrl', function ($scope, MatchServer, Player, debug) {
+    .controller('StartCtrl', ['$scope', 'MatchServer', 'Player', 'debug',
+        function ($scope, MatchServer, Player, debug) {
         MatchServer.checkConnection();
         if(debug){
             $scope.config = {
@@ -48,4 +49,4 @@ angular.module('defineMatchClientApp')
                 MatchServer.sendStartMatch($scope.config);
             }
         };
-    });
+    }]);

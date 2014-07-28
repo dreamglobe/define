@@ -8,7 +8,8 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-  .controller('FinalCtrl', function ($scope, Player, Definition, MatchServer, Score) {
+  .controller('FinalCtrl', ['$scope', 'Definition', 'Player', 'MatchServer', 'Score', 'debug',
+        function ($scope, Definition, Player, MatchServer, Score, debug) {
         MatchServer.checkConnection();
 
         $scope.termName = Definition.getTerm().name;
@@ -23,4 +24,4 @@ angular.module('defineMatchClientApp')
         $scope.finish = function(){
             MatchServer.logout('01','User logout');
         };
-  });
+  }]);

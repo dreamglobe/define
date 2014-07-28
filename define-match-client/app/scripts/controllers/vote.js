@@ -8,7 +8,8 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-    .controller('VoteCtrl', function ($scope, Definition, Player, MatchServer, Timer, debug) {
+    .controller('VoteCtrl', ['$scope', 'Definition', 'Player', 'MatchServer', 'Timer', 'debug',
+        function ($scope, Definition, Player, MatchServer, Timer, debug) {
         MatchServer.checkConnection();
         if(debug){
             Definition.setTerm({name:'DebugTerm', category:{label:'DBG', name:'DEBUG'} });
@@ -62,4 +63,4 @@ angular.module('defineMatchClientApp')
                 return $scope.letter(vote);
             }
         };
-    });
+    }]);

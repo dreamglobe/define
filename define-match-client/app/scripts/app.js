@@ -20,13 +20,13 @@ angular
     .constant('authUrl', 'http://10.1.1.102:8080/login')
     .constant('logoutUrl', 'http://10.1.1.102:8080/logout')
     .constant('wsBroker', 'http://10.1.1.102:8080/crossgate')
-    .constant('debug', true)
+    .constant('debug', false)
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }])
-    .config(function ($routeProvider) {
+    .config([ '$routeProvider', function ($routeProvider) {
         $routeProvider
             .when('/', {
                 redirectTo: '/login'
@@ -66,11 +66,11 @@ angular
             .otherwise({
                 redirectTo: '/'
             });
-    })
-    .run(function ($rootScope, Console, MatchServer) {
+    }])
+    .run(['$rootScope', 'Console', 'MatchServer', function ($rootScope, Console, MatchServer) {
         //$rootScope.username = null;
         $rootScope.user = {};
         $rootScope.user.name = null;
         $rootScope.Console = Console;
         $rootScope.logout = MatchServer.logout;
-    });
+    }]);

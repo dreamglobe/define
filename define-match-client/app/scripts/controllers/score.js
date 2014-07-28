@@ -8,7 +8,8 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-  .controller('ScoreCtrl', function ($scope, Player, Definition, MatchServer, Score, Timer, debug) {
+  .controller('ScoreCtrl', ['$scope', 'Definition', 'Player', 'MatchServer', 'Score', 'Timer', 'debug',
+        function ($scope, Definition, Player, MatchServer, Score, Timer, debug) {
         MatchServer.checkConnection();
         if(debug){
             Definition.setTerm({name:'DebugTerm', category:{label:'DBG', name:'DEBUG'} });
@@ -50,4 +51,4 @@ angular.module('defineMatchClientApp')
             $scope.readyText = $scope.me.isReady? 'Esperar':'Listo';
             MatchServer.sendReady($scope.me.isReady);
         };
-  });
+  }]);

@@ -8,7 +8,7 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .factory('Score', function (_, Player, Definition) {
+    .factory('Score', ['_', 'Player', 'Definition', function (_, Player, Definition) {
 
         var playerScores = [];
         var correctDefinition;
@@ -65,4 +65,4 @@ angular.module('defineMatchClientApp')
         };
 
         return Score;
-    });
+    }]);

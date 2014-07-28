@@ -8,7 +8,8 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .service('MatchServer', function MatchServer($rootScope, $http, $location, MessageHandler, authUrl, wsBroker, logoutUrl, debug) {
+    .service('MatchServer', ['$rootScope', '$http', '$location', 'MessageHandler', 'authUrl', 'wsBroker', 'logoutUrl', 'debug',
+        function ($rootScope, $http, $location, MessageHandler, authUrl, wsBroker, logoutUrl, debug) {
         var connector;
         var sessionId;
         var errorMessage;
@@ -87,5 +88,5 @@ angular.module('defineMatchClientApp')
                 }
             }
         };
-    })
+    }])
 ;

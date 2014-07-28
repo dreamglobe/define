@@ -8,7 +8,7 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .service('Definition', function (_, $rootScope) {
+    .service('Definition', ['_', '$rootScope', function (_, $rootScope) {
 
         var turnTerm;
         var turnDefinitions = [];
@@ -82,4 +82,4 @@ angular.module('defineMatchClientApp')
         };
 
         return Definition;
-    });
+    }]);

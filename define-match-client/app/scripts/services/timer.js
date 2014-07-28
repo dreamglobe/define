@@ -8,7 +8,8 @@
  * Service in the defineMatchClientApp.
  */
 angular.module('defineMatchClientApp')
-    .factory('Timer', function (_, $rootScope, $timeout) {
+    .factory('Timer', ['_', '$rootScope', '$timeout',
+        function (_, $rootScope, $timeout) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         function Timer() {
@@ -97,4 +98,4 @@ angular.module('defineMatchClientApp')
         };
 
         return t;
-    });
+    }]);

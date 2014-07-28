@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.kamomileware.define</groupId>
@@ -11,27 +12,16 @@
     <packaging>jar</packaging>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}</developerConnection>
+        <connection>scm:svn:http://karma-server/svn/define/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}
+        </connection>
+        <developerConnection>
+            scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/dev-T64-modelo-memoria-v.0.2/${project.artifactId}
+        </developerConnection>
         <url>[ http://karma-server/websvn/listing.php/branches/dev-T64-modelo-memoria-v.0.2/listing.php?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F</url>
     </scm>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.github.trecloux</groupId>
-                <artifactId>yeoman-maven-plugin</artifactId>
-                <configuration>
-                    <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
@@ -63,4 +53,54 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>dist</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.trecloux</groupId>
+                        <artifactId>yeoman-maven-plugin</artifactId>
+                        <configuration>
+                            <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>devel</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.trecloux</groupId>
+                        <artifactId>yeoman-maven-plugin</artifactId>
+                        <configuration>
+                            <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <configuration>
+                                    <gruntBuildArgs>devDist</gruntBuildArgs>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

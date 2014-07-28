@@ -8,7 +8,8 @@
  * Controller of the defineMatchClientApp
  */
 angular.module('defineMatchClientApp')
-    .controller('DefineCtrl', function ($scope, Player, Definition, MatchServer, Timer, debug) {
+    .controller('DefineCtrl',  ['$scope', 'Definition', 'Player', 'MatchServer', 'Timer', 'debug',
+        function ($scope, Definition, Player, MatchServer, Timer, debug) {
         MatchServer.checkConnection();
 
         if(debug){
@@ -36,4 +37,4 @@ angular.module('defineMatchClientApp')
                 return '<span class="glyphicon glyphicon-ok"></span>';
             }
         };
-    });
+    }]);
