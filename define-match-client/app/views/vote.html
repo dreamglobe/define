@@ -1,4 +1,4 @@
-<div ng-include="'views/matchHeader.html'"/>
+<div ng-include="'views/matchHeader.html'"></div>
 <div class="row">
     <div class="poll col-sm-6">
         <div class="panel panel-primary">
@@ -12,10 +12,10 @@
                     ng-click="isShowVote(item.defId) && vote(item.defId)">
                     <td width="10%">
                         <button class="btn btn-sm bg-primary" ng-disabled="!isShowVote(item.defId)"
-                                ng-click="vote(item.defId)"><span ng-bind="letter(item.defId)"/>
+                                ng-click="vote(item.defId)"><span ng-bind="letter(item.defId)"></span>
                         </button>
                     </td>
-                    <td class="vert-align"><span ng-bind="item.text"/></td>
+                    <td class="vert-align"><span ng-bind="item.text"></span></td>
                 </tr>
                 <!-- Deselección -->
                 <tr>

@@ -67,8 +67,7 @@ angular
                 redirectTo: '/'
             });
     }])
-    .run(['$rootScope', 'Console', 'MatchServer', function ($rootScope, Console, MatchServer) {
-        //$rootScope.username = null;
+    .run(['$rootScope', 'Console', 'MatchServer', '$route', function ($rootScope, Console, MatchServer, $route) {
         $rootScope.user = {};
         $rootScope.user.name = null;
         $rootScope.Console = Console;

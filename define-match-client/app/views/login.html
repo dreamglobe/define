@@ -1,13 +1,13 @@
-
-<form name="userLogin" ng-submit="doLogin()">
-
-    <label for="name">Nombre</label>
-    <input id="name"
-           ng-model="user.name"
-           ngbk-focus="true"
-           required  />
-    <input type="submit" ng-disabled="!userLogin.$valid"/>
-
+<form name="userLogin" ng-submit="doLogin()" role="form">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="name" class="control-label">Nombre</label>
+            <input id="name" class="form-control"
+                   ng-model="user.name"
+                   ngbk-focus="true"
+                   required>
+            <button type="submit" class="btn" ng-disabled="!userLogin.$valid">Login</button>
+        </div>
+    </div>
 </form>
-<p/>
 <div ng-show="message" ng-bind="message"></div>

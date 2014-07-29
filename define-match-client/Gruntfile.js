@@ -178,6 +178,9 @@ module.exports = function (grunt) {
 
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
+      devDist: {
+          options: {cssDir: '<%= yeoman.dist %>/styles'}
+      },
       options: {
         sassDir: '<%= yeoman.app %>/styles',
         cssDir: '.tmp/styles',
@@ -356,10 +359,42 @@ module.exports = function (grunt) {
         }, {
           expand: true,
           cwd: '.',
-          src: 'bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/*',
+          src: ['bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/*',
+            'bower_components/**/*.js'],
           dest: '<%= yeoman.dist %>'
         }]
       },
+      devDist: {
+            files: [{
+                expand: true,
+                dot: true,
+                cwd: '<%= yeoman.app %>',
+                dest: '<%= yeoman.dist %>',
+                src: [
+                    '*.{ico,png,txt}',
+                    '.htaccess',
+                    '*.html',
+                    'views/{,*/}*.html',
+                    'images/{,*/}*.{webp}',
+                    'scripts/{,*/}*.js',
+                    'fonts/*'
+                ]
+            }, {
+                expand: true,
+                cwd: '.tmp/images',
+                dest: '<%= yeoman.dist %>/images',
+                src: ['generated/*']
+            }, {
+                expand: true,
+                cwd: '.',
+                src: [
+                    'bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/*',
+                    'bower_components/**/*.js',
+                    'bower_components/**/*.css'
+                ],
+                dest: '<%= yeoman.dist %>'
+            }]
+        },
       styles: {
         expand: true,
         cwd: '<%= yeoman.app %>/styles',
@@ -442,5 +477,11 @@ module.exports = function (grunt) {
     'newer:jshint',
     'test',
     'build'
+  ]);
+
+  grunt.registerTask('devDist',[
+      'clean:dist',
+      'copy:devDist',
+      'compass:devDist'
   ]);
 };

@@ -1,4 +1,4 @@
-<div ng-include="'views/matchHeader.html'"/>
+<div ng-include="'views/matchHeader.html'"></div>
 <div class="row">
     <div class="col-sm-6">
         <div class="panel panel-primary">
@@ -11,12 +11,12 @@
                             <input id="playerDefinition" class="form-control" spellcheck="true"
                                    placeholder="Da una definición para {{term.name}}"
                                    ngbk-focus ng-model="definition"
-                                   required/>
+                                   required>
 
                             <div class="input-group-btn">
                                 <button type="submit" class="btn btn-primary btn-block"
                                         ng-disabled="defineForm.$invalid">&nbsp;
-                                    <span class="glyphicon glyphicon glyphicon-play "/>&nbsp;</button>
+                                    <span class="glyphicon glyphicon glyphicon-play"></span>&nbsp;</button>
                             </div>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                         <span class="label label-primary">Última definición dada</span>
 
                         <div class="well well-sm">
-                            <span ng-bind="lastDefinition" spellcheck="true"/>
+                            <span ng-bind="lastDefinition" spellcheck="true"></span>
                         </div>
                     </div>
                 </div>
