@@ -13,19 +13,20 @@ angular.module('defineMatchClientApp')
         MatchServer.checkConnection();
 
         if(debug){
-            Definition.setTerm({name:'DebugTerm', category:{label:'DBG', name:'DEBUG'} });
+            Definition.setTerm({name:'DebugTerm', category:{name:'DBG', label:'DEBUG'} });
             Player.createList(
                 [{pid:1,name:'debug',totalScore:0,turnScore:0},
-                    {pid:2,name:'debug',totalScore:0,turnScore:1},
-                    {pid:3,name:'debug',totalScore:0,turnScore:2},
-                    {pid:4,name:'debug',totalScore:0,turnScore:0}
-            ], 'debug');
+                    {pid:2,name:'debug2',totalScore:0,turnScore:1},
+                    {pid:3,name:'debug3',totalScore:0,turnScore:2},
+                    {pid:4,name:'debug4',totalScore:0,turnScore:0}
+                ], 'debug');
             Timer.set(30000);
         }
 
         $scope.timer = Timer.start();
         $scope.term = Definition.getTerm();
         $scope.players = Player.getPlayers();
+        $scope.me = Player.me();
         $scope.definition = '';
         $scope.lastDefinition = '';
         $scope.sendDefinition = function (){
@@ -33,8 +34,6 @@ angular.module('defineMatchClientApp')
             MatchServer.sendDefinition($scope.lastDefinition);
         };
         $scope.playerReady =function(player){
-            if(player.definition){
-                return '<span class="glyphicon glyphicon-ok"></span>';
-            }
+            return (player.definition);
         };
     }]);

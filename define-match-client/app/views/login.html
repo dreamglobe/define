@@ -1,13 +1,70 @@
-<form name="userLogin" ng-submit="doLogin()" role="form">
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label for="name" class="control-label">Nombre</label>
-            <input id="name" class="form-control"
-                   ng-model="user.name"
-                   ngbk-focus="true"
-                   required>
-            <button type="submit" class="btn" ng-disabled="!userLogin.$valid">Login</button>
+<div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+        <div class=" panel panel-primary">
+            <div class="panel-heading">
+                <h2 class="panel-title">Acceso a partida de <strong>Define</strong>
+                    <span class=" pull-right glyphicon glyphicon-book"></span>
+                    <span class=" pull-right glyphicon glyphicon-pencil"></span>
+                </h2>
+            </div>
+            <div class="panel-body text-center">
+                <form name="userLogin" ng-submit="doLogin()" role="form" class="form form-inline">
+                    <div class="form-group form-group-sm">
+                        <label for="name" class="sr-only control-label ">Nombre</label>
+
+                        <input id="name" class="form-control" type="text" size="20"
+                               ng-model="user.name"
+                               ngbk-focus="true"
+                               placeholder="Nombre de usuario"
+                               required>
+                    </div>
+                    <div class="form-group form-group-sm ">
+                        <label for="pass" class="sr-only control-label">Nombre</label>
+                        <input id="pass" class="form-control" type="text" size="10"
+                               ng-model="user.password"
+                               placeholder="Contraseña">
+
+                    </div>
+                    <button type="submit" class="btn btn-primary pull-right" ng-disabled="!userLogin.$valid">Log in
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-</form>
-<div ng-show="message" ng-bind="message"></div>
+</div>
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        <h2 class="panel-title">You did it!</h2>
+    </div>
+    <div class="panel-body">
+        <p>You should be proud.</p>
+
+        <p>Next time, you can do it again!</p>
+
+        <div class="panel-group">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h2 class="panel-title">However,</h2>
+                </div>
+                <div class="panel-body">
+                    <p>You should be careful about doing it too quickly...</p>
+
+                    <p>Because...</p>
+
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Things happen!</h2>
+                </div>
+                <div class="panel-body">
+                    <p>... you never know what might happen.</p>
+
+                    <p>Unexpected events are part of life.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-show="message" ng-bind="message" class="alert"></div>

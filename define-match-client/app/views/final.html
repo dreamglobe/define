@@ -1,77 +1,30 @@
-<div class="match-result">
-    <h2>Resultados</h2>
-    <table border="1" width="80%" >
-        <thead>
-        <td>Posición</td>
-        <td>Jugador</td>
-        <td>Puntos</td>
-        <td>Última ronda</td>
-        </thead>
-        <tr ng-repeat="player in players | orderBy:'-totalScore'">
-            <td>{{$index +1}}</td>
-            <td>{{player.name}}</td>
-            <td>{{player.totalScore}}</td>
-            <td>{{player.turnScore}}</td>
-        </tr>
-        <tr>
-            <td colspan="4">
-                <button ng-click="finish()">Terminar</button>
-            </td>
-        </tr>
-    </table>
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2 match-result">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h2 class="panel-title"><strong>Resultados de la partida</strong></h2></div>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr class="info">
+                    <td width="7%" class="text-right"><strong>Posición</strong></td>
+                    <td><strong>Jugador</strong></td>
+                    <td width="12%" class="text-right"><strong>Puntos</strong><span class="caret"></span></td>
+                    <td width="12%" class="text-right"><strong>Turno</strong></td>
+                </tr>
+                </thead>
+                <tr ng-repeat="score in scores | orderBy:'-totalScore'" ng-class="{success: score.pid == me.pid}">
+                    <td class="text-right">{{$index +1}}</td>
+                    <td><span ng-bind="score.player.name"></span></td>
+                    <td class="text-right"><span ng-bind="score.totalScore"></span></td>
+                    <td class="text-right"><span ng-bind="score.turnScore"></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
-
-
-<h2>[<span>{{termCat}}</span>]
-    {{termName}}:
-    <span class="definition">{{termDefinition}}</span>
-    <span ng-show="numCorrectVotes == 1">({{numCorrectVotes}} vez elegido)</span>
-    <span ng-show="numCorrectVotes > 1">({{numCorrectVotes}} veces elegido)</span>
-</h2>
-
-<div class="players-definitions">
-    <h4>Definiciones de los jugadores</h4>
-    <table border="1" width="80%" >
-        <thead>
-        <td></td>
-        <td>Jugador</td>
-        <td>Definición</td>
-        <td>Votos recibidos</td>
-        </thead>
-        <tr ng-repeat="score in scores | orderBy : '-turnPoints' " ng-class="{on: score.pid == user.pid}">
-            <td>{{$index+1}}</td>
-            <td>{{score.player.name}}</td>
-            <td>{{score.definition.text}}</td>
-            <td>{{score.pidVoters.length}}</td>
-        </tr>
-    </table>
+<div class="row">
+    <div class="col-sm-1 col-sm-offset-11">
+        <button ng-click="finish()" class="pull-right btn btn-primary">Terminar</button>
+    </div>
 </div>
-
-<div class="turn-scores">
-    <h5>Puntuaciones del turno</h5>
-    <table border="1" width="80%" >
-        <thead>
-        <td></td>
-        <td>Jugador</td>
-        <td>Puntos</td>
-        <td>Acierto</td>
-        <td>Votos de</td>
-        </thead>
-        <tr ng-repeat="score in scores | orderBy : '-turnPoints' " ng-class="{on: score.pid == me.pid}">
-            <td>{{$index+1}}</td>
-            <td>{{score.player.name}}</td>
-            <td>
-                <span ng-show="score.turnScore > 0">+{{score.turnScore}}</span>
-                <span ng-show="score.turnScore == 0">-</span>
-            </td>
-            <td>
-                <span ng-show="score.isCorrectDefinition" class="glyphicon glyphicon-ok"></span>
-                <span ng-show="!score.isCorrectDefinition" class="glyphicon glyphicon-ko"></span>
-            </td>
-            <td>
-                <span ng-bind="score.getVoters().join(', ')"></span>
-                <span ng-show="score.pidVoters.length == 0">-</span>
-            </td>
-        </tr>
-    </table>
-</div>
+<div ng-include="'fragment/term.html'"></div>
+<div ng-include="'fragment/result.html'"></div>

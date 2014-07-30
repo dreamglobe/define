@@ -1,232 +1,268 @@
-<div ng-hide="!hasConfig"><h2>Esperando inicio</h2></div>
-<div class="row text-info">
-<div class="col-sm-5">
-    <div class="rooster ">
-        <h3>Parrilla</h3>
-        <table border="1" width="80%" cellspacing="15">
-            <thead>
-            <td>Jugador</td>
-            </thead>
-            <tr ng-repeat='player in players' ng-class="{on:player.definition}">
-                <td>{{player.name}}</td>
-            </tr>
-        </table>
-    </div>
-</div>
-<div ng-show="hasConfig">
-<div class="col-sm-5">
-<h3>Configuración</h3>
-
-<form name="matchConfig" ng-submit="startMatch()" role="form" class="form-horizontal form">
-<h4>Configuración de jugadores</h4>
-
-<div class="form-group form-group-sm row">
-    <label for="minPlayers" class="col-xs-3 control-label">Mínimo</label>
-
-    <div class="col-xs-3">
-        <input id="minPlayers" class=" form-control input-sm" size="2" type="number" min="1" max="19"
-               ng-model="config.minimumPlayers">
-    </div>
-    <label for="maxPlayers" class="col-xs-3 control-label">Máximo</label>
-
-    <div class="col-xs-3">
-        <input id="maxPlayers" class="form-control input-sm " size="2" type="number" min="2" max="20"
-               ng-model="config.maximumPlayers">
-    </div>
-</div>
-<h4>Configuración de puntos</h4>
-
-<div class="form-group form-group-sm row">
-    <label for="voteValue" class="col-xs-3 control-label ">Voto</label>
-
-    <div class="col-xs-3">
-        <input id="voteValue" size="2" class="form-control input-sm" type="number" min="0" max="9"
-               ng-model="config.voteValue">
-    </div>
-    <label for="correctVoteValue" class="col-xs-3 control-label">Acierto</label>
-
-    <div class="col-xs-3">
-        <input id="correctVoteValue" class="form-control input-sm" type="number" min="0" max="9"
-               ng-model="config.correctVoteValue">
-    </div>
-</div>
-
-<h4>Fin de partida</h4>
-
-<div>
-    <label class="checkbox-inline ">
-        <input type="checkbox" ng-click="checkFinishPoints"
-               ng-model="pointFinish">Por puntos
-    </label>
-</div>
-<div ng-show="pointFinish" class="row">
-    <label for="goalPoints" class="col-xs-6 control-label">Puntos</label>
-
-    <div class="col-xs-6 input-group">
-        <input id="goalPoints" class="form-control input-sm" size="4" type="number" min="0"
-               ng-model="config.goalPoints">
-    </div>
-</div>
-
-<div>
-    <label class="checkbox-inline">
-        <input type="checkbox" ng-click="checkFinishTime"
-               ng-model="timeFinish">Por tiempo
-    </label>
-</div>
-<div ng-show="timeFinish" class="row">
-    <label for="timeLimit" class="col-xs-6 control-label">Tiempo máximo</label>
-
-    <div class="col-xs-6 input-group">
-        <input id="timeLimit" class="form-control input-sm" size="3" type="number" min="0"
-               ng-model="config.timeLimit">
-
-        <div class="input-group-addon">min.</div>
-    </div>
-</div>
-
-<div>
-    <label class="checkbox-inline">
-        <input type="checkbox" ng-click="checkFinishRound"
-               ng-model="roundFinish">Por turnos
-    </label>
-</div>
-
-<div ng-show="roundFinish" class="row">
-    <label for="maximumRounds" class="col-xs-6 control-label">Turnos totales</label>
-
-    <div class="col-xs-6 input-group">
-        <input id="maximumRounds" class="form-control input-sm" size="3" type="number" min="0"
-               ng-model="config.maximumRounds">
-    </div>
-</div>
-
-<h4>Configuración de fases de turno</h4>
-
-<h5>Configuración de <strong>fase de definición</strong></h5>
-
-<div class="form-group form-group-sm row">
-    <label for="defineDuracion" class="col-xs-4 control-label">Duración</label>
-
-    <div class="col-xs-8 input-group input-group-sm">
-        <div class="input-group-addon">
-            <input type="checkbox"
-                   ng-model="config.definePhaseConf.fastEnd">
+<div class="start-view">
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Jugadores</h3>
+            </div>
+            <table class="table table-bordered table-striped">
+                <tr ng-repeat='player in players' ng-class="{on:player.definition}">
+                    <td><span ng-bind="player.name"></span></td>
+                </tr>
+            </table>
+            <div class="panel-footer">
+                <span ng-bind="players.length"></span> total conectados
+            </div>
         </div>
-        <input id="defineDuracion" class="form-control input-sm" size="4" type="number" min="0"
-               ng-model="config.definePhaseConf.duration">
-
-        <div class="input-group-addon">s.</div>
     </div>
 </div>
-<div class="form-group form-group-sm row">
-    <label for="defineExtendedWhen" class="control-label col-xs-4">Extensión</label>
 
-    <div class="col-xs-8">
-        <select id="defineExtendedWhen" class="form-control input-sm"
-                ng-model="config.definePhaseConf.extendedWhen">
-            <option selected value="NEVER">Nunca</option>
-            <option value="NO_PLAYER">Ningún jugador</option>
-            <option value="SOME_PLAYER">No todos</option>
-            <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
-            <option value="ALWAYS">Siempre</option>
-        </select>
-    </div>
-</div>
-<div ng-show="config.definePhaseConf.extendedWhen!='NEVER'" class="form-group form-group-sm row">
-    <label for="defineTimeLimit" class="control-label col-xs-4">Duración extendida</label>
+<div ng-show="hasConfig" class="row">
+<div class="col-sm-10 col-sm-offset-1">
+<form name="matchConfig" ng-submit="startMatch()" role="form" class="form form-horizontal">
+<fieldset>
+<legend>Configuración</legend>
+<div class="control-group">
+<div class="controls">
+<lablel class="control-label">General</lablel>
+<div class="well well-sm">
+    <lablel class="control-label">Número de jugadores</lablel>
+    <div class="row">
+        <label for="minPlayers" class="col-xs-2 control-label">Mínimo</label>
 
-    <div class="col-xs-8  input-group input-group-sm">
-        <input id="defineTimeLimit" class="form-control input-sm" size="4" type="number" min="0"
-               ng-model="config.definePhaseConf.extendedDuration">
-
-        <div class="input-group-addon">s.</div>
-    </div>
-</div>
-<h5>Configuración de <strong>fase de votación</strong></h5>
-
-<div class="form-group form-group-sm row">
-    <label for="defineDuracion" class="col-xs-4 control-label">Duración</label>
-
-    <div class="col-xs-8 input-group input-group-sm">
-        <div class="input-group-addon">
-            <input type="checkbox"
-                   ng-model="config.votePhaseConf.fastEnd">
+        <div class="col-xs-3">
+            <input id="minPlayers" class=" form-control input-sm" size="2" type="number" min="1" max="19"
+                   ng-model="config.minimumPlayers"/>
         </div>
-        <input id="defineDuracion" class="form-control input-sm" size="4" type="number" min="0"
-               ng-model="config.votePhaseConf.duration">
+        <label for="maxPlayers" class="col-xs-2 control-label">Máximo</label>
 
-        <div class="input-group-addon">s.</div>
-    </div>
-</div>
-<div class="form-group form-group-sm row">
-    <label for="defineExtendedWhen" class="control-label col-xs-4">Extensión</label>
-
-    <div class="col-xs-8">
-        <select id="defineExtendedWhen" class="form-control input-sm"
-                ng-model="config.votePhaseConf.extendedWhen">
-            <option selected value="NEVER">Nunca</option>
-            <option value="NO_PLAYER">Ningún jugador</option>
-            <option value="SOME_PLAYER">No todos</option>
-            <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
-            <option value="ALWAYS">Siempre</option>
-        </select>
-    </div>
-</div>
-<div ng-show="config.votePhaseConf.extendedWhen!='NEVER'" class="form-group form-group-sm row">
-    <label for="defineTimeLimit" class="control-label col-xs-4">Duración extendida</label>
-
-    <div class="col-xs-8  input-group input-group-sm">
-        <input id="defineTimeLimit" class="form-control input-sm" size="4" type="number" min="0"
-               ng-model="config.votePhaseConf.extendedDuration">
-
-        <div class="input-group-addon">s.</div>
-    </div>
-</div>
-
-<h5>Configuración de <strong>fase de resultado</strong></h5>
-
-<div class="form-group form-group-sm row">
-    <label for="defineDuracion" class="col-xs-4 control-label">Duración</label>
-
-    <div class="col-xs-8 input-group input-group-sm">
-        <div class="input-group-addon">
-            <input type="checkbox"
-                   ng-model="config.resultPhaseConf.fastEnd">
+        <div class="col-xs-3">
+            <input id="maxPlayers" class="form-control input-sm " size="2" type="number" min="2" max="20"
+                   ng-model="config.maximumPlayers"/>
         </div>
-        <input id="defineDuracion" class="form-control input-sm" size="4" type="number" min="0"
-               ng-model="config.resultPhaseConf.duration">
+    </div>
 
-        <div class="input-group-addon">s.</div>
+    <lablel class="control-label">Valor de puntuación</lablel>
+    <div class="row">
+        <label for="voteValue" class="col-xs-2 control-label ">Voto</label>
+
+        <div class="col-xs-3">
+            <input id="voteValue" size="2" class="form-control input-sm" type="number" min="0" max="9"
+                   ng-model="config.voteValue"/>
+        </div>
+        <label for="correctVoteValue" class="col-xs-2 control-label">Acierto</label>
+
+        <div class="col-xs-3">
+            <input id="correctVoteValue" class="form-control input-sm" type="number" min="0" max="9"
+                   ng-model="config.correctVoteValue"/>
+        </div>
     </div>
 </div>
-<div class="form-group form-group-sm row">
-    <label for="defineExtendedWhen" class="control-label col-xs-4">Extensión</label>
+<lablel class="control-label">Fin de partida</lablel>
+<div class="well well-sm">
 
-    <div class="col-xs-8">
-        <select id="defineExtendedWhen" class="form-control input-sm"
-                ng-model="config.resultPhaseConf.extendedWhen">
-            <option selected value="NEVER">Nunca</option>
-            <option value="NO_PLAYER">Ningún jugador</option>
-            <option value="SOME_PLAYER">No todos</option>
-            <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
-            <option value="ALWAYS">Siempre</option>
-        </select>
+    <div>
+        <label class="checkbox-inline ">
+            <input type="checkbox" ng-click="checkFinishPoints"
+                   ng-model="pointFinish"/>Por puntos
+        </label>
+    </div>
+    <div ng-show="pointFinish" class="row">
+        <label for="goalPoints" class="col-xs-6 control-label">Puntos</label>
+
+        <div class="col-xs-5 input-group">
+            <input id="goalPoints" class="form-control input-sm" size="4" type="number" min="0"
+                   ng-model="config.goalPoints"/>
+        </div>
+    </div>
+
+    <div>
+        <label class="checkbox-inline">
+            <input type="checkbox" ng-click="checkFinishTime"
+                   ng-model="timeFinish"/>Por tiempo
+        </label>
+    </div>
+    <div ng-show="timeFinish" class="row">
+        <label for="timeLimit" class="col-xs-6 control-label">Tiempo máximo</label>
+
+        <div class="col-xs-5 input-group">
+            <input id="timeLimit" class="form-control input-sm" size="3" type="number" min="0"
+                   ng-model="config.timeLimit"/>
+
+            <div class="input-group-addon">min.</div>
+        </div>
+    </div>
+
+    <div>
+        <label class="checkbox-inline">
+            <input type="checkbox" ng-click="checkFinishRound"
+                   ng-model="roundFinish"/>Por turnos
+        </label>
+    </div>
+
+    <div ng-show="roundFinish" class="row">
+        <label for="maximumRounds" class="col-xs-6 control-label">Turnos totales</label>
+
+        <div class="col-xs-5 input-group">
+            <input id="maximumRounds" class="form-control input-sm" size="3" type="number" min="0"
+                   ng-model="config.maximumRounds"/>
+        </div>
     </div>
 </div>
-<div ng-show="config.resultPhaseConf.extendedWhen!='NEVER'" class="form-group form-group-sm row">
-    <label for="defineTimeLimit" class="control-label col-xs-4">Duración extendida</label>
+<lablel class="control-label">Configuración de fases de turno</lablel>
+<tabset class="well well-sm">
+    <tab>
+        <tab-heading><strong>Definición</strong></tab-heading>
+        <div class="panel panel-body">
+            <div class="form-group form-group-sm row">
+                <label for="defineDuracion" class="col-xs-4 control-label">Duración</label>
 
-    <div class="col-xs-8  input-group input-group-sm">
-        <input id="defineTimeLimit" class="form-control input-sm" size="4" type="number" min="0"
-               ng-model="config.resultPhaseConf.extendedDuration">
+                <div class="col-xs-7">
+                    <div class=" input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <input type="checkbox"
+                                   ng-model="config.definePhaseConf.fastEnd"/>
+                        </div>
+                        <input id="defineDuracion" class="form-control input-sm" size="4" type="number" min="0"
+                               ng-model="config.definePhaseConf.duration"/>
 
-        <div class="input-group-addon">s.</div>
+                        <div class="input-group-addon">s.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-group-sm row">
+                <label for="defineExtendedWhen" class="control-label col-xs-4">Extensión</label>
+
+                <div class="col-xs-7">
+                    <select id="defineExtendedWhen" class="form-control input-sm"
+                            ng-model="config.definePhaseConf.extendedWhen">
+                        <option selected value="NEVER">Nunca</option>
+                        <option value="NO_PLAYER">Ningún jugador</option>
+                        <option value="SOME_PLAYER">No todos</option>
+                        <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
+                        <option value="ALWAYS">Siempre</option>
+                    </select>
+                </div>
+            </div>
+            <div ng-show="config.definePhaseConf.extendedWhen!='NEVER'" class="form-group form-group-sm row">
+                <label for="defineTimeLimit" class="control-label col-xs-4">Extensión</label>
+
+                <div class="col-xs-7">
+                    <div class=" input-group input-group-sm">
+                        <input id="defineTimeLimit" class="form-control input-sm" size="4" type="number" min="0"
+                               ng-model="config.definePhaseConf.extendedDuration"/>
+
+                        <div class="input-group-addon">s.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </tab>
+    <tab>
+        <tab-heading><strong>Votación</strong></tab-heading>
+        <div class="panel panel-body">
+            <div class="form-group form-group-sm row">
+                <label for="defineDuracion" class="col-xs-4 control-label">Duración</label>
+
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <input type="checkbox"
+                                   ng-model="config.votePhaseConf.fastEnd"/>
+                        </div>
+                        <input id="defineDuracion" class="form-control input-sm" size="4" type="number" min="0"
+                               ng-model="config.votePhaseConf.duration"/>
+
+                        <div class="input-group-addon">s.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-group-sm row">
+                <label for="defineExtendedWhen" class="control-label col-xs-4">Extensión</label>
+
+                <div class="col-xs-7">
+                    <select id="defineExtendedWhen" class="form-control input-sm"
+                            ng-model="config.votePhaseConf.extendedWhen">
+                        <option selected value="NEVER">Nunca</option>
+                        <option value="NO_PLAYER">Ningún jugador</option>
+                        <option value="SOME_PLAYER">No todos</option>
+                        <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
+                        <option value="ALWAYS">Siempre</option>
+                    </select>
+                </div>
+            </div>
+            <div ng-show="config.votePhaseConf.extendedWhen!='NEVER'" class="form-group form-group-sm row">
+                <label for="defineTimeLimit" class="control-label col-xs-4">Extensión</label>
+
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm">
+                        <input id="defineTimeLimit" class="form-control input-sm" size="4" type="number" min="0"
+                               ng-model="config.votePhaseConf.extendedDuration"/>
+
+                        <div class="input-group-addon">s.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </tab>
+    <tab>
+        <tab-heading>
+            <strong>Resultado</strong>
+        </tab-heading>
+        <div class="panel panel-body">
+            <div class="form-group form-group-sm row">
+                <label for="defineDuracion" class="col-xs-4 control-label">Duración</label>
+
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-addon">
+                            <input type="checkbox"
+                                   ng-model="config.resultPhaseConf.fastEnd"/>
+                        </div>
+                        <input id="defineDuracion" class="form-control input-sm" size="4" type="number" min="0"
+                               ng-model="config.resultPhaseConf.duration"/>
+
+                        <div class="input-group-addon">s.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-group-sm row">
+                <label for="defineExtendedWhen" class="control-label col-xs-4">Extensión</label>
+
+                <div class="col-xs-7">
+                    <select id="defineExtendedWhen" class="form-control input-sm"
+                            ng-model="config.resultPhaseConf.extendedWhen">
+                        <option selected value="NEVER">Nunca</option>
+                        <option value="NO_PLAYER">Ningún jugador</option>
+                        <option value="SOME_PLAYER">No todos</option>
+                        <option value="NONE_OR_SOME_PLAYERS">Ninguno o no todos</option>
+                        <option value="ALWAYS">Siempre</option>
+                    </select>
+                </div>
+            </div>
+            <div ng-show="config.resultPhaseConf.extendedWhen!='NEVER'" class="form-group form-group-sm row">
+                <label for="defineTimeLimit" class="control-label col-xs-4">Extensión</label>
+
+                <div class="col-xs-7">
+                    <div class="input-group input-group-sm">
+                        <input id="defineTimeLimit" class="form-control input-sm" size="4" type="number" min="0"
+                               ng-model="config.resultPhaseConf.extendedDuration"/>
+
+                        <div class="input-group-addon">s.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </tab>
+</tabset>
+<div class="row">
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-default  pull-right">Comenzar</button>
     </div>
 </div>
-<div class="form-group form-group-sm row pull-right">
-    <button type="submit" class="btn btn-default">Comenzar</button>
 </div>
+</div>
+</fieldset>
 </form>
 </div>
 </div>

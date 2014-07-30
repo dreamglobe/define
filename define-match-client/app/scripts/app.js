@@ -15,12 +15,13 @@ angular
         'ngResource',
         'ngRoute',
         'ngSanitize',
-        'ngTouch'
+        'ngTouch',
+        'ui.bootstrap'
     ])
     .constant('authUrl', 'http://10.1.1.102:8080/login')
     .constant('logoutUrl', 'http://10.1.1.102:8080/logout')
     .constant('wsBroker', 'http://10.1.1.102:8080/crossgate')
-    .constant('debug', false)
+    .constant('debug', true)
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;
         $httpProvider.defaults.useXDomain = true;
@@ -47,10 +48,6 @@ angular
                 templateUrl: 'views/vote.html',
                 controller: 'VoteCtrl'
             })
-            .when('/result', {
-              templateUrl: 'views/result.html',
-              controller: 'ResultCtrl'
-            })
             .when('/score', {
               templateUrl: 'views/score.html',
               controller: 'ScoreCtrl'
@@ -61,7 +58,7 @@ angular
             })
             .when('/final', {
               templateUrl: 'views/final.html',
-              controller: 'FinalCtrl'
+              controller: 'ScoreCtrl'
             })
             .otherwise({
                 redirectTo: '/'

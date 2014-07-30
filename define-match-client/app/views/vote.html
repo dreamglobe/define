@@ -1,11 +1,12 @@
-<div ng-include="'views/matchHeader.html'"></div>
+<div ng-include="'fragment/term.html'"></div>
+<div ng-include="'fragment/progress.html'"></div>
 <div class="row">
     <div class="poll col-sm-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title"><strong>Definiciones</strong></h3>
             </div>
-            <table class="table table-condensed table-hover text-info">
+            <table class="table table-condensed table-hover">
                 <!-- Definiciones candidatas -->
                 <tr ng-repeat='item in definitions'
                     ng-class="{info:isMyVote(item.defId)}"
@@ -33,21 +34,21 @@
             <div class="panel-heading">
                 <h3 class="panel-title"><strong>Jugadores</strong></h3>
             </div>
-            <table class="table table-bordered table-striped text-info">
-                <thead class="text-info">
+            <table class="table table-bordered table-striped">
+                <thead class="">
                 <tr class="info">
-                    <td width="6%">#</td>
+                    <td width="6%" class="text-right">#</td>
                     <td><strong>Nombre</strong></td>
-                    <td width="10%"><strong>Voto</strong></td>
-                    <td width="10%"><strong>Turno</strong></td>
-                    <td width="10%"><strong>Total</strong></td>
+                    <td width="10%" class="text-center"><strong>Voto</strong></td>
+                    <td width="10%" class="text-right"><strong>Turno</strong></td>
+                    <td width="10%" class="text-right"><strong>Total</strong></td>
                 </tr>
                 </thead>
                 <tr ng-repeat='player in players'
                     ng-class="{warning : playerReady(player) && player.pid != me.pid, success: player.pid == me.pid }">
-                    <td ng-bind="$index+1" align="right"></td>
+                    <td ng-bind="$index+1" class="text-right"></td>
                     <td ng-bind="player.name"></td>
-                    <td>
+                    <td class="text-center">
                         <span ng-bind="playerReady(player)"></span>
                         <span ng-show="hasVoteForMe(vote)" class="glyphicon glyphicon-ok"></span>
                     </td>

@@ -1,21 +1,14 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="panel-heading">
-            <h2 class="text-info">
-                <span class="">[<span ng-bind="term.category"></span>]</span>
+            <h2>
+                <span class="">[<span ng-bind="term.category.name"></span>]</span>
                 <strong><span ng-bind="term.name"></span></strong><span ng-show="termDefinition">:
                     <span ng-bind="termDefinition"></span>
                     <span class="small" ng-show="numCorrectVotes == 1">(<span ng-bind="numCorrectVotes"></span> vez elegido)</span>
                     <span class="small" ng-show="numCorrectVotes > 1">(<span ng-bind="numCorrectVotes"></span> veces elegido)</span>
                 </span>
             </h2>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped active {{timer.status}}"
-                     role="progressbar" aria-valuenow="{{timer.percent}}"
-                     aria-valuemin="0" aria-valuemax="100" style="width: {{timer.percent}}%;">
-                    <span style="min-width: 35px;"><span ng-bind="timer.secLeft"></span> Seg.</span>
-                </div>
-            </div>
         </div>
     </div>
 </div>
