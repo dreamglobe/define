@@ -1,10 +1,9 @@
-<div class="row">
+<div class="row ">
     <div class="col-xs-8 col-xs-offset-2">
         <div class=" panel panel-primary">
             <div class="panel-heading">
-                <h2 class="panel-title">Acceso a partida de <strong>Define</strong>
+                <h2 class="panel-title">Acceso a partida <strong>Define</strong>
                     <span class=" pull-right glyphicon glyphicon-book"></span>
-                    <span class=" pull-right glyphicon glyphicon-pencil"></span>
                 </h2>
             </div>
             <div class="panel-body text-center">
@@ -25,46 +24,13 @@
                                placeholder="Contraseña">
 
                     </div>
-                    <button type="submit" class="btn btn-primary pull-right" ng-disabled="!userLogin.$valid">Log in
-                    </button>
+                    <div class="pull-right">
+                    <button type="submit" class="btn btn-primary " ng-disabled="!userLogin.$valid">Log in</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<div class="panel panel-danger">
-    <div class="panel-heading">
-        <h2 class="panel-title">You did it!</h2>
-    </div>
-    <div class="panel-body">
-        <p>You should be proud.</p>
 
-        <p>Next time, you can do it again!</p>
-
-        <div class="panel-group">
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h2 class="panel-title">However,</h2>
-                </div>
-                <div class="panel-body">
-                    <p>You should be careful about doing it too quickly...</p>
-
-                    <p>Because...</p>
-
-
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Things happen!</h2>
-                </div>
-                <div class="panel-body">
-                    <p>... you never know what might happen.</p>
-
-                    <p>Unexpected events are part of life.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <div ng-show="message" ng-bind="message" class="alert"></div>

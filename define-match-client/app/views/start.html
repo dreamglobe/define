@@ -3,7 +3,9 @@
     <div class="col-sm-6 col-sm-offset-3">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Jugadores</h3>
+                <h3 class="panel-title"><strong>Jugadores</strong>
+                    <span class=" pull-right glyphicon glyphicon-list"></span>
+                </h3>
             </div>
             <table class="table table-bordered table-striped">
                 <tr ng-repeat='player in players' ng-class="{on:player.definition}">
@@ -206,9 +208,7 @@
         </div>
     </tab>
     <tab>
-        <tab-heading>
-            <strong>Resultado</strong>
-        </tab-heading>
+        <tab-heading><strong>Resultado</strong></tab-heading>
         <div class="panel panel-body">
             <div class="form-group form-group-sm row">
                 <label for="defineDuracion" class="col-xs-4 control-label">Duración</label>
@@ -257,7 +257,7 @@
 </tabset>
 <div class="row">
     <div class="col-md-12">
-        <button type="submit" class="btn btn-default  pull-right">Comenzar</button>
+        <button type="submit" class="btn btn-primary pull-right">Comenzar</button>
     </div>
 </div>
 </div>
