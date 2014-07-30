@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="turn-scores col-sm-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Puntuaciones del turno</strong></h3>
+            </div>
+            <table class="table table-bordered table-condensed table-striped text-info">
+                <thead>
+                <tr class="info">
+                    <td width="5%" class="hidden-xs">#</td>
+                    <td><strong>Nombre</strong></td>
+                    <td><strong>Definición</strong></td>
+                    <td width="5%" class="hidden-xs"><strong>Votos</strong></td>
+                    <td width="10%"><strong>Turno</strong><span class="caret"></span></td>
+                    <td width="0%"><strong>Total</strong></td>
+                    <td><strong>Votos</strong></td>
+                </tr>
+                </thead>
+                <tr ng-repeat="score in scores | orderBy : '-turnScore' " ng-class="{warning : score.player.isReady}">
+                    <td class="hidden-xs"><span ng-bind="$index+1" class="text-right"></span></td>
+                    <td ng-class="{success: score.pid == me.pid}"><span ng-bind="score.player.name"></span></td>
+                    <td><span ng-bind="score.definition.text"></span></td>
+                    <td class="text-right hidden-xs"><span ng-bind="score.pidVoters.length"></span></td>
+                    <td class="text-right">
+                        <span ng-bind="score.turnScore>0?'+'+score.turnScore:'-'"></span>
+                        <span ng-show="score.isCorrectDefinition" class="glyphicon glyphicon-ok block"></span>
+                    </td>
+                    <td class="text-right"><span ng-bind="score.totalScore"></span></td>
+                    <td>
+                        <span>{{score.getVoters().join(', ')}}</span>
+                        <span ng-show="score.pidVoters.length == 0">-</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
