@@ -9,6 +9,7 @@
  */
 angular.module('defineMatchClientApp')
     .controller('LoginCtrl', ['$scope','MatchServer', function ($scope, MatchServer) {
+
         $scope.doLogin = function(){
             MatchServer.login($scope.user.name);
             $scope.message = MatchServer.getErrorMessage();

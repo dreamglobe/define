@@ -1,0 +1,47 @@
+<form name="matchConfig" ng-submit="startMatch()" role="form" class="form form-horizontal">
+    <fieldset>
+        <legend>Configuración <i class="pull-right glyphicon glyphicon-cog"></i></legend>
+        <div class="control-group">
+            <div class="controls">
+                <accordion close-others="true">
+                    <accordion-group is-open="generalStatus">
+                        <accordion-heading>
+                            <div ng-click="(generalStatus = !generalStatus) && (generalStatus && (endStatus=false) && (phaseStatus=false))">
+                                <lablel class="control-label">General</lablel>
+                                <i class="pull-right glyphicon"
+                                   ng-class="{'glyphicon-chevron-down': generalStatus, 'glyphicon-chevron-right': !generalStatus}"></i>
+                            </div>
+                        </accordion-heading>
+                        <div ng-include="'fragment/config-general.html'"></div>
+                    </accordion-group>
+                    <accordion-group is-open="endlStatus">
+                        <accordion-heading
+                                ng-click="(endStatus = !endStatus) && (endStatus && (generalStatus=false) && (phaseStatus=false))">
+                            <div>
+                                <lablel class="control-label">Fin de partida</lablel>
+                                <i class="pull-right glyphicon"
+                                   ng-class="{'glyphicon-chevron-down': endStatus, 'glyphicon-chevron-right': !endStatus}"></i>
+                            </div>
+                        </accordion-heading>
+                        <div ng-include="'fragment/config-end.html'"></div>
+                    </accordion-group>
+                    <accordion-group is-open="phaseStatus">
+                        <accordion-heading>
+                            <div ng-click="(phaseStatus = !phaseStatus) && (phaseStatus && (generalStatus=false) && (endStatus=false))">
+                                <lablel class="control-label">Fases de turno</lablel>
+                                <i class="pull-right glyphicon"
+                                   ng-class="{'glyphicon-chevron-down': phaseStatus, 'glyphicon-chevron-right': !phaseStatus}"></i>
+                            </div>
+                        </accordion-heading>
+                        <div ng-include="'fragment/config-phases.html'"></div>
+                    </accordion-group>
+                </accordion>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary pull-right">Comenzar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>

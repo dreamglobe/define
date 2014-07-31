@@ -10,15 +10,15 @@
                         <div class="input-group">
                             <label for="playerDefinition" class="sr-only">Escribe aquí la definición</label>
                             <input id="playerDefinition" class="form-control" spellcheck="true"
-                                   placeholder="Da una definición para {{term.name}}"
+                                   placeholder="Definición para {{term.name}}"
                                    ngbk-focus ng-model="definition"
                                    required>
 
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-primary btn-block"
-                                        ng-disabled="defineForm.$invalid">&nbsp;
-                                    <span class="glyphicon glyphicon glyphicon-play"></span>&nbsp;</button>
-                            </div>
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary"
+                                        ng-disabled="defineForm.$invalid">
+                                    <span class="glyphicon glyphicon glyphicon-play"></span></button>
+                            </span>
                         </div>
                     </div>
                     <div ng-show="lastDefinition">

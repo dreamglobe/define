@@ -21,7 +21,7 @@ angular
     .constant('authUrl', 'http://10.1.1.102:8080/login')
     .constant('logoutUrl', 'http://10.1.1.102:8080/logout')
     .constant('wsBroker', 'http://10.1.1.102:8080/crossgate')
-    .constant('debug', true)
+    .constant('debug', false)
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;
         $httpProvider.defaults.useXDomain = true;
@@ -37,36 +37,45 @@ angular
                 controller: 'AboutCtrl'
             })
             .when('/login', {
+                title: 'Acceso',
                 templateUrl: 'views/login.html',
                 controller: 'LoginCtrl'
             })
             .when('/define', {
+                title: 'Definición',
                 templateUrl: 'views/define.html',
                 controller: 'DefineCtrl'
             })
             .when('/vote', {
+                title: 'Votación',
                 templateUrl: 'views/vote.html',
                 controller: 'VoteCtrl'
             })
             .when('/score', {
-              templateUrl: 'views/score.html',
-              controller: 'ScoreCtrl'
+                title: 'Puntuación',
+                templateUrl: 'views/score.html',
+                controller: 'ScoreCtrl'
             })
             .when('/start', {
-              templateUrl: 'views/start.html',
-              controller: 'StartCtrl'
+                title: 'Inicio',
+                templateUrl: 'views/start.html',
+                controller: 'StartCtrl'
             })
             .when('/final', {
-              templateUrl: 'views/final.html',
-              controller: 'ScoreCtrl'
+                title: 'Resultado',
+                templateUrl: 'views/final.html',
+                controller: 'ScoreCtrl'
             })
             .otherwise({
                 redirectTo: '/'
             });
     }])
-    .run(['$rootScope', 'Console', 'MatchServer', '$route', function ($rootScope, Console, MatchServer, $route) {
+    .run(['$rootScope', 'Console', 'MatchServer', '$route', '$location', function ($rootScope, Console, MatchServer, $route, $location) {
         $rootScope.user = {};
         $rootScope.user.name = null;
         $rootScope.Console = Console;
         $rootScope.logout = MatchServer.logout;
+        $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+            $rootScope.viewName = current.title;
+        });
     }]);

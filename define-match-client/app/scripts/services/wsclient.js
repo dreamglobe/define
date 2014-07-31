@@ -24,6 +24,7 @@ angular.module('defineMatchClientApp')
                 connector.onopen = MessageHandler.onConnect;
                 connector.onmessage = MessageHandler.onMessage;
                 connector.onclose = MessageHandler.onClose;
+                $rootScope.user.isLoged = true;
                 return true;
             }
         }

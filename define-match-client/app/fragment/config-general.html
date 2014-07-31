@@ -1,0 +1,34 @@
+
+<div class="well well-sm">
+    <p>Número de jugadores</p>
+    <div class="row">
+
+        <label for="minPlayers" class="col-xs-2 control-label">Mínimo</label>
+        <div class="col-xs-3">
+            <input id="minPlayers" class=" form-control input-sm" size="2" type="number" min="1" max="19"
+                   ng-model="config.minimumPlayers"/>
+        </div>
+        <label for="maxPlayers" class="col-xs-2 control-label">Máximo</label>
+
+        <div class="col-xs-3">
+            <input id="maxPlayers" class="form-control input-sm " size="2" type="number" min="2" max="20"
+                   ng-model="config.maximumPlayers"/>
+        </div>
+    </div>
+    <p></p>
+    <p>Valor de puntuación</p>
+    <div class="row">
+        <label for="voteValue" class="col-xs-2 control-label ">Voto</label>
+
+        <div class="col-xs-3">
+            <input id="voteValue" size="2" class="form-control input-sm" type="number" min="0" max="9"
+                   ng-model="config.voteValue"/>
+        </div>
+        <label for="correctVoteValue" class="col-xs-2 control-label">Acierto</label>
+
+        <div class="col-xs-3">
+            <input id="correctVoteValue" class="form-control input-sm" type="number" min="0" max="9"
+                   ng-model="config.correctVoteValue"/>
+        </div>
+    </div>
+</div>

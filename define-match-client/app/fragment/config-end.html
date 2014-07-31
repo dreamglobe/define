@@ -1,0 +1,51 @@
+
+<div class="well well-sm">
+
+    <div>
+        <label class="checkbox-inline ">
+            <input type="checkbox" ng-click="checkFinishPoints"
+                   ng-model="pointFinish"/>Por puntos
+        </label>
+    </div>
+    <div ng-show="pointFinish" class="row">
+        <label for="goalPoints" class="col-xs-6 control-label">Puntos</label>
+
+        <div class="col-xs-5 input-group">
+            <input id="goalPoints" class="form-control input-sm" size="4" type="number" min="0"
+                   ng-model="config.goalPoints"/>
+        </div>
+    </div>
+
+    <div>
+        <label class="checkbox-inline">
+            <input type="checkbox" ng-click="checkFinishTime"
+                   ng-model="timeFinish"/>Por tiempo
+        </label>
+    </div>
+    <div ng-show="timeFinish" class="row">
+        <label for="timeLimit" class="col-xs-6 control-label">Tiempo máximo</label>
+
+        <div class="col-xs-5 input-group">
+            <input id="timeLimit" class="form-control input-sm" size="3" type="number" min="0"
+                   ng-model="config.timeLimit"/>
+
+            <div class="input-group-addon">min.</div>
+        </div>
+    </div>
+
+    <div>
+        <label class="checkbox-inline">
+            <input type="checkbox" ng-click="checkFinishRound"
+                   ng-model="roundFinish"/>Por turnos
+        </label>
+    </div>
+
+    <div ng-show="roundFinish" class="row">
+        <label for="maximumRounds" class="col-xs-6 control-label">Turnos totales</label>
+
+        <div class="col-xs-5 input-group">
+            <input id="maximumRounds" class="form-control input-sm" size="3" type="number" min="0"
+                   ng-model="config.maximumRounds"/>
+        </div>
+    </div>
+</div>

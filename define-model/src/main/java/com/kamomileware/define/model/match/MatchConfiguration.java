@@ -22,9 +22,9 @@ public class MatchConfiguration {
     private Optional<Integer> maximumRounds = Optional.ofNullable(null);
     private Optional<Long> timeLimit = Optional.ofNullable(null);
 
-    private PhaseConfiguration definePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESPONSE, 180, 60, PhaseExtension.NO_PLAYER, true);
-    private PhaseConfiguration votePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_VOTE, 90, 0, PhaseExtension.NEVER, true);
-    private PhaseConfiguration resultPhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESULT, 30, 0, PhaseExtension.NEVER, true);
+    private PhaseConfiguration definePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESPONSE, 90, 60, PhaseExtension.NO_PLAYER, true);
+    private PhaseConfiguration votePhaseConf = new PhaseConfiguration(RoundPhase.PHASE_VOTE, 60, 0, PhaseExtension.NEVER, true);
+    private PhaseConfiguration resultPhaseConf = new PhaseConfiguration(RoundPhase.PHASE_RESULT, 45, 0, PhaseExtension.NEVER, true);
 
 
     private MatchConfiguration() {

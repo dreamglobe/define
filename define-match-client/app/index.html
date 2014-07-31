@@ -22,38 +22,22 @@
 <![endif]-->
 
 <!-- Add your site or application content here -->
+
+<div ng-include="'fragment/navbar.html'"></div>
 <div class="container">
-    <div class="header">
-        <ul class="nav nav-pills pull-right">
-            <li class="active"><a ng-href="#" ng-click="logout()">Home</a></li>
-            <li><a ng-href="#/about">About</a></li>
-            <li><a ng-href="#">Contact</a></li>
-        </ul>
-        <h3 class="text-muted">
-            Define Match
-            <span ng-show="user.name">: {{user.name}}</span>
-        </h3>
-    </div>
 
     <div ng-view=""></div>
 
 
-    <p></p>
     <div ng-show="Console.isVisible()">
-        <p></p>
-        <hr/>
         <h3>Console</h3>
+
         <div id="console-container">
             <div id="console"></div>
         </div>
     </div>
-
-    <div class="footer">
-        <p>para Dolina <span class="glyphicon glyphicon-heart"></span></p>
-        <span><a  ng-click="Console.toggle()">{{Console.actionText()}}</a></span>
-    </div>
 </div>
-
+<div ng-include="'fragment/navfooter.html'"></div>
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID
  <script>
