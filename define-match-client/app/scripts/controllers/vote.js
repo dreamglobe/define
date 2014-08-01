@@ -37,9 +37,9 @@ angular.module('defineMatchClientApp')
             $scope.canVote = true;
             $scope.vote = function (defId) {
                 $scope.canVote = false;
-                Timer.timeout('vote', 5000, function () {
+                Timer.timeout('vote', function () {
                     $scope.canVote = true;
-                });
+                }, 5000);
                 MatchServer.sendVote(defId);
             };
             $scope.unvote = function () {
