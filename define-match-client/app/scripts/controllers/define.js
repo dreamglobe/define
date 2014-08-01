@@ -35,7 +35,7 @@ angular.module('defineMatchClientApp')
                 $scope.lastDefinition = $scope.definition;
                 MatchServer.sendDefinition($scope.lastDefinition);
             };
-            $scope.playerReady = function (player) {
+            $scope.isReady = function (player) {
                 return (player.definition);
             };
         }]);
