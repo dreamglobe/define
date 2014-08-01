@@ -12,7 +12,8 @@ angular.module('defineMatchClientApp')
         function ($rootScope, _, Console) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
-        var players = {};
+        var playersByPid = {};
+        var players = []
         var playerPid;
 
         var fields = ['pid', 'name', 'totalScore', 'turnScore', 'score', 'hasChange'];
@@ -22,7 +23,13 @@ angular.module('defineMatchClientApp')
 
         function updateScope(fn){
             if(!$rootScope.$$phase) {
-                $rootScope.$apply(fn);
+                if(fn){
+                    $rootScope.$apply(fn);
+                } else {
+                    $rootScope.$apply();
+                }
+            } else if(fn){
+                fn();
             }
         }
 
@@ -45,7 +52,8 @@ angular.module('defineMatchClientApp')
 
             //  object maintenance
             this.hasChange = false;
-            players[pid] = this;
+            playersByPid[pid] = this;
+            players.push(this);
         }
 
         // object accessors
@@ -145,17 +153,21 @@ angular.module('defineMatchClientApp')
 
         Player.remove = function (pid) {
             if (pid !== playerPid) {
-                Console.log('Usuario ' + players[pid].name + ' (' + pid + ') eliminado.');
-                delete players[pid];
+                Console.log('Usuario ' + playersByPid[pid].name + ' (' + pid + ') eliminado.');
+                var player = playersByPid[pid];
+                players.splice(players.indexOf(player), 1);
+                delete playersByPid[pid];
+
             }
         };
 
         Player.createList = function (list, name) {
-            players = {};
+            playersByPid = {};
+            players = [];
             playerPid = _.find(list, function (p) {return p.name === name;}).pid;
             _.each(list, function (p) {Player.create(p);});
-            Console.logUserList(players);
-            return players;
+            Console.logUserList(playersByPid);
+            return playersByPid;
         };
 
         Player.startDefinitionPhase = function () {
@@ -171,19 +183,19 @@ angular.module('defineMatchClientApp')
         };
 
         Player.resetReady = function () {
-            _.each(players, function (p) {
+            _.each(playersByPid, function (p) {
                 p.resetReady();
             });
         };
 
         Player.resetChange = function () {
-            _.each(players, function (p) {
+            _.each(playersByPid, function (p) {
                 p.resetChange();
             });
         };
 
         Player.newRound = function () {
-            _.each(players, function (p) {
+            _.each(playersByPid, function (p) {
                 p.newRound();
             });
         };
@@ -193,11 +205,11 @@ angular.module('defineMatchClientApp')
         };
 
         Player.get = function (pid) {
-            return players[pid];
+            return playersByPid[pid];
         };
 
         Player.me = function () {
-            return players[playerPid];
+            return playersByPid[playerPid];
         };
 
         return Player;

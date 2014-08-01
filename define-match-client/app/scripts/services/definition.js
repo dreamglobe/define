@@ -17,7 +17,13 @@ angular.module('defineMatchClientApp')
 
         function updateScope(fn){
             if(!$rootScope.$$phase) {
-                $rootScope.$apply(fn);
+                if(fn){
+                    $rootScope.$apply(fn);
+                } else {
+                    $rootScope.$apply();
+                }
+            } else if(fn){
+                fn();
             }
         }
 
