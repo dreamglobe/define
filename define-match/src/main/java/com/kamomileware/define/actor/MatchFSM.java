@@ -61,20 +61,22 @@ public abstract class MatchFSM extends UntypedActor{
     }
 
     protected long startLatch(RoundPhase state){
-        final long phaseTotalDuration = round.getPhaseTotalDuration(state);
+        this.round.resetExtendedState(state);
+        final long phaseTotalDuration = this.round.getPhaseDurationInMillis(state);
         final int roundNumber = this.round.getRoundNumber();
         log.info("Starting latch '{}' for '{}' millis", state, phaseTotalDuration);
-        this.latchTimer = this.startLatch(roundNumber, new FiniteDuration(phaseTotalDuration,TimeUnit.MILLISECONDS));
+        final FiniteDuration delay = new FiniteDuration(phaseTotalDuration, TimeUnit.MILLISECONDS);
+        this.latchTimer = this.startLatch(roundNumber, delay);
         return phaseTotalDuration;
     }
 
     protected long startLatchExtend(RoundPhase state){
         final int roundNumber = this.round.getRoundNumber();
-        final long phaseTotalDuration = round.getPhaseTotalDuration(state);
-        log.info("Starting latch '{}' for '{}' millis", state, phaseTotalDuration);
-        this.latchTimer = this.startLatch(roundNumber,
-                new FiniteDuration(phaseTotalDuration,TimeUnit.SECONDS));
-        return phaseTotalDuration;
+        final long phaseExtendedDuration = round.getPhaseDurationInMillis(state);
+        log.info("Starting latch '{}' for '{}' millis", state, phaseExtendedDuration);
+        final FiniteDuration delay = new FiniteDuration(phaseExtendedDuration, TimeUnit.MILLISECONDS);
+        this.latchTimer = this.startLatch(roundNumber, delay);
+        return phaseExtendedDuration;
     }
 
     protected void cancelLatch() {

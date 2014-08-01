@@ -27,7 +27,9 @@ angular.module('defineMatchClientApp')
 
         function tick () {
             t.secLeft--;
-            t.timer = $timeout(tick, 1000);
+            if(t.secLeft>0) {
+                t.timer = $timeout(tick, 1000);
+            }
         }
 
         function progressTick() {

@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class RoundPlayers<REF> extends RoundPlayersBase<REF> {
+
     public RoundPlayers() {
         super();
     }
@@ -30,15 +31,23 @@ public class RoundPlayers<REF> extends RoundPlayersBase<REF> {
     }
 
     public boolean hasAnyoneResponse() {
-        return this.stream().anyMatch(p -> p.hasResponse());
+        return this.stream().anyMatch(PlayerData::hasResponse);
     }
 
     public boolean hasEveryoneResponse() {
         return stream().allMatch(PlayerData::hasResponse);
     }
 
+    public boolean hasAnyoneVote() {
+        return this.stream().anyMatch(PlayerData::hasVote);
+    }
+
     public boolean hasEveryoneVote() {
-        return stream().allMatch(p -> p.hasVote());
+        return stream().allMatch(PlayerData::hasVote);
+    }
+
+    public boolean isAnyoneReadyInResult() {
+        return this.stream().anyMatch(PlayerData::isReadyInResult);
     }
 
     public boolean isEveryoneReadyInResult() {
@@ -72,4 +81,5 @@ public class RoundPlayers<REF> extends RoundPlayersBase<REF> {
         this.stream().forEach(p -> p.getVote().ifPresent(VoteDefinition::applyVote));
         this.stream().forEach(p -> p.getScore().applyTurnScore());
     }
+
 }

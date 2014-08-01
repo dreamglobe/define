@@ -12,11 +12,12 @@ import com.kamomileware.define.model.round.Round;
 import com.kamomileware.define.model.round.RoundPhase;
 import com.kamomileware.define.model.round.TermDefinition;
 
-import java.util.*;
+import java.util.List;
 
-import static com.kamomileware.define.term.TermRepository.*;
-import static com.kamomileware.define.model.round.RoundPhase.*;
 import static com.kamomileware.define.model.MessageTypes.*;
+import static com.kamomileware.define.model.round.RoundPhase.*;
+import static com.kamomileware.define.term.TermRepository.get;
+import static com.kamomileware.define.term.TermRepository.shuffleAndGet;
 
 /**
  * Match Actor for coordinating and operate the match state. Match state refers to
@@ -51,12 +52,12 @@ public class MatchActor extends MatchFSM {
     @Override
     protected void transition(RoundPhase old, RoundPhase next) {
         if (next == STOPPED) {
-            cancelLatch();
+            this.cancelLatch();
             this.sendUsers(STOP);
-            round = null;
+            this.round = null;
             this.switchBehaviour(this.stopBehavior);
         } else if (next == CONFIG) {
-            round = new Round<>(MatchConfiguration.createDefault(), shuffleAndGet());
+            this.round = new Round<>(MatchConfiguration.createDefault(), shuffleAndGet());
             this.switchBehaviour(this.waitConfigureMatchBehaviour);
         } else if (next == PHASE_RESPONSE) {
             this.switchBehaviour(this.waitResponseBehavior);
@@ -167,14 +168,14 @@ public class MatchActor extends MatchFSM {
         public void apply(Object message) {
             if (message instanceof UserDefinition) {
                 handleUserResponse(((UserDefinition) message).getResponse(), sender());
-                if (round.hasEveryoneResponse()) {
+                if (round.isFastEnd(PHASE_RESPONSE)) {
                     cancelLatch();
                     setState(PHASE_VOTE);
                 }
             } else if (message instanceof Latch) {
-                if (round.canExtendPhase(PHASE_RESPONSE)) {
-                    round.extendPhase(PHASE_RESPONSE);
-                    startLatchExtend(PHASE_RESPONSE);
+                if (round.extendPhase(PHASE_RESPONSE)) {
+                    final long extended = startLatchExtend(PHASE_RESPONSE);
+                    sendUsers(new ExtendTime(extended));
                 } else {
                     if (round.hasAnyoneResponse()) {
                         setState(PHASE_VOTE);
@@ -184,8 +185,8 @@ public class MatchActor extends MatchFSM {
                     }
                 }
             } else if (message instanceof RegisterUser) {
-                // TODO: model phase and time
-                final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESPONSE));
+                final long phaseDurationInMillis = round.getPhaseDurationInMillis(PHASE_RESPONSE);
+                final long phaseMillisLeft = getPhaseMillisLeft(phaseDurationInMillis);
                 handleRegisterUser((RegisterUser) message, sender());
                 sender().tell(new StartDefinition(phaseMillisLeft, round.getTerm()), self());
             } else {
@@ -202,7 +203,7 @@ public class MatchActor extends MatchFSM {
         public void apply(Object message){
             if(message instanceof UserVote){
                 handleVote((UserVote) message);
-                if(round.hasEveryoneVote()){
+                if(round.isFastEnd(PHASE_VOTE)){
                     cancelLatch();
                     handleEndVote();
                     if(!round.isFinalRound()) {
@@ -212,15 +213,20 @@ public class MatchActor extends MatchFSM {
                     }
                 }
             }else if(message instanceof Latch){
-                handleEndVote();
-                if(!round.isFinalRound()) {
-                    setState(PHASE_RESULT);
+                if (round.extendPhase(PHASE_VOTE)) {
+                    final long extended = startLatchExtend(PHASE_VOTE);
+                    sendUsers(new ExtendTime(extended));
                 } else {
-                    setState(STOPPED);
+                    handleEndVote();
+                    if (!round.isFinalRound()) {
+                        setState(PHASE_RESULT);
+                    } else {
+                        setState(STOPPED);
+                    }
                 }
             } else if(message instanceof RegisterUser){
                 handleRegisterUser((RegisterUser) message, sender());
-                long timeLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_VOTE));
+                long timeLeft = getPhaseMillisLeft(round.getPhaseDurationInMillis(PHASE_VOTE));
                 final RegisterUserInVote msg = new RegisterUserInVote(timeLeft, round.getTerm(),
                     round.getRoundItemDefinitions(), null);
                 sender().tell(msg, self());
@@ -238,16 +244,21 @@ public class MatchActor extends MatchFSM {
         public void apply(Object message) {
             if (message instanceof UserReady) {
                 handleUserReady(((UserReady) message), sender());
-                if (round.isEveryoneReadyInResult()) {
+                if (round.isFastEnd(PHASE_RESULT)) {
                     cancelLatch();
                     setState(PHASE_RESPONSE);
                 }
             } else if (message instanceof Latch) {
-                setState(PHASE_RESPONSE);
+                if (round.extendPhase(PHASE_RESULT)) {
+                    final long extended = startLatchExtend(PHASE_RESULT);
+                    sendUsers(new ExtendTime(extended));
+                } else {
+                    setState(PHASE_RESPONSE);
+                }
             } else if (message instanceof RegisterUser) {
                 handleRegisterUser((RegisterUser) message, sender());
                 final ItemDefinition defId = TermDefinition.createItemDefinition(round.getCorrectDefinition());
-                final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESULT));
+                final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseDurationInMillis(PHASE_RESULT));
                 final RegisterUserInShowScores msg = new RegisterUserInShowScores(
                         phaseMillisLeft, round.getTerm(), round.getRoundItemDefinitions(),
                         null, round.createPlayersScores(), defId);

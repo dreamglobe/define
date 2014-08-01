@@ -65,6 +65,7 @@ public class PlayerActor extends AbstractClientActor {
         || message instanceof StartDefinition
         || message instanceof StartVote
         || message instanceof StartShowScores
+        || message instanceof ExtendTime
                 ) {
             sendClient(message);
         } else if(message instanceof ClientStartMatch){

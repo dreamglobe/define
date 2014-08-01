@@ -119,8 +119,16 @@ public class Round<REF> implements DefinitionResolver {
         return roundPlayers.hasEveryoneVote();
     }
 
+    public boolean hasAnyoneVote() {
+        return roundPlayers.hasAnyoneVote();
+    }
+
     public boolean isEveryoneReadyInResult() {
         return roundPlayers.isEveryoneReadyInResult();
+    }
+
+    public boolean isAnyoneReadyInResult() {
+        return roundPlayers.isAnyoneReadyInResult();
     }
 
     RoundPlayers<REF> prepareNextRoundPlayers(Round<REF> newRound) {
@@ -219,21 +227,47 @@ public class Round<REF> implements DefinitionResolver {
         return System.currentTimeMillis() - this.matchStartTime;
     }
 
-    public boolean canExtendPhase(RoundPhase state) {
-        return matchConf.getPhaseConf(state).canExtend(this);
+    public boolean extendPhase(RoundPhase state) {
+        if(matchConf.getPhaseConf(state).canExtend(this)) {
+            matchConf.getPhaseConf(state).setExtended(true);
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    public void extendPhase(RoundPhase state) {
-        matchConf.getPhaseConf(state).setExtended(true);
-    }
-
-    public long getPhaseTotalDuration(RoundPhase state) {
-        return matchConf.getPhaseConf(state).getTotalDuration() * 1000;
+    public long getPhaseDurationInMillis(RoundPhase state) {
+        return matchConf.getPhaseConf(state).getDurationInSeconds() * 1000;
     }
 
     public void endRound(){
         this.roundPlayers.clear();
         this.roundDefinitions.clear();
         this.result.clear();
+    }
+
+    public boolean isFastEnd(RoundPhase phase) {
+        boolean result = false;
+        if(matchConf.getPhaseConf(phase).isFastEnd()){
+            switch(phase){
+                case PHASE_RESPONSE:
+                    result = hasEveryoneResponse();
+                    break;
+                case PHASE_VOTE:
+                    result = hasEveryoneVote();
+                    break;
+                case PHASE_RESULT:
+                    result = isEveryoneReadyInResult();
+                    break;
+            }
+        }
+        return result;
+    }
+
+    public void resetExtendedState(RoundPhase state) {
+        final MatchConfiguration.PhaseConfiguration phaseConf = this.getMatchConf().getPhaseConf(state);
+        if(phaseConf.isExtended()) {
+            phaseConf.setExtended(false);
+        }
     }
 }

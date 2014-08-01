@@ -109,9 +109,6 @@ public class MessageTypes {
 
     /** Inter Actor Messages **/
 
-    /**
-     * Created by pepe on 12/06/14.
-     */
     public static class Start extends PhaseDeffineMessage implements Serializable {
         private static final long serialVersionUID = -2085677311635169798L;
         private Start(){super(0L);}
@@ -119,9 +116,6 @@ public class MessageTypes {
 
     public static final Start START = new Start();
 
-    /**
-     * Created by pepe on 12/06/14.
-     */
     public static class Stop extends PhaseDeffineMessage {
         private static final long serialVersionUID = -417020725588326199L;
         private Stop(){super(0L);}
@@ -129,9 +123,6 @@ public class MessageTypes {
 
     public static final Stop STOP = new Stop();
 
-    /**
-     * Created by pepe on 12/06/14.
-     */
     public static class Latch extends PhaseDeffineMessage {
         private static final long serialVersionUID = -7555609005105323268L;
         protected final int sequence;
@@ -146,9 +137,13 @@ public class MessageTypes {
         }
     }
 
-    /**
-     * Created by pepe on 12/06/14.
-     */
+    public static class ExtendTime extends PhaseDeffineMessage {
+
+        public ExtendTime(long time) {
+            super(time);
+        }
+    }
+
     public static class RegisterUser extends DeffineMessage {
         private static final long serialVersionUID = 1958789168037278074L;
         private final String pid;
@@ -187,9 +182,6 @@ public class MessageTypes {
         }
     }
 
-    /**
-     * Created by pepe on 12/06/14.
-     */
     public static class RemoveUser extends DeffineMessage {
         private static final long serialVersionUID = -329444905850140400L;
         private final String pid;
@@ -203,9 +195,6 @@ public class MessageTypes {
         }
     }
 
-    /**
-     * Created by pepe on 12/06/14.
-     */
     public static class PlayerList extends DeffineMessage {
         private static final long serialVersionUID = -5759721640234426466L;
         final List<PlayerInfo> players;
@@ -307,9 +296,6 @@ public class MessageTypes {
         }
     }
 
-    /**
-     * Created by pepe on 12/06/14.
-     */
     public static class StartShowScores extends PhaseDeffineMessage {
         private static final long serialVersionUID = -7914974657516737999L;
         private final ItemDefinition correctDef;
@@ -362,18 +348,11 @@ public class MessageTypes {
         }
     }
 
-    /**
-     * Created by pepe on 12/06/14.
-     */
     public static class UserDefinition extends DeffineMessage {
         private static final long serialVersionUID = -1010573446123056025L;
         private final String pid;
         private final String response;
 
-        /**
-         * Constructor for informing the rest of the players
-         * @param pid
-         */
         public UserDefinition(String pid) {
             this.pid = pid;
             this.response=null;
@@ -412,9 +391,6 @@ public class MessageTypes {
         }
     }
 
-    /**
-     * Created by pepe on 29/06/14.
-     */
     public static class UserReady extends DeffineMessage {
         private static final long serialVersionUID = 7686791648984584553L;
         private final String pid;

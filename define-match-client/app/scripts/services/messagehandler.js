@@ -129,6 +129,13 @@ angular.module('defineMatchClientApp')
                     case 'UserReady':
                         Player.get(payload.pid).isReady = payload.ready;
                         break;
+
+                    case 'ExtendTime':
+                        Timer.set(payload.time);
+                        Timer.start();
+                        updateScope();
+                        break;
+
                     default:
 
                 }

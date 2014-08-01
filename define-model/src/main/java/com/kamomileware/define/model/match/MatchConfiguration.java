@@ -156,6 +156,7 @@ public class MatchConfiguration {
         private PhaseExtension extendedWhen = PhaseExtension.NO_PLAYER;
         private boolean fastEnd = true;
         private boolean extended = false;
+        private PhaseBehaviour behaviour;
 
         @JsonCreator
         public PhaseConfiguration(
@@ -163,8 +164,19 @@ public class MatchConfiguration {
                 @JsonProperty("duration") int duration,
                 @JsonProperty("extendedDuration") int extendedDuration,
                 @JsonProperty("extendedWhen") PhaseExtension extendedWhen,
-                @JsonProperty("fastEnd") boolean fastEnd) {
+                @JsonProperty("isFastEnd") boolean fastEnd) {
             this.phase = phase;
+            switch (phase){
+                case PHASE_RESPONSE:
+                    behaviour = definePhaseBehaviour;
+                    break;
+                case PHASE_VOTE:
+                    behaviour = votePhaseBehaviour;
+                    break;
+                case PHASE_RESULT:
+                    behaviour = resultPhaseBehaviour;
+                    break;
+            }
             this.duration = duration;
             this.extendedDuration = extendedDuration;
             this.extendedWhen = extendedWhen;
@@ -172,27 +184,7 @@ public class MatchConfiguration {
         }
 
         public boolean canExtend(Round round){
-            boolean result = false;
-            if(!extended) {
-                switch (extendedWhen) {
-                    case NO_PLAYER:
-                        result = !round.hasAnyoneResponse();
-                        break;
-                    case SOME_PLAYER:
-                        result = !round.hasEveryoneResponse() && round.hasAnyoneResponse();
-                        break;
-                    case NONE_OR_SOME_PLAYERS:
-                        result = !round.hasEveryoneResponse();
-                        break;
-                    case NEVER:
-                        result = false;
-                        break;
-                    case ALWAYS:
-                        result = true;
-                        break;
-                }
-            }
-            return result;
+            return behaviour.canExtend(this, round);
         }
 
         public RoundPhase getPhase() {
@@ -220,8 +212,8 @@ public class MatchConfiguration {
         }
 
         @JsonIgnore
-        public int getTotalDuration(){
-            return extended? duration + extendedDuration : duration;
+        public int getDurationInSeconds(){
+            return extended? extendedDuration : duration;
         }
 
         public PhaseExtension getExtendedWhen() {
@@ -254,4 +246,91 @@ public class MatchConfiguration {
     public static MatchConfiguration createDefault() {
         return new MatchConfiguration();
     }
+
+    public static interface PhaseBehaviour {
+        boolean canExtend(PhaseConfiguration phase, Round round);
+    }
+
+    private static PhaseBehaviour definePhaseBehaviour = new PhaseBehaviour() {
+        @Override
+        public boolean canExtend(PhaseConfiguration phase, Round round) {
+            boolean result = false;
+            if(!phase.extended) {
+                switch (phase.extendedWhen) {
+                    case NO_PLAYER:
+                        result = !round.hasAnyoneResponse();
+                        break;
+                    case SOME_PLAYER:
+                        result = !round.hasEveryoneResponse() && round.hasAnyoneResponse();
+                        break;
+                    case NONE_OR_SOME_PLAYERS:
+                        result = !round.hasEveryoneResponse();
+                        break;
+                    case NEVER:
+                        result = false;
+                        break;
+                    case ALWAYS:
+                        result = true;
+                        break;
+                }
+            }
+            return result;
+        }
+    };
+
+    private static PhaseBehaviour votePhaseBehaviour = new PhaseBehaviour() {
+        @Override
+        public boolean canExtend(PhaseConfiguration phase, Round round) {
+            boolean result = false;
+            if(!phase.extended) {
+                switch (phase.extendedWhen) {
+                    case NO_PLAYER:
+                        result = !round.hasAnyoneVote();
+                        break;
+                    case SOME_PLAYER:
+                        result = !round.hasEveryoneVote() && round.hasAnyoneVote();
+                        break;
+                    case NONE_OR_SOME_PLAYERS:
+                        result = !round.hasEveryoneVote();
+                        break;
+                    case NEVER:
+                        result = false;
+                        break;
+                    case ALWAYS:
+                        result = true;
+                        break;
+                }
+            }
+            return result;
+        }
+    };
+
+    private static PhaseBehaviour resultPhaseBehaviour = new PhaseBehaviour() {
+        @Override
+        public boolean canExtend(PhaseConfiguration phase, Round round) {
+            boolean result = false;
+            if(!phase.extended) {
+                switch (phase.extendedWhen) {
+                    case NO_PLAYER:
+                        result = !round.isAnyoneReadyInResult();
+                        break;
+                    case SOME_PLAYER:
+                        result = !round.isEveryoneReadyInResult() && round.isAnyoneReadyInResult();
+                        break;
+                    case NONE_OR_SOME_PLAYERS:
+                        result = !round.isEveryoneReadyInResult();
+                        break;
+                    case NEVER:
+                        result = false;
+                        break;
+                    case ALWAYS:
+                        result = true;
+                        break;
+                }
+            }
+            return result;
+        }
+    };
+
+
 }
