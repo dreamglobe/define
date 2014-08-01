@@ -51,8 +51,8 @@
                     <td ng-bind="$index+1" class="text-right"></td>
                     <td ng-bind="player.name"></td>
                     <td class="text-center">
+                        <span ng-show="hasVoteForMe(player.vote)" class="glyphicon glyphicon-ok"></span>
                         <span ng-bind="playerReady(player)"></span>
-                        <span ng-show="hasVoteForMe(vote)" class="glyphicon glyphicon-ok"></span>
                     </td>
                     <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'" class="text-right"></td>
                     <td ng-bind="player.totalScore" class="text-right"></td>

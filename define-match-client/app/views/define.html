@@ -49,7 +49,7 @@
                 </tr>
                 </thead>
                 <tr ng-repeat='player in players'
-                    ng-class="{warning : isReady(player) && player.pid != me.pid, success: player.pid == me.pid}">
+                    ng-class="{warning : playerReady(player) && player.pid != me.pid, success: player.pid == me.pid}">
                     <td ng-bind="$index+1" align="right"></td>
                     <td ng-bind="player.name"></td>
                     <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'" align="right"></td>
