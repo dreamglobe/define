@@ -312,19 +312,19 @@ public class MessageTypes {
      */
     public static class StartShowScores extends PhaseDeffineMessage {
         private static final long serialVersionUID = -7914974657516737999L;
-        private final int correctDefId;
+        private final ItemDefinition correctDef;
         private final long numCorrectVotes;
         private final List<PlayerScore> scores;
 
-        public StartShowScores(long millis, List<PlayerScore> scores, int correctDefId) {
+        public StartShowScores(long millis, List<PlayerScore> scores, ItemDefinition correctDef) {
             super(millis);
             this.scores = scores;
-            this.correctDefId = correctDefId;
+            this.correctDef = correctDef;
             this.numCorrectVotes = scores.stream().filter(ps -> ps.isCorrectDefinition()).count();
         }
 
-        public int getCorrectDefId() {
-            return correctDefId;
+        public ItemDefinition getCorrectDef() {
+            return correctDef;
         }
 
         public long getNumCorrectVotes() {
@@ -340,7 +340,9 @@ public class MessageTypes {
         private final List<ItemDefinition> definitions;
         private final Term term;
         private final ItemDefinition playerDefinition;
-        public RegisterUserInShowScores(long millis, Term term, List<ItemDefinition> definitions, ItemDefinition playerDefinition, List<PlayerScore> scores, int correctDefId) {
+
+        public RegisterUserInShowScores(long millis, Term term, List<ItemDefinition> definitions,
+                            ItemDefinition playerDefinition, List<PlayerScore> scores, ItemDefinition correctDefId) {
             super(millis, scores, correctDefId);
             this.term = term;
             this.definitions = definitions;

@@ -5,10 +5,12 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.Procedure;
+import com.kamomileware.define.model.ItemDefinition;
 import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.match.MatchConfiguration;
 import com.kamomileware.define.model.round.Round;
 import com.kamomileware.define.model.round.RoundPhase;
+import com.kamomileware.define.model.round.TermDefinition;
 
 import java.util.*;
 
@@ -244,7 +246,7 @@ public class MatchActor extends MatchFSM {
                 setState(PHASE_RESPONSE);
             } else if (message instanceof RegisterUser) {
                 handleRegisterUser((RegisterUser) message, sender());
-                final int defId = round.getCorrectDefinition().getDefId();
+                final ItemDefinition defId = TermDefinition.createItemDefinition(round.getCorrectDefinition());
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseTotalDuration(PHASE_RESULT));
                 final RegisterUserInShowScores msg = new RegisterUserInShowScores(
                         phaseMillisLeft, round.getTerm(), round.getRoundItemDefinitions(),
@@ -296,8 +298,8 @@ public class MatchActor extends MatchFSM {
      */
     private void sendUsersScores(long timeLeft) {
         List<PlayerScore> scores = this.round.createPlayersScores();
-        final int defId = round.getCorrectDefinition().getDefId();
-        this.sendUsers(new StartShowScores(timeLeft, scores, defId));
+        final ItemDefinition correctDefinition = TermDefinition.createItemDefinition(round.getCorrectDefinition());
+        this.sendUsers(new StartShowScores(timeLeft, scores, correctDefinition));
     }
 
     private void handleUserReady(UserReady message, ActorRef sender) {

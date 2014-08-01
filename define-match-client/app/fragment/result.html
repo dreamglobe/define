@@ -3,7 +3,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title"><strong>Puntuaciones del turno</strong>
-                    <span class=" pull-right glyphicon glyphicon-stats">
+                    <span class=" pull-right glyphicon glyphicon-stats"></span>
                 </h3>
             </div>
             <table class="table table-bordered table-condensed table-striped">
@@ -22,7 +22,10 @@
                     ng-class="{warning : score.player.isReady && score.pid != me.pid, success: score.pid == me.pid}">
                     <td class="text-right hidden-xs"><span ng-bind="$index+1" class="text-right"></span></td>
                     <td ><span ng-bind="score.player.name"></span></td>
-                    <td><span ng-bind="score.definition.text"></span></td>
+                    <td>
+                        <span ng-show="score.definition" ng-bind="score.definition.text"></span>
+                        <span ng-hide="score.definition">-</span>
+                    </td>
                     <td class="text-right hidden-xs"><span ng-bind="score.pidVoters.length"></span></td>
                     <td class="text-right">
                         <span ng-bind="score.turnScore>0?'+'+score.turnScore:'-'"></span>

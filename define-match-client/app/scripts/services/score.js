@@ -47,7 +47,7 @@ angular.module('defineMatchClientApp')
                         s.pidVoters,
                         s.correctDefinition));
             });
-            correctDefinition = Definition.get(result.correctDefId);
+            correctDefinition = result.correctDef;
             numCorrectVotes = result.numCorrectVotes;
             return playerScores;
         };
