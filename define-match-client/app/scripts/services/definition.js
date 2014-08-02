@@ -80,7 +80,7 @@ angular.module('defineMatchClientApp')
         };
 
         Definition.getPlayerDefinition = function () {
-            return playerDefinition;
+            return playerDefinition || new Definition(-1, '');
         };
 
         Definition.getTerm = function () {

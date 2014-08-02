@@ -29,8 +29,8 @@ angular.module('defineMatchClientApp')
             this.definition = Definition.get(defId);
         }
 
-        Score.prototype.getVoters = function(){
-            return _.map(this.pidVoters, function(pid){
+        Score.prototype.getVoters = function () {
+            return _.map(this.pidVoters, function (pid) {
                 return Player.get(pid).name;
             });
         };
@@ -51,6 +51,26 @@ angular.module('defineMatchClientApp')
             numCorrectVotes = result.numCorrectVotes;
             return playerScores;
         };
+
+        Score.addScoreForRegisterUser = function (pid) {
+            playerScores.push(
+                new Score(pid,
+                    -1,
+                    0,
+                    0,
+                    0,
+                    [],
+                    false));
+        };
+
+        Score.removeScoreForRemoveUser = function (pid) {
+            var player = Player.get(pid);
+            var pos = playerScores.indexOf(player.score);
+            if(pos>=0){
+                playerScores.splice(pos,1);
+            }
+        };
+
 
         Score.getList = function () {
             return playerScores;

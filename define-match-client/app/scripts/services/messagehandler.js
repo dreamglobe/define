@@ -74,6 +74,9 @@ angular.module('defineMatchClientApp')
 
                     case 'RegisterUser':
                         Player.create(payload);
+                        if(Score.getList().length > 0) {
+                            Score.addScoreForRegisterUser(payload.pid)
+                        }
                         updateScope();
                         break;
 

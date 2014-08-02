@@ -21,6 +21,7 @@ public class Round<REF> implements DefinitionResolver {
     private final int roundNumber;
 
     private final Term term;
+    private final Term previousTerm;
     private MatchConfiguration matchConf;
 
     private final RoundPlayers<REF> roundPlayers;
@@ -36,6 +37,7 @@ public class Round<REF> implements DefinitionResolver {
      */
     public Round(MatchConfiguration matchConf, Term term) {
         this.roundNumber = 0;
+        this.previousTerm = null;
         this.term = term;
         this.roundPlayers = new RoundPlayers<REF>();
         this.matchConf = matchConf;
@@ -49,6 +51,7 @@ public class Round<REF> implements DefinitionResolver {
      */
     public Round(Round<REF> previousRound, Term term) {
         this.roundNumber = previousRound.roundNumber+1;
+        this.previousTerm = previousRound.getTerm();
         this.term = term;
         this.matchConf = previousRound.matchConf;
         this.roundPlayers = previousRound.prepareNextRoundPlayers(this);
@@ -59,6 +62,10 @@ public class Round<REF> implements DefinitionResolver {
 
     public int getRoundNumber() {
         return roundNumber;
+    }
+
+    public Term getPreviousTerm() {
+        return previousTerm;
     }
 
     public Term getTerm() {

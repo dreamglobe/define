@@ -260,7 +260,7 @@ public class MatchActor extends MatchFSM {
                 final ItemDefinition defId = TermDefinition.createItemDefinition(round.getCorrectDefinition());
                 final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseDurationInMillis(PHASE_RESULT));
                 final RegisterUserInShowScores msg = new RegisterUserInShowScores(
-                        phaseMillisLeft, round.getTerm(), round.getRoundItemDefinitions(),
+                        phaseMillisLeft, round.getPreviousTerm(), round.getRoundItemDefinitions(),
                         null, round.createPlayersScores(), defId);
                 sender().tell(msg, self());
             } else {

@@ -161,7 +161,6 @@ angular.module('defineMatchClientApp')
                 var player = playersByPid[pid];
                 players.splice(players.indexOf(player), 1);
                 delete playersByPid[pid];
-
             }
         };
 
