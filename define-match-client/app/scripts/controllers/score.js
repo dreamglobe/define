@@ -30,12 +30,12 @@ angular.module('defineMatchClientApp')
                 ], playerDefinition: {defId: 1, text: 'Definition 1'}});
                 Score.createList({
                     scores: [
-                        {pid: 1, defId: 1, voteScore: 1, turnScore: 3, totalScore: 3, pidVoters: [3], correctDefinition: true},
-                        {pid: 2, defId: 2, voteScore: 0, turnScore: 0, totalScore: 0, pidVoters: [1, 2, 3, 4], correctDefinition: false},
-                        {pid: 3, defId: 3, voteScore: 0, turnScore: 2, totalScore: 2, pidVoters: [], correctDefinition: true},
-                        {pid: 4, defId: 4, voteScore: 1, turnScore: 1, totalScore: 1, pidVoters: [2], correctDefinition: false}
+                        {pid: 1, defId: 1, voteScore: 1, turnScore: 3, totalScore: 3, pidVoters: [3], correctDefinition: true, player: Player.get(1)},
+                        {pid: 2, defId: 2, voteScore: 0, turnScore: 0, totalScore: 0, pidVoters: [1, 2, 3, 4], correctDefinition: false, player: Player.get(2)},
+                        {pid: 3, defId: 3, voteScore: 0, turnScore: 2, totalScore: 2, pidVoters: [], correctDefinition: true, player: Player.get(3)},
+                        {pid: 4, defId: 4, voteScore: 1, turnScore: 1, totalScore: 1, pidVoters: [2], correctDefinition: false, player: Player.get(4)}
                     ],
-                    correctDefId: 5,
+                    correctDef: {defId: 5, text: 'Definition 5 Definition 5 Definition 5 '},
                     numCorrectVotes: 2
                 });
                 Timer.set(10000);
@@ -54,4 +54,13 @@ angular.module('defineMatchClientApp')
                 $scope.readyText = $scope.me.isReady ? 'Esperar' : 'Listo';
                 MatchServer.sendReady($scope.me.isReady);
             };
+            $scope.sortTable = function (field) {
+                if ($scope.sortField == field) {
+                    $scope.sortOrder = !$scope.sortOrder;
+                } else {
+                    $scope.sortOrder = true;
+                }
+                $scope.sortField = field;
+            };
+            $scope.sortTable('turnScore');
         }]);

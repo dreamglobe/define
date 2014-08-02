@@ -101,6 +101,10 @@ body {
   }
 }
 
+.sortable td:hover {
+  cursor: pointer;
+}
+
 .glyphicon.smaller {font-size: 8px;}
 .glyphicon.bigger {font-size: 16px;}
 

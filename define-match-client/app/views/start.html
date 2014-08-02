@@ -6,8 +6,9 @@
                     <span class=" pull-right glyphicon glyphicon-list"></span>
                 </h3>
             </div>
-            <table class="table table-bordered table-striped">
+            <table class="table  table-striped">
                 <tr ng-repeat='player in players' ng-class="{on:player.definition}">
+                    <td width="7%"><span ng-bind="players.indexOf(player)+1"></span></td>
                     <td><span ng-bind="player.name"></span></td>
                 </tr>
             </table>

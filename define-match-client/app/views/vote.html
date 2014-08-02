@@ -38,26 +38,40 @@
             </div>
             <table class="table table-bordered table-striped">
                 <thead class="">
-                <tr class="info">
-                    <td width="6%" class="text-right">#</td>
-                    <td><strong>Nombre</strong></td>
-                    <td width="10%" class="text-center"><strong>Voto</strong></td>
-                    <td width="10%" class="text-right"><strong>Turno</strong></td>
-                    <td width="10%" class="text-right"><strong>Total</strong></td>
-                </tr>
-                </thead>
-                <tr ng-repeat='player in players'
-                    ng-class="{warning : playerReady(player) && player.pid != me.pid, success: player.pid == me.pid }">
-                    <td ng-bind="$index+1" class="text-right"></td>
-                    <td ng-bind="player.name"></td>
-                    <td class="text-center">
-                        <span ng-show="hasVoteForMe(player.vote)" class="glyphicon glyphicon-ok"></span>
-                        <span ng-bind="playerReady(player)"></span>
-                    </td>
-                    <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'" class="text-right"></td>
-                    <td ng-bind="player.totalScore" class="text-right"></td>
-                </tr>
-            </table>
+            <tr class="info sortable">
+                <td width="12%"ng-click="sortTable('pos')">
+                    #
+                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='pos'}"></i></i>
+                </td>
+                <td ng-click="sortTable('name')">
+                    <strong>Nombre</strong>
+                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='name'}"></i></i>
+                </td>
+                <td width="19%" ng-click="sortTable('vote')">
+                    <strong>Voto</strong>
+                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='vote'}"></i></i>
+                </td>
+                <td width="21%" ng-click="sortTable('turnScore')">
+                    <strong>Turno</strong>
+                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='turnScore'}"></i></i>
+                </td>
+                <td width="19%" ng-click="sortTable('totalScore')">
+                    <strong>Total</strong>
+                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='totalScore'}"></i></i>
+                </td>
+            </tr>
+            </thead>
+            <tr ng-repeat='player in players | orderBy: sortField: sortOrder'
+                ng-class="{warning : playerVote(player) && player.pid !== me.pid, success: player.pid === me.pid}">
+                <td ng-bind="player.pos() +1" class="text-right"></td>
+                <td ng-bind="player.name"></td>
+                <td class="text-center">
+                    <span ng-show="hasVoteForMe(player.vote)" class="glyphicon glyphicon-ok"></span>
+                    <span ng-bind="playerVote(player)"></span>
+                </td>
+                <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'" class="text-right"></td>
+                <td ng-bind="player.totalScore" class="text-right"></td>
+            </tr>
         </div>
     </div>
 </div>

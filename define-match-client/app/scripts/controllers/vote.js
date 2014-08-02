@@ -57,10 +57,20 @@ angular.module('defineMatchClientApp')
             $scope.letter = function (defId) {
                 return defId !== null ? Definition.getLetterByDefId(defId) : '';
             };
-            $scope.playerReady = function (player) {
+            $scope.playerVote = function (player) {
                 var vote = player.vote;
                 if (vote) {
                     return $scope.letter(vote);
                 }
             };
+            $scope.sortTable = function(field){
+                if($scope.sortField == field){
+                    $scope.sortOrder = !$scope.sortOrder;
+                }else{
+                    $scope.sortOrder = true;
+                }
+                $scope.sortField = field;
+            };
+            $scope.sortTable('pos');
+            $scope.sortOrder=false;
         }]);

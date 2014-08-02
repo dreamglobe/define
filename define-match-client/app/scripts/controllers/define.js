@@ -38,4 +38,14 @@ angular.module('defineMatchClientApp')
             $scope.playerReady = function (player) {
                 return (player.definition);
             };
+            $scope.sortTable = function(field){
+                if($scope.sortField == field){
+                    $scope.sortOrder = !$scope.sortOrder;
+                }else{
+                    $scope.sortOrder = true;
+                }
+                $scope.sortField = field;
+            };
+            $scope.sortTable('pos');
+            $scope.sortOrder=false;
         }]);

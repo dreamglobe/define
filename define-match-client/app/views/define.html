@@ -41,16 +41,28 @@
             </div>
             <table class="table table-bordered table-striped text-info">
                 <thead class="text-info">
-                <tr class="info">
-                    <td width="7%">#</td>
-                    <td><strong>Nombre</strong></td>
-                    <td width="10%"><strong>Turno</strong></td>
-                    <td width="10%"><strong>Total</strong></td>
+                <tr class="info sortable">
+                    <td width="12%"ng-click="sortTable('pos')">
+                        #
+                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='pos'}"></i></i>
+                    </td>
+                    <td ng-click="sortTable('name')">
+                        <strong>Nombre</strong>
+                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='name'}"></i></i>
+                    </td>
+                    <td width="21%" ng-click="sortTable('turnScore')">
+                        <strong>Turno</strong>
+                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='turnScore'}"></i></i>
+                    </td>
+                    <td width="20%" ng-click="sortTable('totalScore')">
+                        <strong>Total</strong>
+                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='totalScore'}"></i></i>
+                    </td>
                 </tr>
                 </thead>
-                <tr ng-repeat='player in players'
+                <tr ng-repeat='player in players | orderBy: sortField: sortOrder'
                     ng-class="{warning : playerReady(player) && player.pid != me.pid, success: player.pid == me.pid}">
-                    <td ng-bind="$index+1" align="right"></td>
+                    <td ng-bind="player.pos() +1" align="right"></td>
                     <td ng-bind="player.name"></td>
                     <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'" align="right"></td>
                     <td ng-bind="player.totalScore" align="right"></td>

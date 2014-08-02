@@ -13,7 +13,7 @@ angular.module('defineMatchClientApp')
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         var playersByPid = {};
-        var players = []
+        var players = [];
         var playerPid;
 
         var fields = ['pid', 'name', 'totalScore', 'turnScore', 'score', 'hasChange'];
@@ -134,6 +134,10 @@ angular.module('defineMatchClientApp')
 
         Player.prototype.resetChange = function () {
             this.__.hasChange = false;
+        };
+
+        Player.prototype.pos = function () {
+            return players.indexOf(this);
         };
 
         // Static methods
