@@ -9,9 +9,9 @@
             <table class="table table-bordered table-condensed table-striped">
                 <thead>
                 <tr class="info sortable">
-                    <td width="5%" class="text-left hidden-xs" ng-click="sortTable('player.pos')">
+                    <td width="5%" class="text-left hidden-xs" ng-click="sortTable('player.pos()')">
                         #
-                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='player.pos'}"></i></i>
+                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='player.pos()'}"></i></i>
                     </td>
                     <td width="15%" ng-click="sortTable('player.name')">
                         <strong>Nombre</strong>
@@ -21,19 +21,19 @@
                         <strong>Definición</strong>
                         <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='definition.text'}"></i></i>
                     </td>
-                    <td width="10%" class="hidden-xs text-left" ng-click="sortTable('pidVoters.length')">
+                    <td width="10%" class="hidden-xs text-left" ng-click="sortTable('-pidVoters.length')">
                         <strong>Votos</strong>
-                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='pidVoters.length'}"></i></i>
+                        <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-pidVoters.length'}"></i></i>
                     </td>
-                    <td width="10%" class="text-left" ng-click="sortTable('turnScore')">
+                    <td width="10%" class="text-left" ng-click="sortTable('-turnScore')">
                         <strong>Turno</strong>
-                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='turnScore'}"></i></i>
+                        <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-turnScore'}"></i></i>
                     </td>
-                    <td width="10%" class="text-left" ng-click="sortTable('totalScore')">
+                    <td width="10%" class="text-left" ng-click="sortTable('-totalScore')">
                         <strong>Total</strong>
-                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='totalScore'}"></i></i>
+                        <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-totalScore'}"></i></i>
                     </td>
-                    <td width="25%" ng-click="sortTable('pidVoters.length')">
+                    <td width="25%" ng-click="sortTable('-pidVoters.length')">
                         <strong>Votos de</strong>
                     </td>
                 </tr>

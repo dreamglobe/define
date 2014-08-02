@@ -71,6 +71,11 @@ angular
             });
     }])
     .run(['$rootScope', 'Console', 'MatchServer', '$route', '$location', function ($rootScope, Console, MatchServer, $route, $location) {
+        if (typeof String.prototype.startsWith != 'function') {
+            String.prototype.startsWith = function (str){
+                return this.slice(0, str.length) == str;
+            };
+        }
         $rootScope.user = {};
         $rootScope.user.name = null;
         $rootScope.Console = Console;

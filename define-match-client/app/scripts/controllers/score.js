@@ -58,9 +58,9 @@ angular.module('defineMatchClientApp')
                 if ($scope.sortField == field) {
                     $scope.sortOrder = !$scope.sortOrder;
                 } else {
-                    $scope.sortOrder = true;
+                    $scope.sortOrder = false;
                 }
                 $scope.sortField = field;
             };
-            $scope.sortTable('turnScore');
+            $scope.sortTable('-turnScore');
         }]);

@@ -39,25 +39,25 @@
             <table class="table table-bordered table-striped">
                 <thead class="">
             <tr class="info sortable">
-                <td width="12%"ng-click="sortTable('pos')">
+                <td width="12%"ng-click="sortTable('pos()')">
                     #
-                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='pos'}"></i></i>
+                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='pos()'}"></i></i>
                 </td>
                 <td ng-click="sortTable('name')">
                     <strong>Nombre</strong>
                     <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='name'}"></i></i>
                 </td>
-                <td width="19%" ng-click="sortTable('vote')">
+                <td width="19%" ng-click="sortTable('-vote')">
                     <strong>Voto</strong>
-                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='vote'}"></i></i>
+                    <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-vote'}"></i></i>
                 </td>
-                <td width="21%" ng-click="sortTable('turnScore')">
+                <td width="21%" ng-click="sortTable('-turnScore')">
                     <strong>Turno</strong>
-                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='turnScore'}"></i></i>
+                    <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-turnScore'}"></i></i>
                 </td>
-                <td width="19%" ng-click="sortTable('totalScore')">
+                <td width="19%" ng-click="sortTable('-totalScore')">
                     <strong>Total</strong>
-                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='totalScore'}"></i></i>
+                    <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-totalScore'}"></i></i>
                 </td>
             </tr>
             </thead>
