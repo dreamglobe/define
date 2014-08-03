@@ -3,27 +3,35 @@ package com.kamomileware.define.model.term;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import org.apache.commons.lang3.text.WordUtils;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by pepe on 10/07/14.
  */
-public enum TermCategory {
-    NP("Nombre propio", Formatters.normalFormatter),
+@Document
+public class TermCategory {
 
-    CH("Cheli", Formatters.normalFormatter),
+    @Id
+    private final String name;
 
-    SG("S.I.G.L.A", Formatters.siglasFormatter),
+    @NotBlank
+    private final String label;
 
-    AB("Abstracto", Formatters.normalFormatter);
-
-    private String label;
+    @NotNull
     private TermDefinitionFormatter formatter;
 
-    TermCategory(String label, TermDefinitionFormatter formatter) {
+    TermCategory(String name, String label){
+        this(name, label, Formatters.normalFormatter);
+    }
+
+    TermCategory(String name, String label, TermDefinitionFormatter formatter) {
+        this.name = name;
         this.label = label;
         this.formatter = formatter;
     }
@@ -32,13 +40,23 @@ public enum TermCategory {
         return formatter.format(text);
     }
 
-    public String getName(){
-        return this.name();
+    public String getName() {
+        return name;
     }
 
     public String getLabel(){
         return this.label;
     }
+
+    public static final TermCategory NP = new TermCategory("NP", "Nombre propio");
+
+    public static final TermCategory CH = new TermCategory("CH", "Cheli");
+
+    public static final TermCategory SG = new TermCategory("SG", "S.I.G.L.A", Formatters.siglasFormatter);
+
+    public static final TermCategory AB = new TermCategory("AB", "Abstracto");
+
+    public static final TermCategory[] categories = new TermCategory[]{NP,CH,SG,AB};
 }
 
 interface TermDefinitionFormatter {
@@ -61,10 +79,5 @@ class Formatters {
         }
     };
 
-    public static TermDefinitionFormatter siglasFormatter = new TermDefinitionFormatter() {
-        @Override
-        public String format(String text) {
-            return WordUtils.capitalize(text);
-        }
-    };
+    public static TermDefinitionFormatter siglasFormatter = text -> WordUtils.capitalize(text);
 }

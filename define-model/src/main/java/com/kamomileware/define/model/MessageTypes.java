@@ -254,7 +254,7 @@ public class MessageTypes {
 
         public StartDefinition(long millis, Term term){
             super(millis);
-            this.term = term;
+            this.term = new Term(term.getName(),null,term.getCategory());
         }
 
         public Term getTerm() {

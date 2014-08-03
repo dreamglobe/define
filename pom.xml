@@ -96,6 +96,11 @@
                 <artifactId>spring-data-mongodb</artifactId>
                 <version>1.5.1.RELEASE</version>
             </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>5.0.3.Final</version>
+            </dependency>
             <!-- Logging dependencies -->
             <dependency>
                 <groupId>org.slf4j</groupId>

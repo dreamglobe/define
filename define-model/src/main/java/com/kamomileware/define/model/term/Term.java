@@ -1,15 +1,13 @@
 package com.kamomileware.define.model.term;
 
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-
-import static com.kamomileware.define.model.term.TermCategory.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by pepe on 10/07/14.
@@ -18,11 +16,17 @@ import static com.kamomileware.define.model.term.TermCategory.*;
 public class Term {
 
     @Id
-    private String id;
-    private String name;
-    private String definition;
-    private TermCategory category;
-    private CardDefinition card;
+    @NotBlank
+    private final String name;
+
+    @Field("def") @NotBlank
+    private final String definition;
+
+    @DBRef @NotNull
+    private final TermCategory category;
+
+    @DBRef
+    private TermsCard card;
 
     public Term(String name, String definition, TermCategory ch) {
         this.name = name;
@@ -33,39 +37,20 @@ public class Term {
     public String getDefinition() {
         return definition;
     }
-    public void setDefinition(String definition) {
-        this.definition = definition;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public TermCategory getCategory() {
         return category;
     }
 
-    public void setCategory(TermCategory category) {
-        this.category = category;
-    }
-
-    public CardDefinition getCard() {
+    public TermsCard getCard() {
         return card;
     }
 
-    public void setCard(CardDefinition card) {
+    public void setCard(TermsCard card) {
         this.card = card;
     }
 

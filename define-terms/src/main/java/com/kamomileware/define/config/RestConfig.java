@@ -1,7 +1,8 @@
-package com.kamomileware.define.rest.config;
+package com.kamomileware.define.config;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import com.mongodb.WriteConcern;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -18,6 +19,8 @@ public class RestConfig {
 
     public @Bean
     MongoTemplate mongoTemplate() throws Exception {
-        return new MongoTemplate(mongo(), "test");
+        final Mongo client = mongo();
+        client.setWriteConcern(WriteConcern.SAFE);
+        return new MongoTemplate(client, "test");
     }
 }
