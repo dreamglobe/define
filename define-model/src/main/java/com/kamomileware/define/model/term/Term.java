@@ -3,6 +3,7 @@ package com.kamomileware.define.model.term;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by pepe on 10/07/14.
  */
-@Document
+@Document (collection = "term")
 public class Term {
 
     @Id
@@ -22,11 +23,17 @@ public class Term {
     @Field("def") @NotBlank
     private final String definition;
 
-    @DBRef @NotNull
+    @DBRef(lazy = false) @NotNull
     private final TermCategory category;
 
-    @DBRef
-    private TermsCard card;
+    @DBRef(lazy = true)
+    private TermCard card;
+
+    @PersistenceConstructor
+    public Term(String name, String definition, TermCategory category, TermCard card){
+        this(name, definition, category);
+        this.card = card;
+    }
 
     public Term(String name, String definition, TermCategory ch) {
         this.name = name;
@@ -46,11 +53,11 @@ public class Term {
         return category;
     }
 
-    public TermsCard getCard() {
+    public TermCard getCard() {
         return card;
     }
 
-    public void setCard(TermsCard card) {
+    public void setCard(TermCard card) {
         this.card = card;
     }
 

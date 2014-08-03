@@ -1,10 +1,15 @@
 package com.kamomileware.define.term;
 
-import com.kamomileware.define.model.term.TermsCard;
+import com.kamomileware.define.model.term.TermCard;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
  * Created by pepe on 3/08/14.
  */
-public interface TermCardRepository extends MongoRepository<TermsCard, String> {
+@RepositoryRestResource(collectionResourceRel = "cards", path = "cards")
+public interface TermCardRepository extends MongoRepository<TermCard, String>, TermCardRepositoryCustom {
+
+    TermCard findByOrder(@Param("order") long order);
 }

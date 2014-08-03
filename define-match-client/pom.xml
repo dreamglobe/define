@@ -41,6 +41,9 @@
                         </fileset>
                         <fileset>
                             <directory>bower_components</directory>
+                            <excludes>
+                                <exclude>_variables.scss</exclude>
+                            </excludes>
                         </fileset>
                         <fileset>
                             <directory>node_modules</directory>

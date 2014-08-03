@@ -12,28 +12,45 @@
     <scm>
         <connection>scm:svn:http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</connection>
         <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}/branches/v.0.3-Term_services/${project.artifactId}</developerConnection>
-        <url>[ http://karma-server/websvn/listing.php/branches/v.0.3-Term_services/listing.php?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F</url>
+        <url>http://karma-server/websvn/listing.php/branches/v.0.3-Term_services/listing.php?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F</url>
     </scm>
+
+    <properties>
+        <start-class>com.kamomileware.define.TermRestApp</start-class>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>define-model</artifactId>
         </dependency>
+        <!-- externals -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-rest-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.data</groupId>-->
-            <!--<artifactId>spring-data-mongodb</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.data</groupId>-->
-            <!--<artifactId>spring-data-rest-webmvc</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-data-rest</artifactId>-->
-        <!--</dependency>-->
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

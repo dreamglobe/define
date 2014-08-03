@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Created by pepe on 10/07/14.
  */
-@Document
+@Document(collection = "cat") @TypeAlias("cat")
 public class TermCategory {
 
     @Id
