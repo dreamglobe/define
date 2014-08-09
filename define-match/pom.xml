@@ -15,7 +15,7 @@
     </scm>
 
     <properties>
-        <start-class>com.kamomileware.define.TermRestApp</start-class>
+        <start-class>com.kamomileware.define.MatchServer</start-class>
     </properties>
 
     <dependencies>
