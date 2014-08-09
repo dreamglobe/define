@@ -1,4 +1,4 @@
-package com.kamomileware.define.aux;
+package com.kamomileware.define.dbproc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
