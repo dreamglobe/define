@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by pepe on 10/07/14.
  */
-@Document (collection = "term")
+@Document (collection = "terms")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 @JsonTypeName("term")
 public class Term {

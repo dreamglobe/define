@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * Created by pepe on 10/07/14.
  */
-@Document(collection = "cat") @TypeAlias("cat")
+@Document(collection = "cats") @TypeAlias("cat")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 @JsonTypeName("cat")
 public class TermCategory {

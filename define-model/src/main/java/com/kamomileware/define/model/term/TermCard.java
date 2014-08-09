@@ -1,21 +1,13 @@
 package com.kamomileware.define.model.term;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.KeyDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.deser.ValueInstantiator;
-import com.fasterxml.jackson.databind.deser.std.MapDeserializer;
-import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -29,7 +21,8 @@ public class TermCard {
     @Id
     private Long order;
 
-    @DBRef @JsonManagedReference("terms")
+    @DBRef
+    @JsonManagedReference("terms")
     @JsonDeserialize(keyAs = String.class, contentAs = Term.class)
     private Map<String,Term> definitions;
 
