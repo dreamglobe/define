@@ -1,5 +1,6 @@
 package com.kamomileware.define.model.term;
 
+import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import org.apache.commons.lang3.text.WordUtils;
@@ -16,22 +17,28 @@ import java.util.stream.Collectors;
  * Created by pepe on 10/07/14.
  */
 @Document(collection = "cat") @TypeAlias("cat")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+@JsonTypeName("cat")
 public class TermCategory {
 
     @Id
-    private final String name;
+    private String name;
 
     @NotBlank
-    private final String label;
+    private String label;
 
     @NotNull
     private TermDefinitionFormatter formatter;
 
-    TermCategory(String name, String label){
+    public TermCategory(String name, String label){
         this(name, label, Formatters.normalFormatter);
     }
 
-    TermCategory(String name, String label, TermDefinitionFormatter formatter) {
+    public TermCategory() {
+        this(null, null, Formatters.normalFormatter);
+    }
+
+    public TermCategory(String name, String label, TermDefinitionFormatter formatter) {
         this.name = name;
         this.label = label;
         this.formatter = formatter;
@@ -49,6 +56,14 @@ public class TermCategory {
         return this.label;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     public static final TermCategory NP = new TermCategory("NP", "Nombre propio");
 
     public static final TermCategory CH = new TermCategory("CH", "Cheli");
@@ -58,6 +73,37 @@ public class TermCategory {
     public static final TermCategory AB = new TermCategory("AB", "Abstracto");
 
     public static final TermCategory[] categories = new TermCategory[]{NP,CH,SG,AB};
+
+    @JsonCreator
+    public static TermCategory forName(@JsonProperty("name") String cat) {
+        TermCategory result;
+        switch(cat){
+            case "NP": result = NP; break;
+            case "CH": result = CH; break;
+            case "SG": result = SG; break;
+            case "AB": result = AB; break;
+            default:
+                result = new TermCategory(cat, cat);
+        };
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TermCategory that = (TermCategory) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
+    }
 }
 
 interface TermDefinitionFormatter {

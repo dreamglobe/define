@@ -1,6 +1,7 @@
 package com.kamomileware.define.model.term;
 
 
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
@@ -14,43 +15,65 @@ import javax.validation.constraints.NotNull;
  * Created by pepe on 10/07/14.
  */
 @Document (collection = "term")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+@JsonTypeName("term")
 public class Term {
 
     @Id
     @NotBlank
-    private final String name;
+    private String name;
 
     @Field("def") @NotBlank
-    private final String definition;
+    private String definition;
 
-    @DBRef(lazy = false) @NotNull
-    private final TermCategory category;
+    @DBRef(lazy = false) @NotNull @JsonIdentityReference
+    private TermCategory category;
 
-    @DBRef(lazy = true)
+    @DBRef(lazy = true) @JsonBackReference("terms")
     private TermCard card;
 
     @PersistenceConstructor
-    public Term(String name, String definition, TermCategory category, TermCard card){
+    public Term(String name, String definition, String category, TermCard card){
         this(name, definition, category);
         this.card = card;
     }
 
-    public Term(String name, String definition, TermCategory ch) {
-        this.name = name;
-        this.definition = definition;
-        this.category = ch;
+    public Term(String name,
+                String definition,
+                String cat) {
+        this(name, definition, TermCategory.forName(cat));
     }
 
-    public String getDefinition() {
-        return definition;
+    public Term() {}
+
+    public Term(String name, String definition, TermCategory category){
+        this.name = name;
+        this.definition = definition;
+        this.category = category;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(String definition) {
+        this.definition = definition;
+    }
+
     public TermCategory getCategory() {
         return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = TermCategory.forName(category);
     }
 
     public TermCard getCard() {
@@ -64,22 +87,17 @@ public class Term {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Term)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Term term = (Term) o;
 
-        if (category != null ? !category.equals(term.category) : term.category != null) return false;
-        if (!definition.equals(term.definition)) return false;
-        if (!name.equals(term.name)) return false;
+        if (name != null ? !name.equals(term.name) : term.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + definition.hashCode();
-        result = 31 * result + (category != null ? category.hashCode() : 0);
-        return result;
+        return name != null ? name.hashCode() : 0;
     }
 }

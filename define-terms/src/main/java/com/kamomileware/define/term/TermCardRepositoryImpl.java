@@ -12,19 +12,21 @@ import java.util.Map;
  */
 public class TermCardRepositoryImpl implements TermCardRepositoryCustom {
 
-    //@Autowired
+    @Autowired
     protected TermRepository termDao;
 
-    //@Autowired
+    @Autowired
     protected TermCardRepository cardDao;
 
 
     @Override
-    public TermCard addNewCard(Map<String, Term> terms) {
+    public TermCard addNewCard(TermCard newCard) {
+        // TODO: must be max for allowing deletes
         long order = cardDao.count();
-        termDao.save(terms.values());
-        final TermCard card = cardDao.save(new TermCard(order, terms));
-        terms.values().forEach(t -> {
+        termDao.save(newCard.getDefinitionsList());
+        newCard.setOrder(order);
+        final TermCard card = cardDao.save(newCard);
+        newCard.getDefinitionsList().forEach(t -> {
             t.setCard(card);
             termDao.save(t);
         });
@@ -32,9 +34,9 @@ public class TermCardRepositoryImpl implements TermCardRepositoryCustom {
     }
 
     @Override
-    public TermCard updateCard(int order, Map<String, Term> terms) {
-        TermCard card = cardDao.findByOrder(order);
-        terms.forEach((k,v)->{
+    public TermCard updateCard(TermCard newCard) {
+        TermCard card = cardDao.findByOrder(newCard.getOrder());
+        newCard.getDefinitions().forEach((k,v)->{
             Assert.isTrue(k.equals(v.getCategory().getName()));
             Term oldTerm = card.getDefinition(k);
             if(!oldTerm.getName().equals(v.getName())){
@@ -51,7 +53,7 @@ public class TermCardRepositoryImpl implements TermCardRepositoryCustom {
         boolean result = false;
         TermCard card = cardDao.findByOrder(order);
         if(card!=null) {
-            termDao.delete(card.getDefinitions());
+            termDao.delete(card.getDefinitionsList());
             cardDao.delete(card);
             result= true;
         }

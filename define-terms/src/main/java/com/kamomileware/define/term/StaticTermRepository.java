@@ -181,4 +181,8 @@ public class StaticTermRepository {
     public static Term get(int i) {
         return terms.get(i);
     }
+
+    public static List<Term> get() {
+        return terms;
+    }
 }
