@@ -20,6 +20,7 @@ module.exports = function (grunt) {
     app: require('./bower.json').appPath || 'app',
     dist: 'dist/static'
   };
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Define the configuration for all the tasks
   grunt.initConfig({

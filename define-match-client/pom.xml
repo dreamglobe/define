@@ -59,6 +59,9 @@
     <profiles>
         <profile>
             <id>dist</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -80,9 +83,6 @@
         </profile>
         <profile>
             <id>devel</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>

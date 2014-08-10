@@ -18,9 +18,9 @@ angular
         'ngTouch',
         'ui.bootstrap'
     ])
-    .constant('authUrl', 'http://karmaware.mine.nu:9001/login')
-    .constant('logoutUrl', 'http://karmaware.mine.nu:9001/logout')
-    .constant('wsBroker', 'http://karmaware.mine.nu:9001/crossgate')
+    .constant('authUrl', '/login')
+    .constant('logoutUrl', '/logout')
+    .constant('wsBroker', '/crossgate')
     .constant('debug', false)
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;
