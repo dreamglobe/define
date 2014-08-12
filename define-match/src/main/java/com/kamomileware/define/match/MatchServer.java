@@ -1,10 +1,10 @@
-package com.kamomileware.define;
+package com.kamomileware.define.match;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = "com.kamomileware.define")
+@ComponentScan(basePackages = "com.kamomileware.define.match")
 @EnableAutoConfiguration
 //EnableGlobalMethodSecurity(securedEnabled = false, prePostEnabled = false)
 public class MatchServer {

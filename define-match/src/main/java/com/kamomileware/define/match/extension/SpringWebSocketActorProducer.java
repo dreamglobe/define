@@ -1,8 +1,8 @@
-package com.kamomileware.define.extension;
+package com.kamomileware.define.match.extension;
 
 import akka.actor.Actor;
 import akka.actor.IndirectActorProducer;
-import com.kamomileware.define.actor.ClientActor;
+import com.kamomileware.define.match.actor.ClientActor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.socket.WebSocketSession;
 

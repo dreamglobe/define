@@ -1,9 +1,9 @@
-package com.kamomileware.define.config;
+package com.kamomileware.define.match.config;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import com.kamomileware.define.extension.SpringWSocketClientExtension;
-import com.kamomileware.define.actor.MatchActor;
+import com.kamomileware.define.match.extension.SpringWSocketClientExtension;
+import com.kamomileware.define.match.actor.MatchActor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

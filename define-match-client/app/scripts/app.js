@@ -18,9 +18,9 @@ angular
         'ngTouch',
         'ui.bootstrap'
     ])
-    .constant('authUrl', '/login')
-    .constant('logoutUrl', '/logout')
-    .constant('wsBroker', '/crossgate')
+    .constant('authUrl', './login/')
+    .constant('logoutUrl', './logout/')
+    .constant('wsBroker', '/crossgate/')
     .constant('debug', false)
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;

@@ -1,4 +1,4 @@
-package com.kamomileware.define.extension;
+package com.kamomileware.define.match.extension;
 
 import akka.actor.Actor;
 import akka.actor.IndirectActorProducer;

@@ -1,4 +1,4 @@
-package com.kamomileware.define.actor;
+package com.kamomileware.define.match.actor;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;

@@ -43,6 +43,11 @@
         <dependencies>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>define-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>define-match</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -66,11 +71,6 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>define-stats</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>define-boot</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!--JDK Maven dependencies -->

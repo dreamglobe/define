@@ -25,6 +25,8 @@
     "grunt-svgmin": "^0.4.0",
     "grunt-usemin": "^2.1.1",
     "grunt-wiredep": "^1.7.0",
+    "imagemin-gifsicle": "^0.1.1",
+    "imagemin-jpegtran": "^0.1.0",
     "imagemin-optipng": "^0.1.0",
     "imagemin-pngquant": "^0.1.3",
     "jshint-stylish": "^0.2.0",

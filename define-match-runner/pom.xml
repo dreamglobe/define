@@ -8,11 +8,9 @@
         <version>0.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>define-match-runner</artifactId>
-    <packaging>pom</packaging>
     <properties>
-        <start-class>com.kamomileware.define.MatchServer</start-class>
+        <start-class>com.kamomileware.define.match.MatchServer</start-class>
     </properties>
     <dependencies>
         <dependency>
@@ -29,6 +27,7 @@
                     <jvmArguments>-server</jvmArguments>
                     <arguments>
                         <argument>--server.port=9001</argument>
+                        <!--<argument>-server.contextPath=/define</argument>-->
                     </arguments>
                 </configuration>
             </plugin>

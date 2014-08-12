@@ -1,6 +1,6 @@
-package com.kamomileware.define.config;
+package com.kamomileware.define.match.config;
 
-import com.kamomileware.define.actor.PlayerActor.ClientHandler;
+import com.kamomileware.define.match.actor.PlayerActor.ClientHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

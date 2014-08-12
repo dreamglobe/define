@@ -1,4 +1,4 @@
-package com.kamomileware.define.actor;
+package com.kamomileware.define.match.actor;
 
 import akka.actor.Actor;
 import org.springframework.web.socket.WebSocketSession;

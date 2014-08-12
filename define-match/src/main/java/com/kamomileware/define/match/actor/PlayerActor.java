@@ -1,4 +1,4 @@
-package com.kamomileware.define.actor;
+package com.kamomileware.define.match.actor;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -6,7 +6,7 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kamomileware.define.extension.SpringWSocketClientExtension;
+import com.kamomileware.define.match.extension.SpringWSocketClientExtension;
 import com.kamomileware.define.model.MessageTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,7 +30,7 @@ import javax.inject.Named;
 import java.util.Optional;
 
 import static com.fasterxml.jackson.databind.MapperFeature.USE_ANNOTATIONS;
-import static com.kamomileware.define.extension.SpringWSocketClientExtension.SpringExtProvider;
+import static com.kamomileware.define.match.extension.SpringWSocketClientExtension.SpringExtProvider;
 import static com.kamomileware.define.model.MessageTypes.*;
 
 /**
