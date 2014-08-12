@@ -22,7 +22,7 @@ public class RestDataFixture {
 
 
     public static TermCard notYetCreatedCard(){
-        return new TermCard(null, definitions());
+        return new TermCard(-1L, definitions());
     }
 
     public static TermCard newlyCreatedCard(){
@@ -56,19 +56,19 @@ public class RestDataFixture {
     }
 
     public static TermCategory category1(){
-        return new TermCategory(CAT1_NAME, "DEBUG1");
+        return TermCategory.NP;
     }
 
     public static TermCategory category2(){
-        return new TermCategory(CAT2_NAME, "DEBUG2");
+        return TermCategory.CH;
     }
 
     public static TermCategory category3(){
-        return new TermCategory(CAT3_NAME, "DEBUG3");
+        return TermCategory.SG;
     }
 
     public static TermCategory category4(){
-        return new TermCategory(CAT4_NAME, "DEBUG4");
+        return TermCategory.AB;
     }
 
     public static String createEventsAsJSON() throws JsonProcessingException {

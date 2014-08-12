@@ -24,7 +24,9 @@ public class TermObjectExport {
     static ObjectMapper mapper;
 
     public static void main(String[] args){
+
         mapper = new ObjectMapper();
+
         if(logger.isDebugEnabled()) {
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
         }
