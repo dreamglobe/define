@@ -428,9 +428,9 @@ module.exports = function (grunt) {
             },
             patches: {
                 expand: true,
-                cwd: '.',
-                dest: 'bower_components',
-                src: ['app/bower_mod/**/*']
+                cwd: './app/bower_mod',
+                dest: './bower_components',
+                src: ['**/*']
             }
         },
 
