@@ -21,11 +21,15 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>define-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>define-model</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>define-terms</artifactId>
+            <artifactId>define-term</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

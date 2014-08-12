@@ -8,9 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableAutoConfiguration
 //EnableGlobalMethodSecurity(securedEnabled = false, prePostEnabled = false)
 public class MatchServer {
-
     public static void main(String[] args) {
-        SpringApplication.run(TermRestApp.class, args);
+        SpringApplication.run(MatchServer.class, args);
     }
-
 }
