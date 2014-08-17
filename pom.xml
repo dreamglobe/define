@@ -16,7 +16,7 @@
     <scm>
         <connection>scm:svn:http://karma-server/svn/define/branches/v.0.3-Term_services</connection>
         <developerConnection>scm:svn:http://karma-server/svn/define/branches/v.0.3-Term_services</developerConnection>
-        <url>http://karma-server/websvn/listing.php/branches/v.0.3-Term_services?repname=define</url>
+        <url>http://karma-server/svn/define/branches/v.0.3-Term_services/</url>
     </scm>
 
     <modules>
