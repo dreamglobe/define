@@ -71,7 +71,8 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/");
+                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("file:static/");
     }
 
     @Configuration

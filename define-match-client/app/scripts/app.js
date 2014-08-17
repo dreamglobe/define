@@ -27,7 +27,7 @@ angular
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }])
-    .config([ '$routeProvider', function ($routeProvider) {
+    .config([ '$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         $routeProvider
             .when('/', {
                 redirectTo: '/login'
@@ -69,6 +69,7 @@ angular
             .otherwise({
                 redirectTo: '/'
             });
+        $locationProvider.html5Mode(true);
     }])
     .run(['$rootScope', 'Console', 'MatchServer', '$route', '$location', function ($rootScope, Console, MatchServer, $route, $location) {
         if (typeof String.prototype.startsWith != 'function') {
