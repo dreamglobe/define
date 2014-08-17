@@ -22,6 +22,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>define-boot</artifactId>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
