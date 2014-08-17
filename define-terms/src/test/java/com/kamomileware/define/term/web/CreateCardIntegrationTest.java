@@ -1,10 +1,9 @@
-package com.kamomileware.define.web;
+package com.kamomileware.define.term.web;
 
 import com.kamomileware.define.model.term.TermCard;
 import com.kamomileware.define.term.RestDataFixture;
-import com.kamomileware.define.term.TermCardRepository;
+import com.kamomileware.define.term.repository.TermCardRepository;
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;

@@ -28,7 +28,7 @@
                     <jvmArguments>-server</jvmArguments>
                     <arguments>
                         <argument>--server.port=9001</argument>
-                        <!--<argument>-server.contextPath=/define</argument>-->
+                        <argument>--server.contextPath=/define</argument>
                     </arguments>
                 </configuration>
             </plugin>

@@ -1,4 +1,4 @@
-package com.kamomileware.define.dbproc;
+package com.kamomileware.define.term.dbproc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.kamomileware.define.model.term.Term;
 import com.kamomileware.define.model.term.TermCard;
 import com.kamomileware.define.model.term.TermCategory;
-import com.kamomileware.define.term.StaticTermRepository;
+import com.kamomileware.define.term.repository.StaticTermRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

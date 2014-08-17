@@ -1,4 +1,4 @@
-package com.kamomileware.define;
+package com.kamomileware.define.term;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

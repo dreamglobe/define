@@ -16,7 +16,7 @@
     </scm>
 
     <properties>
-        <start-class>com.kamomileware.define.TermRestApp</start-class>
+        <start-class>com.kamomileware.define.term.TermRestApp</start-class>
     </properties>
 
     <dependencies>

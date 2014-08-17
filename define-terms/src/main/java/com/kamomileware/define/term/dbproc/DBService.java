@@ -1,4 +1,4 @@
-package com.kamomileware.define.dbproc;
+package com.kamomileware.define.term.dbproc;
 
 import com.kamomileware.define.model.term.Term;
 import com.kamomileware.define.model.term.TermCategory;

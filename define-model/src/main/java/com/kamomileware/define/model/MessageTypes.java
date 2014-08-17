@@ -225,18 +225,18 @@ public class MessageTypes {
     }
 
     public static class ShowEndScores extends DeffineMessage {
-        private final int correctDefId;
+        private final ItemDefinition correctDef;
         private final long numCorrectVotes;
         private final List<PlayerScore> scores;
 
-        public ShowEndScores(List<PlayerScore> scores, int correctDefId) {
+        public ShowEndScores(List<PlayerScore> scores, ItemDefinition correctDef) {
             this.scores = scores;
-            this.correctDefId = correctDefId;
+            this.correctDef = correctDef;
             this.numCorrectVotes = scores.stream().filter(ps -> ps.isCorrectDefinition()).count();
         }
 
-        public int getCorrectDefId() {
-            return correctDefId;
+        public ItemDefinition getCorrectDef() {
+            return correctDef;
         }
 
         public long getNumCorrectVotes() {

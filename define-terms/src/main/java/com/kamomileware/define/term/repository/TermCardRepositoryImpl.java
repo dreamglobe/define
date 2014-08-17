@@ -1,11 +1,9 @@
-package com.kamomileware.define.term;
+package com.kamomileware.define.term.repository;
 
 import com.kamomileware.define.model.term.Term;
 import com.kamomileware.define.model.term.TermCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-
-import java.util.Map;
 
 /**
  * Created by pepe on 3/08/14.

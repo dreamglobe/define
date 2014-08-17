@@ -1,4 +1,4 @@
-package com.kamomileware.define.term;
+package com.kamomileware.define.term.repository;
 
 import com.kamomileware.define.model.term.Term;
 

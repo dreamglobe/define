@@ -1,4 +1,4 @@
-package com.kamomileware.define.term;
+package com.kamomileware.define.term.repository;
 
 import com.kamomileware.define.model.term.TermCard;
 import org.springframework.data.mongodb.repository.MongoRepository;

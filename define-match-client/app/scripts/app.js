@@ -20,7 +20,7 @@ angular
     ])
     .constant('authUrl', './login/')
     .constant('logoutUrl', './logout/')
-    .constant('wsBroker', '/crossgate/')
+    .constant('wsBroker', '/define/crossgate/')
     .constant('debug', false)
     .config(['$httpProvider', function ($httpProvider) {
         $httpProvider.defaults.withCredentials = true;

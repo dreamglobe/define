@@ -1,10 +1,10 @@
-package com.kamomileware.define.dbproc;
+package com.kamomileware.define.term.dbproc;
 
 import com.kamomileware.define.model.term.Term;
 import com.kamomileware.define.model.term.TermCategory;
-import com.kamomileware.define.term.TermCardRepository;
-import com.kamomileware.define.term.TermCategoryRepository;
-import com.kamomileware.define.term.TermRepository;
+import com.kamomileware.define.term.repository.TermCardRepository;
+import com.kamomileware.define.term.repository.TermCategoryRepository;
+import com.kamomileware.define.term.repository.TermRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.kamomileware.define.config;
+package com.kamomileware.define.term.config;
 
 import com.kamomileware.define.model.term.TermCategory;
 import org.springframework.data.mongodb.core.MongoTemplate;
