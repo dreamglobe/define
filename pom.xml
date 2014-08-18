@@ -14,9 +14,9 @@
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/term-services</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/branches/term-services</developerConnection>
-        <url>http://karma-server/svn/define/branches/term-services</url>
+        <connection>scm:svn:http://karma-server/svn/define/branches/term-servives</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/branches/term-servives</developerConnection>
+        <url>http://karma-server/svn/define/branches/term-servives</url>
     </scm>
 
     <modules>
