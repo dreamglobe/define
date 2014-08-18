@@ -11,9 +11,9 @@
     <packaging>jar</packaging>
 
     <scm>
-        <connection>smc:svn:http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</connection>
-        <developerConnection>smc:svn:http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</developerConnection>
-        <url>http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</url>
+        <connection>smc:svn:http://karma-server/svn/define/branches/term-servives/${project.artifactId}</connection>
+        <developerConnection>smc:svn:http://karma-server/svn/define/branches/term-servives/${project.artifactId}</developerConnection>
+        <url>http://karma-server/svn/define/branches/term-servives/${project.artifactId}</url>
     </scm>
 
     <build>
