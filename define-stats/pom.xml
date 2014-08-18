@@ -4,16 +4,16 @@
     <parent>
         <groupId>com.kamomileware.define</groupId>
         <artifactId>define-project</artifactId>
-        <version>0.3</version>
+        <version>0.4-SNAPSHOT</version>
 
     </parent>
     <artifactId>define-stats</artifactId>
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/tags/define-project-0.3/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/tags/define-project-0.3/${project.artifactId}</developerConnection>
-        <url>http://karma-server/svn/define/tags/define-project-0.3/${project.artifactId}</url>
+        <connection>scm:svn:http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</developerConnection>
+        <url>http://karma-server/svn/define/branches/v.0.3-Term_services/${project.artifactId}</url>
     </scm>
 
 </project>
