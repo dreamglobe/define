@@ -160,11 +160,6 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
             </plugin>
-            <!--  Support our own plugin -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
         </plugins>
     </build>
     <profiles>
