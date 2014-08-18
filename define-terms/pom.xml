@@ -10,9 +10,9 @@
     <packaging>jar</packaging>
 
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/term-servives/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/branches/term-servives/${project.artifactId}</developerConnection>
-        <url>http://karma-server/svn/define/branches/term-servives/${project.artifactId}</url>
+        <connection>scm:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</connection>
+        <developerConnection>scm:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</developerConnection>
+        <url>http://karma-server/svn/define/branches/term-services/${project.artifactId}</url>
     </scm>
 
     <properties>
