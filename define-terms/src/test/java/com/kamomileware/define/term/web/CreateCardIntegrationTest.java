@@ -4,9 +4,12 @@ import com.kamomileware.define.model.term.TermCard;
 import com.kamomileware.define.term.RestDataFixture;
 import com.kamomileware.define.term.repository.TermCardRepository;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +28,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  */
 public class CreateCardIntegrationTest {
 
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     MockMvc mockMvc;
 
     @InjectMocks
@@ -36,15 +41,15 @@ public class CreateCardIntegrationTest {
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
-
         this.mockMvc = standaloneSetup(controller).setMessageConverters(new MappingJackson2HttpMessageConverter()).build();
     }
 
-    //@Test
+    @Test
     public void thatCreateCardWorksCorrectly() throws Exception {
         when(cardRepository.addNewCard(any(TermCard.class))).thenReturn(RestDataFixture.newlyCreatedCard());
 
         final String eventsAsJSON = createEventsAsJSON();
+        logger.info(eventsAsJSON);
         this.mockMvc.perform(
                 post("/cards")
                         .content(eventsAsJSON)

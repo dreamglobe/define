@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Created by pepe on 10/07/14.
  */
 @Document(collection = "cats") @TypeAlias("cat")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name", resolver = TermCategoryResolver.class)
 @JsonTypeName("cat")
 public class TermCategory {
 
@@ -74,8 +74,7 @@ public class TermCategory {
 
     public static final TermCategory[] categories = new TermCategory[]{NP,CH,SG,AB};
 
-    @JsonCreator
-    public static TermCategory forName(@JsonProperty("name") String cat) {
+    public static TermCategory forName(String cat) {
         TermCategory result;
         switch(cat){
             case "NP": result = NP; break;
@@ -127,4 +126,25 @@ class Formatters {
     };
 
     public static TermDefinitionFormatter siglasFormatter = text -> WordUtils.capitalize(text);
+}
+
+class TermCategoryResolver implements ObjectIdResolver {
+
+    @Override
+    public void bindItem(ObjectIdGenerator.IdKey id, Object pojo) { }
+
+    @Override
+    public Object resolveId(ObjectIdGenerator.IdKey id) {
+        return TermCategory.forName(id.key.toString());
+    }
+
+    @Override
+    public ObjectIdResolver newForDeserialization(Object context) {
+        return this;
+    }
+
+    @Override
+    public boolean canUseFor(ObjectIdResolver resolverType) {
+        return resolverType.getClass() == getClass();
+    }
 }

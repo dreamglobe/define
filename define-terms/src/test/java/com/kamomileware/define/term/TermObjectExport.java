@@ -1,4 +1,4 @@
-package com.kamomileware.define.term.dbproc;
+package com.kamomileware.define.term;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.kamomileware.define.term.RestDataFixture.notYetCreatedCard;
 
 /**
  * Created by pepe on 8/08/14.
@@ -48,6 +50,20 @@ public class TermObjectExport {
             logger.info(serialized.equals(serialized2)?"Correcto":"Fallo");
         } catch (IOException e) {
             logger.error("Error processing: ", e);
+        }
+
+        requestCardSerialization();
+    }
+
+    private static void requestCardSerialization() {
+        try {
+            final String beanCard = RestDataFixture.createEventsAsJSON();
+//            final TermCard value = notYetCreatedCard();
+//            String beanCard = mapper.writeValueAsString(value);
+            TermCard result = mapper.readValue(beanCard, TermCard.class);
+            //logger.info(String.valueOf(result.equals(value)));
+        } catch (IOException e) {
+            logger.error("", e);
         }
     }
 

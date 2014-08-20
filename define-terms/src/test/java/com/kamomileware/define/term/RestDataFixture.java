@@ -15,10 +15,10 @@ import java.util.Random;
  */
 public class RestDataFixture {
 
-    public static final String CAT1_NAME = "DBG1";
-    public static final String CAT2_NAME = "DBG2";
-    public static final String CAT3_NAME = "DBG3";
-    public static final String CAT4_NAME = "DBG4";
+    public static final String CAT1_NAME = "NP";
+    public static final String CAT2_NAME = "CH";
+    public static final String CAT3_NAME = "SG";
+    public static final String CAT4_NAME = "AB";
 
 
     public static TermCard notYetCreatedCard(){

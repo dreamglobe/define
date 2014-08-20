@@ -26,7 +26,7 @@ public class Term {
     @Field("def") @NotBlank
     private String definition;
 
-    @DBRef(lazy = false) @NotNull @JsonIdentityReference
+    @DBRef(lazy = false) @NotNull @JsonIdentityReference(alwaysAsId = true)
     private TermCategory category;
 
     @DBRef(lazy = true) @JsonBackReference("terms")
@@ -72,9 +72,13 @@ public class Term {
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = TermCategory.forName(category);
+    public void setCategory(TermCategory category) {
+        this.category = TermCategory.forName(category.getName());
     }
+
+//    public void setCategory(String categoryName) {
+//        this.category = TermCategory.forName(categoryName);
+//    }
 
     public TermCard getCard() {
         return card;

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = "com.kamomileware.define.match")
 @EnableAutoConfiguration
-//EnableGlobalMethodSecurity(securedEnabled = false, prePostEnabled = false)
 public class MatchServer {
     public static void main(String[] args) {
         SpringApplication.run(MatchServer.class, args);
