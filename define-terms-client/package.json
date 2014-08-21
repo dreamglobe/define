@@ -1,6 +1,6 @@
 {
   "name": "definetermsclient",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.1",
@@ -26,11 +26,16 @@
     "grunt-svgmin": "^0.4.0",
     "grunt-usemin": "^2.1.1",
     "grunt-wiredep": "^1.7.0",
+    "imagemin-gifsicle": "^0.1.1",
+    "imagemin-jpegtran": "^0.1.0",
+    "imagemin-optipng": "^0.1.0",
+    "imagemin-pngquant": "^0.1.3",
     "jshint-stylish": "^0.2.0",
     "karma": "^0.12.19",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "load-grunt-tasks": "^0.4.0",
+    "pngquant": "^0.1.5",
     "time-grunt": "^0.3.1"
   },
   "engines": {

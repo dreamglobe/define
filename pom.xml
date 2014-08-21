@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,6 +27,7 @@
         <module>define-model</module>
         <module>define-stats</module>
         <module>define-match-client</module>
+        <module>define-terms-client</module>
     </modules>
 
     <properties>
@@ -45,7 +47,7 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>define-boot</artifactId>
                 <version>${project.version}</version>
-		<type>pom</type>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
@@ -321,11 +323,6 @@
                     <version>2.3</version>
                     <configuration>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
-                        <archive>
-                            <manifest>
-                                <mainClass>${start-class}</mainClass>
-                            </manifest>
-                        </archive>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -354,4 +351,58 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>dist</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.github.trecloux</groupId>
+                            <artifactId>yeoman-maven-plugin</artifactId>
+                            <configuration>
+                                <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <goals>
+                                        <goal>build</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>devel</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.github.trecloux</groupId>
+                            <artifactId>yeoman-maven-plugin</artifactId>
+                            <configuration>
+                                <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <goals>
+                                        <goal>build</goal>
+                                    </goals>
+                                    <configuration>
+                                        <gruntBuildArgs>devDist</gruntBuildArgs>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>
