@@ -3,15 +3,19 @@ package com.kamomileware.define.term.repository;
 
 import com.kamomileware.define.model.term.TermCard;
 
+import java.util.List;
+
 
 /**
  * Created by pepe on 3/08/14.
  */
 public interface TermCardRepositoryCustom {
 
-    TermCard addNewCard(TermCard newCard);
+    TermCard addNew(TermCard newCard);
 
-    TermCard updateCard(TermCard newCard);
+    List<TermCard> addNew(Iterable<TermCard> newCards);
 
-    boolean removeCard(int order);
+    TermCard updateWithTerms(TermCard newCard);
+
+    boolean removeWithTerms(int order);
 }

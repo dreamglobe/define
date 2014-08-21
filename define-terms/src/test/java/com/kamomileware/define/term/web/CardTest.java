@@ -2,7 +2,7 @@ package com.kamomileware.define.term.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kamomileware.define.model.term.TermCard;
-import com.kamomileware.define.term.RestDataFixture;
+import com.kamomileware.define.term.fixture.RestDataFixture;
 import org.springframework.http.*;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.client.HttpClientErrorException;

@@ -24,7 +24,7 @@ public class CardCommandController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<TermCard> createOrder(@RequestBody TermCard card, UriComponentsBuilder builder) {
-        final TermCard termCard = cardDao.addNewCard(card);
+        final TermCard termCard = cardDao.addNew(card);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(
                 builder.path("/cards/{order}")

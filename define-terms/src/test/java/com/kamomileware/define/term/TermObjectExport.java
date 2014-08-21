@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.kamomileware.define.model.term.Term;
 import com.kamomileware.define.model.term.TermCard;
 import com.kamomileware.define.model.term.TermCategory;
+import com.kamomileware.define.term.fixture.RestDataFixture;
 import com.kamomileware.define.term.repository.StaticTermRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.kamomileware.define.term.RestDataFixture.notYetCreatedCard;
 
 /**
  * Created by pepe on 8/08/14.

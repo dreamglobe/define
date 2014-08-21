@@ -1,7 +1,7 @@
 package com.kamomileware.define.term.web;
 
 import com.kamomileware.define.model.term.TermCard;
-import com.kamomileware.define.term.RestDataFixture;
+import com.kamomileware.define.term.fixture.RestDataFixture;
 import com.kamomileware.define.term.repository.TermCardRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.kamomileware.define.term.RestDataFixture.*;
+import static com.kamomileware.define.term.fixture.RestDataFixture.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,7 +46,7 @@ public class CreateCardIntegrationTest {
 
     @Test
     public void thatCreateCardWorksCorrectly() throws Exception {
-        when(cardRepository.addNewCard(any(TermCard.class))).thenReturn(RestDataFixture.newlyCreatedCard());
+        when(cardRepository.addNew(any(TermCard.class))).thenReturn(RestDataFixture.newlyCreatedCard());
 
         final String eventsAsJSON = createEventsAsJSON();
         logger.info(eventsAsJSON);

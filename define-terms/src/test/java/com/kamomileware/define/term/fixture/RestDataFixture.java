@@ -1,4 +1,4 @@
-package com.kamomileware.define.term;
+package com.kamomileware.define.term.fixture;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
