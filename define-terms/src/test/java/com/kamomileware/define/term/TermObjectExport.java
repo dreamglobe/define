@@ -79,7 +79,7 @@ public class TermObjectExport {
         List<TermCard> result = new ArrayList<>(numCards);
         for(int i=0; i< numCards; i++){
             Map<String, Term> definitions = new HashMap<>(4);
-            final TermCard card = new TermCard((long) i, definitions);
+            final TermCard card = new TermCard(Long.toString(i), definitions);
             for(int j=0; j<4; j++){
                 Term term = terms.get(i*4+j);
                 definitions.put(term.getCategory().getName(), term);

@@ -2,6 +2,7 @@ package com.kamomileware.define.model.term;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.TypeAlias;
@@ -19,15 +20,15 @@ import java.util.Map;
 public class TermCard {
 
     @Id
-    private Long order;
+    private String order;
 
-    @DBRef
+    @DBRef(lazy = true)
     @JsonManagedReference("terms")
     @JsonDeserialize(keyAs = String.class, contentAs = Term.class)
     private Map<String,Term> definitions;
 
     @PersistenceConstructor
-    public TermCard(Long order,
+    public TermCard(String order,
                     Map<String,Term> definitions){
         this.order = order;
         this.definitions = definitions;
@@ -36,11 +37,11 @@ public class TermCard {
     public TermCard() { }
 
     public Long  getOrder() {
-        return order;
+        return order!=null? Long.parseLong(order):null;
     }
 
     public void setOrder(Long order) {
-        this.order = order;
+        this.order = order.toString();
     }
 
     @JsonIgnore

@@ -6,8 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan("com.kamomileware.define")
-@EnableAutoConfiguration
+@ComponentScan("com.kamomileware.define.term")
+@EnableAutoConfiguration(exclude = { org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class })
 public class TermRestApp {
 
     public static void main(String[] args) {

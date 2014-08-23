@@ -1,20 +1,24 @@
-package com.kamomileware.define.term.dbproc;
+package com.kamomileware.define.term.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.kamomileware.define.model.term.Term;
 import com.kamomileware.define.model.term.TermCard;
 import com.kamomileware.define.model.term.TermCategory;
 import com.kamomileware.define.term.repository.TermCardRepository;
-import com.kamomileware.define.term.service.DBServiceException;
+import com.kamomileware.define.term.repository.TermCategoryRepository;
+import com.kamomileware.define.term.repository.TermRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,15 +34,24 @@ public class DBMongoServiceImpl implements DBService {
     private MongoTemplate template;
 
     @Autowired
+    private TermRepository termDao;
+
+    @Autowired
     private TermCardRepository cardDao;
 
     @Autowired
+    private TermCategoryRepository catdDao;
+
+    @Autowired
+    @Qualifier("mapper")
     private ObjectMapper mapper;
 
     @Override
     public void clear() {
         template.dropCollection(TermCard.class);
         template.dropCollection(Term.class);
+        template.dropCollection(TermCategory.class);
+        catdDao.save(Arrays.asList(TermCategory.categories));
     }
 
     @Override
@@ -47,8 +60,25 @@ public class DBMongoServiceImpl implements DBService {
     }
 
     @Override
-    public String export(){
-        return ""; // TODO: read db Values in TIS and export
+    public String export() throws JsonProcessingException {
+        final List<TermCard> cards = cardDao.findAll();
+        final List<Term> terms = buildTermList(cards);
+        TermsInformationSystem tis = new TermsInformationSystem(
+                TermCategory.categories,
+                terms.toArray(new Term[terms.size()]),
+                cards.toArray(new TermCard[cards.size()])
+        );
+        return mapper.writeValueAsString(tis);
+    }
+
+    private List<Term> buildTermList(List<TermCard> cards) {
+        List<Term> result = new ArrayList(cards.size()*4);
+        for(TermCard card : cards){
+            for(Term term : card.getDefinitions().values()){
+                result.add(term);
+            }
+        }
+        return result;
     }
 
     private TermsInformationSystem deserialize(String serialized) {

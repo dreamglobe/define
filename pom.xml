@@ -2,24 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.kamomileware.maven</groupId>
         <artifactId>maven-parent</artifactId>
         <version>2</version>
     </parent>
-
     <groupId>com.kamomileware.define</groupId>
     <artifactId>define-project</artifactId>
     <version>0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
-
     <scm>
         <connection>scm:svn:http://karma-server/svn/define/branches/term-services</connection>
         <developerConnection>scm:svn:http://karma-server/svn/define/branches/term-services</developerConnection>
         <url>http://karma-server/svn/define/branches/term-services</url>
     </scm>
-
     <modules>
         <module>define-boot</module>
         <module>define-match</module>
@@ -29,7 +25,6 @@
         <module>define-match-client</module>
         <module>define-terms-client</module>
     </modules>
-
     <properties>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
@@ -37,10 +32,11 @@
         <tomcat.version>8.0.8</tomcat.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <spring-boot.version>1.1.4.RELEASE</spring-boot.version>
+        <spring-boot.version>1.1.5.RELEASE</spring-boot.version>
+        <spring-data.version>1.6.0.RC1</spring-data.version>
+        <spring-data-commons.version>1.9.0.RC1</spring-data-commons.version>
         <jackson.version>2.4.1</jackson.version>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -102,8 +98,13 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-commons</artifactId>
+                <version>${spring-data-commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb</artifactId>
-                <version>1.5.1.RELEASE</version>
+                <version>${spring-data.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>

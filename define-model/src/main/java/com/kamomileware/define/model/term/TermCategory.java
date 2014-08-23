@@ -6,6 +6,7 @@ import com.google.common.base.Splitter;
 import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,7 +28,7 @@ public class TermCategory {
     @NotBlank
     private String label;
 
-    @NotNull
+    @NotNull @Transient
     private TermDefinitionFormatter formatter;
 
     public TermCategory(String name, String label){

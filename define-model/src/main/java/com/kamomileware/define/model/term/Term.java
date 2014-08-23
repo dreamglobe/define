@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by pepe on 10/07/14.
  */
-@Document (collection = "terms")
+@Document (collection = "terms") @TypeAlias("term")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
 @JsonTypeName("term")
 public class Term {
@@ -26,9 +27,11 @@ public class Term {
     @Field("def") @NotBlank
     private String definition;
 
-    @DBRef(lazy = false) @NotNull @JsonIdentityReference(alwaysAsId = true)
+    @Field("cat")
+    @DBRef(lazy = true) @NotNull @JsonIdentityReference(alwaysAsId = true)
     private TermCategory category;
 
+    @Field("card")
     @DBRef(lazy = true) @JsonBackReference("terms")
     private TermCard card;
 

@@ -22,12 +22,12 @@ public class RestDataFixture {
 
 
     public static TermCard notYetCreatedCard(){
-        return new TermCard(-1L, definitions());
+        return new TermCard("0", definitions());
     }
 
     public static TermCard newlyCreatedCard(){
         int order = new Random().nextInt(1000);
-        return new TermCard(new Long(order), definitions());
+        return new TermCard(new Long(order).toString(), definitions());
     }
 
     public static Map<String, Term> definitions() {
