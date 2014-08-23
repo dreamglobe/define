@@ -1,0 +1,14 @@
+<h2>Gestión de base de datos</h2>
+
+<h3>Importación de datos</h3>
+<form name="importForm" ng-submit="uploadFile()" role="form">
+    <input type="file" name="file" ng-model="document.fileInput" id="file"
+           onchange="angular.element(this).scope().setTitle(this)"/>
+    <input type="text" class="col-sm-4" ng-model="document.title" id="title"/>
+    <button class="btn btn-primary" type="submit">Enviar</button>
+    <div class="spinner" ng-show="loading"></div>
+</form>
+
+
+<h3>Importación de datos</h3>
+<a class="btn btn-primary" ng-href="{{server}}{{exportPath}}term_db.json" target="_blank">Importar</a>

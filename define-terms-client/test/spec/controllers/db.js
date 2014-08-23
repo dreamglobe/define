@@ -1,17 +1,17 @@
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: DbctrlCtrl', function () {
 
   // load the controller's module
   beforeEach(module('defineTermsClientApp'));
 
-  var MainCtrl,
+  var DbctrlCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
+    DbctrlCtrl = $controller('DbCtrl', {
       $scope: scope
     });
   }));
