@@ -26,13 +26,13 @@ public class CardTest {
 
         RestTemplate template = new RestTemplate();
         ResponseEntity<TermCard> entity = template.postForEntity(
-                "http://localhost:8080/cards",
+                "http://localhost:8080/card",
                 requestEntity, TermCard.class);
 
         String path = entity.getHeaders().getLocation().getPath();
 
         assertEquals(HttpStatus.CREATED, entity.getStatusCode());
-        assertTrue(path.startsWith("/cards"));
+        assertTrue(path.startsWith("/card"));
         TermCard card = entity.getBody();
 
         System.out.println ("The Location is " + entity.getHeaders().getLocation());
@@ -49,7 +49,7 @@ public class CardTest {
         RestTemplate template = new RestTemplate();
         try {
             ResponseEntity<TermCard> entity = template.postForEntity(
-                    "http://localhost:8080/cards",
+                    "http://localhost:8080/card",
                     requestEntity, TermCard.class);
 
             fail("Request Passed incorrectly with status " + entity.getStatusCode());

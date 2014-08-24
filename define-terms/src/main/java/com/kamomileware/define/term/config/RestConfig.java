@@ -79,12 +79,10 @@ public class RestConfig {
         return factory.createMultipartConfig();
     }
 
-
     @Bean
     public CustomConversions customConversions() throws Exception {
         List<Converter<?, ?>> converterList = new ArrayList<Converter<?, ?>>();
         converterList.add(new TermReadConverter());
-        //converterList.add(new TermWriteConverter());
         return new CustomConversions(converterList);
     }
 
@@ -99,17 +97,4 @@ public class RestConfig {
         }
 
     }
-
-//    @WritingConverter
-//    static public class TermWriteConverter implements Converter<Term, DBObject> {
-//
-//        public DBObject convert(Person source) {
-//            DBObject dbo = new BasicDBObject();
-//            dbo.put("_id", source.getId());
-//            dbo.put("name", source.getFirstName());
-//            dbo.put("age", source.getAge());
-//            return dbo;
-//        }
-//
-//    }
 }

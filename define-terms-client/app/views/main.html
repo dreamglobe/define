@@ -1,2 +1,19 @@
 <div class="row marketing">
+    <div class="col-sm-6">
+        <table class="table table-bordered table-condensed">
+            <thead>
+            <tr>
+                <td colspan="2">Nombre</td>
+            </tr>
+            </thead>
+            <tr ng-repeat="term in terms">
+                <td>[<span ng-bind="term.category"></span>]</td>
+                <td><span ng-bind="term.name"></span></td>
+            </tr>
+            <tr ng-repeat="i in [] | range: terms.length: page.size">
+                <td>--</td> <td>--</td>
+            </tr>
+        </table>
+        <span ng-include="'views/fragments/pagination.html'"></span>
+    </div>
 </div>

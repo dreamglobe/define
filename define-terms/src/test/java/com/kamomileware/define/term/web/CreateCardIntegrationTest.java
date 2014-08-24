@@ -51,7 +51,7 @@ public class CreateCardIntegrationTest {
         final String eventsAsJSON = createEventsAsJSON();
         logger.info(eventsAsJSON);
         this.mockMvc.perform(
-                post("/cards")
+                post("/card")
                         .content(eventsAsJSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

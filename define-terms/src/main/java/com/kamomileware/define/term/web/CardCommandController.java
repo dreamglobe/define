@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * Created by pepe on 5/08/14.
  */
 @Controller
-@RequestMapping("/cards")
+@RequestMapping("/card")
 public class CardCommandController {
 
     @Autowired
@@ -27,7 +27,7 @@ public class CardCommandController {
         final TermCard termCard = cardDao.addNew(card);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(
-                builder.path("/cards/{order}")
+                builder.path("/card/{order}")
                     .buildAndExpand(Long.toString(termCard.getOrder())).toUri()
         );
 
