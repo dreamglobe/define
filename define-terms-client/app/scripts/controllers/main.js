@@ -20,20 +20,21 @@ angular.module('defineTermsClientApp')
             var loadCard = function (data) {
                 $scope.card = data;
             };
-            var alertError = function(error) {
+            var alertError = function (error) {
                 $alert({title: 'Error loading Terms', content: error.message, placement: 'top', type: 'alert', show: true,
                     duration: '3', animation: 'am-fade-and-slide-top', container: 'body', keyboard: 'true'});
             };
             var search = $location.search();
-            var page = {num: search.page|| 0, size : search.size||16, sort: search.sort||'name,desc'};
+            var page = {num: search.page || 0, size: search.size || 16, sort: search.sort || 'name,desc'};
             TermService.getList(page).then(loadTerms).catch(alertError);
 
-            $scope.loadCard = function(term){
+            $scope.loadCard = function (term) {
                 $scope.card = TermService.getCard(term)
                     .then(loadCardOrder)
                     .then(loadCard)
                     .catch(alertError);
             };
-
-            //$scope.card= {definitions:{'AB':'','CH':'','NP':'','SG':''}};
+            $scope.prepareNewCard = function () {
+                $scope.card = {definitions: {'AB': '', 'CH': '', 'NP': '', 'SG': ''}};
+            };
         }]);
