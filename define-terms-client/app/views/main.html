@@ -1,12 +1,12 @@
-<div class="row marketing">
+<div class="row">
     <div class="col-sm-6">
         <h3>Listado de terminos</h3>
         <div ng-include="'views/fragments/list.html'"></div>
         <div ng-include="'views/fragments/pagination.html'"></div>
+        <div ng-include="'views/fragments/actions.html'"></div>
     </div>
     <div class="col-sm-6" ng-show="card">
-        <h3>Detalle tarjeta</h3>
+        <h3>Detalle de tarjeta #<span ng-bind="card.order"></h3>
         <div ng-include="'views/fragments/detail.html'"></div>
-        <div ng-include="'views/fragments/actions.html'"></div>
     </div>
 </div>

@@ -16,6 +16,7 @@
         <span ng-show="page.number === n">{{n + 1}}</span>
     </li>
     <li ng-class="{disabled: page.number === page.totalPages - 1}">
+        <!--ng-click="page.number=page.number + 1"-->
         <a ng-show="page.number !== page.totalPages - 1"
            ng-href="#{{basePath}}?page={{page.number + 1}}&size={{page.size}}&sort={{sort}}">Next</a>
         <span ng-show="page.number === page.totalPages - 1">Next</span>

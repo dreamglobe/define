@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 /**
  * Created by pepe on 10/07/14.
  */
-@Document(collection = "cats") @TypeAlias("cat")
+@Document(collection = "cats")
+@TypeAlias("cat")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name", resolver = TermCategoryResolver.class)
 @JsonTypeName("cat")
 public class TermCategory {
@@ -28,10 +29,11 @@ public class TermCategory {
     @NotBlank
     private String label;
 
-    @NotNull @Transient
+    @NotNull
+    @Transient
     private TermDefinitionFormatter formatter;
 
-    public TermCategory(String name, String label){
+    public TermCategory(String name, String label) {
         this(name, label, Formatters.normalFormatter);
     }
 
@@ -53,7 +55,7 @@ public class TermCategory {
         return name;
     }
 
-    public String getLabel(){
+    public String getLabel() {
         return this.label;
     }
 
@@ -73,15 +75,23 @@ public class TermCategory {
 
     public static final TermCategory AB = new TermCategory("AB", "Abstracto");
 
-    public static final TermCategory[] categories = new TermCategory[]{NP,CH,SG,AB};
+    public static final TermCategory[] categories = new TermCategory[]{NP, CH, SG, AB};
 
     public static TermCategory forName(String cat) {
         TermCategory result;
-        switch(cat){
-            case "NP": result = NP; break;
-            case "CH": result = CH; break;
-            case "SG": result = SG; break;
-            case "AB": result = AB; break;
+        switch (cat) {
+            case "NP":
+                result = NP;
+                break;
+            case "CH":
+                result = CH;
+                break;
+            case "SG":
+                result = SG;
+                break;
+            case "AB":
+                result = AB;
+                break;
             default:
                 result = new TermCategory(cat, cat);
         };
@@ -122,7 +132,7 @@ class Formatters {
         }
 
         private String getFirstUpper(String text) {
-            return text.length()>1? text.substring(0, 1).toUpperCase().concat(text.substring(1)) : text;
+            return text.length() > 1 ? text.substring(0, 1).toUpperCase().concat(text.substring(1)) : text;
         }
     };
 
@@ -132,7 +142,8 @@ class Formatters {
 class TermCategoryResolver implements ObjectIdResolver {
 
     @Override
-    public void bindItem(ObjectIdGenerator.IdKey id, Object pojo) { }
+    public void bindItem(ObjectIdGenerator.IdKey id, Object pojo) {
+    }
 
     @Override
     public Object resolveId(ObjectIdGenerator.IdKey id) {

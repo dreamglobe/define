@@ -81,6 +81,7 @@ fieldset legend {
   width:inherit; /* Or auto */
   padding:0 10px; /* To give a bit of padding on the left and right */
   border-bottom:none;
+  margin-bottom: 10px;
 }
 
 /* Responsive: Portrait tablets and up */
@@ -98,7 +99,7 @@ fieldset legend {
   }
   /* Space out the masthead */
   .header {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
   }
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
