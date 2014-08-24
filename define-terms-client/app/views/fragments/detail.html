@@ -1,0 +1,57 @@
+<form name="termForm" ngSubmit="saveForm()" role="form" class="form">
+    <div class="col-sm-12">
+        <fieldset class="">
+            <legend>[NP] Nombre propio</legend>
+            <div class="form-group">
+                <label for="termName1" class="sr-only">Nombre</label>
+                <input id="termName1" class=" form-control input-sm"
+                       ng-bind="card.definitions['NP'].name"/>
+            </div>
+            <div class="form-group">
+                <label for="termDef1" class="sr-only">Definición</label>
+                <textarea id="termDef1" class=" form-control input-sm"
+                          ng-bind="card.definitions['NP'].definition"/>
+            </div>
+        </fieldset>
+
+        <fieldset class="">
+            <legend>[CH] Cheli</legend>
+            <div class="form-group">
+                <label for="termName2" class="sr-only">Nombre</label>
+                <input id="termName2" class=" form-control input-sm"
+                       ng-bind="card.definitions['CH'].name"/>
+            </div>
+            <div class="form-group">
+                <label for="termDef2" class="sr-only">Definición</label>
+                <textarea id="termDef2" class=" form-control input-sm"
+                          ng-bind="card.definitions['CH'].definition"/>
+            </div>
+        </fieldset>
+        <fieldset class="">
+            <legend>[SG] SIGLA</legend>
+            <div class="form-group">
+                <label for="termName3" class="sr-only">Nombre</label>
+                <input id="termName3" class=" form-control input-sm"
+                       ng-bind="card.definitions['SG'].name"/>
+            </div>
+            <div class="form-group">
+                <label for="termDef3" class="sr-only">Definición</label>
+                <textarea id="termDef3" class=" form-control input-sm"
+                          ng-bind="card.definitions['SG'].definition"/>
+            </div>
+        </fieldset>
+        <fieldset class="">
+            <legend>[AB] Abstracto</legend>
+            <div class="form-group">
+                <label for="termName4" class="sr-only">Nombre</label>
+                <input id="termName4" class=" form-control input-sm"
+                       ng-bind="card.definitions['AB'].name"/>
+            </div>
+            <div class="form-group">
+                <label for="termDef4" class="sr-only">Definición</label>
+                <textarea id="termDef4" class=" form-control input-sm"
+                          ng-bind="card.definitions['AB'].definition"/>
+            </div>
+        </fieldset>
+    </div>
+</form>

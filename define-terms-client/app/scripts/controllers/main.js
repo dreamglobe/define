@@ -23,4 +23,6 @@ angular.module('defineTermsClientApp')
             var page = {num: search.page|| 0, size : search.size||20, sort: search.sort||'name,desc'};
 
             TermService.getList(page).then(loadTerms).catch(alertError);
+
+            $scope.card= {definitions:{'AB':'','CH':'','NP':'','SG':''}};
         }]);
