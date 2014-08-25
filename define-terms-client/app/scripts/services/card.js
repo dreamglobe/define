@@ -21,7 +21,7 @@ angular.module('defineTermsClientApp')
             return CardResource.get({id: id}).$promise;
         };
         this.create = function(newCard){
-            return CardMesh.put(newCard).$promise;
+            return CardMesh.save(newCard).$promise;
         };
         this.update = function(updated){
             return CardMesh.update(newCard).$promise;

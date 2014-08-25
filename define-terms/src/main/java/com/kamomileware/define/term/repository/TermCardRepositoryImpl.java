@@ -24,6 +24,7 @@ public class TermCardRepositoryImpl implements TermCardRepositoryCustom {
     public TermCard addNew(TermCard newCard) {
         // TODO: must be max for allowing deletes
         long order = cardDao.count()+1;
+        newCard.getDefinitionsList().forEach(d -> d.setCard(null));
         termDao.save(newCard.getDefinitionsList());
         newCard.setOrder(order);
         final TermCard card = cardDao.save(newCard);
