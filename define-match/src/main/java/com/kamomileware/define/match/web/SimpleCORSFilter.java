@@ -1,4 +1,4 @@
-package com.kamomileware.define.match.config;
+package com.kamomileware.define.match.web;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

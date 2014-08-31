@@ -3,9 +3,12 @@ package com.kamomileware.define.model;
 import com.fasterxml.jackson.annotation.*;
 import com.kamomileware.define.model.match.MatchConfiguration;
 import com.kamomileware.define.model.term.Term;
+import com.kamomileware.define.model.term.TermCard;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by pepe on 29/06/14.
@@ -19,7 +22,7 @@ public class MessageTypes {
             use = JsonTypeInfo.Id.NAME,
             include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
             property = "type")
-    public abstract static class DeffineMessage implements Serializable {
+    public static abstract class DeffineMessage implements Serializable {
         private static final long serialVersionUID = 5144661293016326895L;
         private final String TYPE = this.getClass().getSimpleName();
 
@@ -29,7 +32,7 @@ public class MessageTypes {
         }
     }
 
-    public abstract static class PhaseDeffineMessage extends DeffineMessage {
+    public static abstract class PhaseDeffineMessage extends DeffineMessage {
         private static final long serialVersionUID = -5764893248138092071L;
         public long time = 0L;
 
@@ -47,7 +50,7 @@ public class MessageTypes {
             @JsonSubTypes.Type(value = ClientReady.class, name = "ClientReady"),
             @JsonSubTypes.Type(value = ClientVote.class, name = "ClientVote"),
             @JsonSubTypes.Type(value = ClientStartMatch.class, name = "ClientStartMatch")})
-    public abstract static class ClientMessage extends DeffineMessage {
+    public static abstract class ClientMessage extends DeffineMessage {
         private static final long serialVersionUID = -4040598146039087356L;
     }
 
@@ -407,6 +410,45 @@ public class MessageTypes {
 
         public String getPid() {
             return pid;
+        }
+    }
+
+    public static abstract class DBMessage extends DeffineMessage {
+
+    }
+
+    public static class DBGetCards extends DBMessage {
+        private final int number;
+        private final Set<Integer> blacklisted;
+
+        public DBGetCards(int number) {
+            this.number = number;
+            this.blacklisted = Collections.emptySet();
+        }
+
+        public DBGetCards(int number, Set<Integer> blacklisted) {
+            this.number = number;
+            this.blacklisted = blacklisted;
+        }
+
+        public int getNumber() {
+            return number;
+        }
+
+        public Set<Integer> getBlacklisted() {
+            return blacklisted;
+        }
+    }
+
+    public static class DBCards extends DBMessage {
+        private final List<TermCard> cards;
+
+        public DBCards(List<TermCard> cards) {
+            this.cards = cards;
+        }
+
+        public List<TermCard> getCards() {
+            return cards;
         }
     }
 }
