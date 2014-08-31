@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kamomileware.define.model.term.Term;
 import com.kamomileware.define.model.term.TermCard;
 import com.mongodb.*;
-import org.bson.types.ObjectId;
 import org.springframework.boot.context.embedded.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
-import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
@@ -25,7 +24,6 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguratio
 
 import javax.servlet.MultipartConfigElement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -66,7 +64,7 @@ public class RestConfig {
         return new ObjectMapper();
     }
 
-    @Bean
+    @Bean @Profile("dev")
     public LoggingEventListener mappingEventsListener() {
         return new LoggingEventListener();
     }
@@ -90,9 +88,13 @@ public class RestConfig {
     static public class TermReadConverter implements Converter<DBObject, Term> {
         public Term convert(DBObject source) {
             final Term term = new Term((String) source.get("_id"), (String) source.get("def"), (String) ((DBRef) source.get("cat")).getId());
-            TermCard card = new TermCard();
-            card.setOrder(Long.parseLong((String)((DBRef)source.get("card")).getId()));
-            term.setCard(card);
+            final DBRef dbRef = (DBRef) source.get("card");
+            if (dbRef!=null) {
+                TermCard card = new TermCard();
+                final long order = Long.parseLong((String) dbRef.getId());
+                card.setOrder(order);
+                term.setCard(card);
+            }
             return term;
         }
 

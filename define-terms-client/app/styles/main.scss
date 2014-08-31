@@ -68,6 +68,15 @@ body {
   }
 }
 
+.top-right {
+  position: fixed;
+  margin: 0px;
+  z-index: 1031;
+  display: inline-block;
+  top: 20px;
+  right: 20px;
+}
+
 fieldset {
   border: 1px groove #ddd !important;
   padding: 0 1em 0em 1em !important;
@@ -87,7 +96,7 @@ fieldset legend {
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
-    max-width: 730px;
+    max-width: 840px;
   }
 
   /* Remove the padding we set earlier */

@@ -1,11 +1,11 @@
-<form name="termForm" ngSubmit="saveForm()" role="form" class="form">
+<form name="termForm" ng-submit="saveCard(); focusMe=true;" role="form" class="form">
     <div class="col-sm-12">
         <fieldset class="">
             <legend>[NP] Nombre propio</legend>
             <div class="form-group">
                 <label for="termName1" class="sr-only">Nombre</label>
                 <input id="termName1" class=" form-control"
-                       ng-model="card.definitions['NP'].name"/>
+                       ng-model="card.definitions['NP'].name" ngbk-focus="{{focusMe}}"/>
             </div>
             <div class="form-group">
                 <label for="termDef1" class="sr-only">Definición</label>
@@ -54,4 +54,5 @@
             </div>
         </fieldset>
     </div>
+    <input type="submit" class="btn btn-default pull-right" value="{{saveActionLabel}}" />
 </form>

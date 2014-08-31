@@ -18,4 +18,6 @@ public interface TermCardRepositoryCustom {
     TermCard updateWithTerms(TermCard newCard);
 
     boolean removeWithTerms(int order);
+
+    java.util.Set<String> findDuplicateTerms();
 }

@@ -11,5 +11,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "cards", path = "cards")
 public interface TermCardRepository extends MongoRepository<TermCard, String>, TermCardRepositoryCustom {
 
-    TermCard findByOrder(@Param("order") long order);
+    TermCard findByOrder(@Param("id") long order);
 }

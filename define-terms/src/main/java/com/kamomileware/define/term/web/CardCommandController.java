@@ -7,10 +7,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by pepe on 5/08/14.
@@ -27,8 +29,31 @@ public class CardCommandController {
         final TermCard termCard = cardDao.addNew(card);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(
-                builder.path("/card/{order}")
+                builder.path("/cards/{order}")
                     .buildAndExpand(Long.toString(termCard.getOrder())).toUri()
+        );
+
+        return new ResponseEntity<>(termCard, headers, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/duplicates", method = RequestMethod.GET)
+    public ResponseEntity<Set<String>> updateOrder(UriComponentsBuilder builder) {
+        final Set<String> duplicates = cardDao.findDuplicateTerms();
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<>(duplicates, headers, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/{cardOrder}", method = RequestMethod.POST)
+    public ResponseEntity<TermCard> updateOrder(@PathVariable("cardOrder") Long order, @RequestBody TermCard card, UriComponentsBuilder builder) {
+        if(!order.equals(card.getOrder())){
+            return new ResponseEntity<>(card, null, HttpStatus.BAD_REQUEST);
+        }
+        final TermCard termCard = cardDao.updateWithTerms(card);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(
+                builder.path("/cards/{order}")
+                        .buildAndExpand(Long.toString(termCard.getOrder())).toUri()
         );
 
         return new ResponseEntity<>(termCard, headers, HttpStatus.CREATED);

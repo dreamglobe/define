@@ -9,9 +9,7 @@
  */
 angular.module('defineTermsClientApp')
     .factory('CardMesh', ['$rootScope', '$resource', function ($rootScope, $resource) {
-        return $resource($rootScope.server + 'card/:id',
-            {id:'@order'},
-            {update:'PUT'});
+        return $resource($rootScope.server + 'card/:id', {id:"@order"});
     }])
     .factory('CardResource', [ '$rootScope', '$resource', function ($rootScope, $resource) {
         return $resource($rootScope.server + 'cards/:id');
@@ -24,6 +22,6 @@ angular.module('defineTermsClientApp')
             return CardMesh.save(newCard).$promise;
         };
         this.update = function(updated){
-            return CardMesh.update(newCard).$promise;
+            return CardMesh.save(updated).$promise;
         };
     }]);
