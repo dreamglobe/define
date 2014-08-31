@@ -11,6 +11,8 @@ import com.kamomileware.define.model.match.MatchConfiguration;
 import com.kamomileware.define.model.round.Round;
 import com.kamomileware.define.model.round.RoundPhase;
 import com.kamomileware.define.model.round.TermDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 
@@ -36,6 +38,8 @@ public class MatchActor extends MatchFSM {
     private final WaitVotesBehaviour waitVotesBehavior = new WaitVotesBehaviour();
     private final ShowResultBehaviour showResultBehavior = new ShowResultBehaviour();
 
+    @Autowired @Qualifier("dbWorkersRouter")
+    private ActorRef dbWorkerRouter;
 
     /**
      * Sets the initial state becoming {@link MatchActor.StoppedBehaviour}
