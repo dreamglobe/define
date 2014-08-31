@@ -1,18 +1,18 @@
 'use strict';
 
-describe('Service: terms', function () {
+describe('Service: TermService', function () {
 
   // load the service's module
   beforeEach(module('defineTermsClientApp'));
 
   // instantiate service
   var terms;
-  beforeEach(inject(function (_terms_) {
-    terms = _terms_;
+  beforeEach(inject(function (_TermService_) {
+    terms = _TermService_;
   }));
 
   it('should do something', function () {
-    expect(!!terms).toBe(true);
+
   });
 
 });

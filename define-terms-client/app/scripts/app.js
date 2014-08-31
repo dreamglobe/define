@@ -16,7 +16,6 @@ angular
         'ngRoute',
         'ngSanitize',
         'ngTouch',
-        'mgcrea.ngStrap.tab',
         'mgcrea.ngStrap.modal',
         'mgcrea.ngStrap.alert'
     ])

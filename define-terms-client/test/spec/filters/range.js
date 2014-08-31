@@ -13,7 +13,7 @@ describe('Filter: range', function () {
 
   it('should return the input prefixed with "range filter:"', function () {
     var text = 'angularjs';
-    expect(range(text)).toBe('range filter: ' + text);
+
   });
 
 });

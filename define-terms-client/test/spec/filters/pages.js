@@ -12,8 +12,8 @@ describe('Filter: pages', function () {
   }));
 
   it('should return the input prefixed with "pages filter:"', function () {
-    var text = 'angularjs';
-    expect(pages(text)).toBe('pages filter: ' + text);
+
+
   });
 
 });
