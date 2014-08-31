@@ -11,7 +11,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -121,22 +121,38 @@ interface TermDefinitionFormatter {
 }
 
 class Formatters {
-    public static TermDefinitionFormatter normalFormatter = new TermDefinitionFormatter() {
+    private static String[] preposiciones = {"a","ante","bajo","cabe ","con","contra","de","desde","en","entre","hacia","hasta","para","por","según","sin","so","sobre","tras ","el","la","los","las"};
+    private static Set<String> NOT_UPPER = new HashSet<>(Arrays.asList(preposiciones));
+
+    public static TermDefinitionFormatter normalFormatter =
+            new TermDefinitionFormatter() {
         @Override
         public String format(String text) {
             return Joiner.on(". ").join(getFirstUpperList(Splitter.on(".").trimResults().omitEmptyStrings().splitToList(text)));
         }
+    };
 
-        public List<String> getFirstUpperList(List<String> list) {
-            return list.stream().map(p -> getFirstUpper(p)).collect(Collectors.toList());
-        }
-
-        private String getFirstUpper(String text) {
-            return text.length() > 1 ? text.substring(0, 1).toUpperCase().concat(text.substring(1)) : text;
+    public static TermDefinitionFormatter siglasFormatter = // text -> WordUtils.capitalize(text);
+            new TermDefinitionFormatter() {
+        @Override
+        public String format(String text) {
+            final StringTokenizer st = new StringTokenizer(text);
+            List<String> formattedText = new ArrayList<>(st.countTokens());
+            while(st.hasMoreTokens()){
+                String word = st.nextToken();
+                formattedText.add(NOT_UPPER.contains(word)? word:getFirstUpper(word));
+            }
+            return Joiner.on(' ').join(formattedText);
         }
     };
 
-    public static TermDefinitionFormatter siglasFormatter = text -> WordUtils.capitalize(text);
+    public static List<String> getFirstUpperList(List<String> list) {
+        return list.stream().map(p -> getFirstUpper(p)).collect(Collectors.toList());
+    }
+
+    private static String getFirstUpper(String text) {
+        return text.length() > 1 ? text.substring(0, 1).toUpperCase().concat(text.substring(1)) : text;
+    }
 }
 
 class TermCategoryResolver implements ObjectIdResolver {
