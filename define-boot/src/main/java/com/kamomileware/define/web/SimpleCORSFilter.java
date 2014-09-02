@@ -1,4 +1,4 @@
-package com.kamomileware.define.term.config;
+package com.kamomileware.define.web;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

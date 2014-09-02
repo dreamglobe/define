@@ -211,6 +211,10 @@ public class MessageTypes {
         }
     }
 
+    public static class CanStartMatch extends DeffineMessage{
+
+    }
+
     public static class Starting extends DeffineMessage {
 
         MatchConfiguration config;

@@ -6,13 +6,20 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.Procedure;
 import com.kamomileware.define.model.ItemDefinition;
+import com.kamomileware.define.model.MessageTypes;
 import com.kamomileware.define.model.PlayerScore;
+import com.kamomileware.define.model.match.CardStack;
 import com.kamomileware.define.model.match.MatchConfiguration;
 import com.kamomileware.define.model.round.Round;
 import com.kamomileware.define.model.round.RoundPhase;
 import com.kamomileware.define.model.round.TermDefinition;
+import com.kamomileware.define.model.term.Term;
+import com.kamomileware.define.model.term.TermCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -28,15 +35,19 @@ import static com.kamomileware.define.term.repository.StaticTermRepository.shuff
  *
  * Created by pepe on 12/06/14.
  */
+@Service
+@Component("crossgate")
+@Scope("prototype")
 public class MatchActor extends MatchFSM {
 
     private final LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
     private final StoppedBehaviour stopBehavior = new StoppedBehaviour();
-    private final WaitConfigureMatchBehaviour waitConfigureMatchBehaviour = new WaitConfigureMatchBehaviour();
     private final WaitResponseBehaviour waitResponseBehavior = new WaitResponseBehaviour();
     private final WaitVotesBehaviour waitVotesBehavior = new WaitVotesBehaviour();
     private final ShowResultBehaviour showResultBehavior = new ShowResultBehaviour();
+
+    private final CardStack cardStack = new CardStack();
 
     @Autowired @Qualifier("dbWorkersRouter")
     private ActorRef dbWorkerRouter;
@@ -61,8 +72,8 @@ public class MatchActor extends MatchFSM {
             this.round = null;
             this.switchBehaviour(this.stopBehavior);
         } else if (next == CONFIG) {
-            this.round = new Round<>(MatchConfiguration.createDefault(), shuffleAndGet());
-            this.switchBehaviour(this.waitConfigureMatchBehaviour);
+            this.round = Round.createEmptyRound();
+            this.switchBehaviour(new WaitConfigureMatchBehaviour(getSender()));
         } else if (next == PHASE_RESPONSE) {
             this.switchBehaviour(this.waitResponseBehavior);
             long leftTime = this.startLatch(PHASE_RESPONSE);
@@ -75,12 +86,18 @@ public class MatchActor extends MatchFSM {
             this.switchBehaviour(this.showResultBehavior);
             long leftTime = this.startLatch(PHASE_RESULT);
             this.sendUsersScores(leftTime);
-            round = new Round<>(round, get(round.getRoundNumber()));
+            final Term nextTerm = this.cardStack.drawTerm(this.round.getNextHandCategory());
+            this.round = this.round.createNext(nextTerm);
+            if(this.cardStack.cardsLeft() < 5) this.askForCards(10);
         } else if(next == END_MATCH){
             this.sendUsersFinalScores();
             this.round.endRound();
             self().tell(STOP, self());
         }
+    }
+
+    private void askForCards(int cardNbr) {
+        dbWorkerRouter.tell(new DBGetCards(cardNbr, cardStack.getCardIds()), getSelf());
     }
 
     /**
@@ -99,178 +116,6 @@ public class MatchActor extends MatchFSM {
      */
     public void aunhandled(Object message){
         log.error("unHandled message: {}", message.toString());
-    }
-
-    /**
-     * Behaviour for {@link RoundPhase#STOPPED} state
-     */
-    private class StoppedBehaviour implements Procedure<Object> {
-        @Override
-        public void apply(Object message) {
-            if (message instanceof RegisterUser) {
-                setState(CONFIG);
-                handleRegisterUser((RegisterUser) message, sender());
-                sender().tell(new Starting(MatchConfiguration.createDefault()), sender());
-            } else {
-                aunhandled(message);
-            }
-        }
-    }
-
-    /**
-     * Common behaviour for non {@link RoundPhase#STOPPED} state
-     */
-    private abstract class CommonStartedBehaviour implements Procedure<Object> {
-        @Override
-        public void apply(Object message) {
-            if (message instanceof Stop) {
-                sendUsers(message);
-                setState(STOPPED);
-            } else if (message instanceof RemoveUser) {
-                round.removePlayer(sender());
-                if (round.getPlayerList().isEmpty()) {
-                    round.endRound();
-                    self().tell(STOP, self());
-                }else{
-                    sendUsers(message);
-                }
-            } else {
-                aunhandled(message);
-            }
-        }
-    }
-
-    /**
-     * Behaviour for {@link RoundPhase#CONFIG} state
-     */
-    private class WaitConfigureMatchBehaviour extends CommonStartedBehaviour {
-        @Override
-        public void apply(Object message) {
-            if(message instanceof RegisterUser){
-                handleRegisterUser((RegisterUser) message, sender());
-                sender().tell(new Starting(), self());
-            }else if(message instanceof ClientStartMatch) {
-                handleConfigureRound((ClientStartMatch)message);
-                setState(PHASE_RESPONSE);
-            } else {
-                super.apply(message);
-            }
-        }
-    }
-
-    private void handleConfigureRound(ClientStartMatch message) {
-        // First Round
-        round = new Round<>(round, get(round.getRoundNumber()));
-        round.setMatchConf(message.getConfig());
-    }
-
-    /**
-     * Common behaviour for {@link RoundPhase#PHASE_RESPONSE} state
-     */
-    private class WaitResponseBehaviour extends CommonStartedBehaviour {
-        @Override
-        public void apply(Object message) {
-            if (message instanceof UserDefinition) {
-                handleUserResponse(((UserDefinition) message).getResponse(), sender());
-                if (round.isFastEnd(PHASE_RESPONSE)) {
-                    cancelLatch();
-                    setState(PHASE_VOTE);
-                }
-            } else if (message instanceof Latch) {
-                if (round.extendPhase(PHASE_RESPONSE)) {
-                    final long extended = startLatchExtend(PHASE_RESPONSE);
-                    sendUsers(new ExtendTime(extended));
-                } else {
-                    if (round.hasAnyoneResponse()) {
-                        setState(PHASE_VOTE);
-                    } else {
-                        handleEndVote();
-                        setState(PHASE_RESULT);
-                    }
-                }
-            } else if (message instanceof RegisterUser) {
-                final long phaseDurationInMillis = round.getPhaseDurationInMillis(PHASE_RESPONSE);
-                final long phaseMillisLeft = getPhaseMillisLeft(phaseDurationInMillis);
-                handleRegisterUser((RegisterUser) message, sender());
-                sender().tell(new StartDefinition(phaseMillisLeft, round.getTerm()), self());
-            } else {
-                super.apply(message);
-            }
-        }
-    }
-
-    /**
-     * Common behaviour for {@link RoundPhase#PHASE_VOTE} state
-     */
-    private class WaitVotesBehaviour extends CommonStartedBehaviour {
-        @Override
-        public void apply(Object message){
-            if(message instanceof UserVote){
-                handleVote((UserVote) message);
-                if(round.isFastEnd(PHASE_VOTE)){
-                    cancelLatch();
-                    handleEndVote();
-                    if(!round.isFinalRound()) {
-                        setState(PHASE_RESULT);
-                    } else {
-                        setState(END_MATCH);
-                    }
-                }
-            }else if(message instanceof Latch){
-                if (round.extendPhase(PHASE_VOTE)) {
-                    final long extended = startLatchExtend(PHASE_VOTE);
-                    sendUsers(new ExtendTime(extended));
-                } else {
-                    handleEndVote();
-                    if (!round.isFinalRound()) {
-                        setState(PHASE_RESULT);
-                    } else {
-                        setState(STOPPED);
-                    }
-                }
-            } else if(message instanceof RegisterUser){
-                handleRegisterUser((RegisterUser) message, sender());
-                long timeLeft = getPhaseMillisLeft(round.getPhaseDurationInMillis(PHASE_VOTE));
-                final RegisterUserInVote msg = new RegisterUserInVote(timeLeft, round.getTerm(),
-                    round.getRoundItemDefinitions(), null);
-                sender().tell(msg, self());
-            } else {
-                super.apply(message);
-            }
-        }
-    }
-
-    /**
-     * Common behaviour for {@link RoundPhase#PHASE_RESULT} state
-     */
-    private class ShowResultBehaviour extends CommonStartedBehaviour {
-        @Override
-        public void apply(Object message) {
-            if (message instanceof UserReady) {
-                handleUserReady(((UserReady) message), sender());
-                if (round.isFastEnd(PHASE_RESULT)) {
-                    cancelLatch();
-                    setState(PHASE_RESPONSE);
-                }
-            } else if (message instanceof Latch) {
-                if (round.extendPhase(PHASE_RESULT)) {
-                    final long extended = startLatchExtend(PHASE_RESULT);
-                    sendUsers(new ExtendTime(extended));
-                } else {
-                    setState(PHASE_RESPONSE);
-                }
-            } else if (message instanceof RegisterUser) {
-                handleRegisterUser((RegisterUser) message, sender());
-                final ItemDefinition defId = TermDefinition.createItemDefinition(round.getCorrectDefinition());
-                final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseDurationInMillis(PHASE_RESULT));
-                final RegisterUserInShowScores msg = new RegisterUserInShowScores(
-                        phaseMillisLeft, round.getPreviousTerm(), round.getRoundItemDefinitions(),
-                        null, round.createPlayersScores(), defId);
-                sender().tell(msg, self());
-            } else {
-                super.apply(message);
-            }
-        }
     }
 
     /* Private methods for handling message */
@@ -343,5 +188,187 @@ public class MatchActor extends MatchFSM {
      */
     public static Props props() {
         return Props.create(MatchActor.class);
+    }
+
+    /**
+     * Behaviour for {@link RoundPhase#STOPPED} state
+     */
+    private class StoppedBehaviour implements Procedure<Object> {
+        @Override
+        public void apply(Object message) {
+            if (message instanceof RegisterUser) {
+                setState(CONFIG);
+                askForCards(40);
+                handleRegisterUser((RegisterUser) message, sender());
+                sender().tell(new Starting(MatchConfiguration.createDefault()), sender());
+            } else {
+                aunhandled(message);
+            }
+        }
+    }
+
+    /**
+     * Common behaviour for non {@link RoundPhase#STOPPED} state
+     */
+    private abstract class CommonStartedBehaviour implements Procedure<Object> {
+        @Override
+        public void apply(Object message) {
+            if (message instanceof Stop) {
+                sendUsers(message);
+                setState(STOPPED);
+            } else if (message instanceof RemoveUser) {
+                round.removePlayer(sender());
+                if (round.getPlayerList().isEmpty()) {
+                    round.endRound();
+                    self().tell(STOP, self());
+                } else {
+                    sendUsers(message);
+                }
+            }else if(message instanceof DBCards){
+                cardStack.addCards(((DBCards)message).getCards());
+            } else {
+                aunhandled(message);
+            }
+        }
+    }
+
+    /**
+     * Behaviour for {@link RoundPhase#CONFIG} state
+     */
+    private class WaitConfigureMatchBehaviour extends CommonStartedBehaviour {
+        private final ActorRef starter;
+        private boolean canStart = false;
+
+        private WaitConfigureMatchBehaviour(ActorRef starter) {
+            this.starter = starter;
+        }
+
+        @Override
+        public void apply(Object message) {
+            if(message instanceof RegisterUser){
+                handleRegisterUser((RegisterUser) message, sender());
+                sender().tell(new Starting(), self());
+            } else if(message instanceof DBCards){
+                cardStack.addCards(((DBCards)message).getCards());
+                starter.tell(new CanStartMatch(), getSelf());
+                canStart = true;
+            } else if(canStart && message instanceof ClientStartMatch) {
+                final ClientStartMatch startMatch = (ClientStartMatch) message;
+                round = round.createNext(cardStack.drawTerm());
+                round.setMatchConf(startMatch.getConfig());
+                setState(PHASE_RESPONSE);
+            } else {
+                super.apply(message);
+            }
+        }
+    }
+
+    /**
+     * Common behaviour for {@link RoundPhase#PHASE_RESPONSE} state
+     */
+    private class WaitResponseBehaviour extends CommonStartedBehaviour {
+        @Override
+        public void apply(Object message) {
+            if (message instanceof UserDefinition) {
+                handleUserResponse(((UserDefinition) message).getResponse(), sender());
+                if (round.isFastEnd(PHASE_RESPONSE)) {
+                    cancelLatch();
+                    setState(PHASE_VOTE);
+                }
+            } else if (message instanceof Latch) {
+                if (round.extendPhase(PHASE_RESPONSE)) {
+                    final long extended = startLatchExtend(PHASE_RESPONSE);
+                    sendUsers(new ExtendTime(extended));
+                } else {
+                    if (round.hasAnyoneResponse()) {
+                        setState(PHASE_VOTE);
+                    } else {
+                        handleEndVote();
+                        setState(PHASE_RESULT);
+                    }
+                }
+            } else if (message instanceof RegisterUser) {
+                final long phaseDurationInMillis = round.getPhaseDurationInMillis(PHASE_RESPONSE);
+                final long phaseMillisLeft = getPhaseMillisLeft(phaseDurationInMillis);
+                handleRegisterUser((RegisterUser) message, sender());
+                sender().tell(new StartDefinition(phaseMillisLeft, round.getTerm()), self());
+            } else {
+                super.apply(message);
+            }
+        }
+    }
+
+    /**
+     * Common behaviour for {@link RoundPhase#PHASE_VOTE} state
+     */
+    private class WaitVotesBehaviour extends CommonStartedBehaviour {
+        @Override
+        public void apply(Object message){
+            if(message instanceof UserVote){
+                handleVote((UserVote) message);
+                if(round.isFastEnd(PHASE_VOTE)){
+                    cancelLatch();
+                    handleEndVote();
+                    if(!round.isFinalRound()) {
+                        setState(PHASE_RESULT);
+                    } else {
+                        setState(END_MATCH);
+                    }
+                }
+            }else if(message instanceof Latch){
+                if (round.extendPhase(PHASE_VOTE)) {
+                    final long extended = startLatchExtend(PHASE_VOTE);
+                    sendUsers(new ExtendTime(extended));
+                } else {
+                    handleEndVote();
+                    if (!round.isFinalRound()) {
+                        setState(PHASE_RESULT);
+                    } else {
+                        setState(STOPPED);
+                    }
+                }
+            } else if(message instanceof RegisterUser){
+                handleRegisterUser((RegisterUser) message, sender());
+                long timeLeft = getPhaseMillisLeft(round.getPhaseDurationInMillis(PHASE_VOTE));
+                final RegisterUserInVote msg = new RegisterUserInVote(timeLeft, round.getTerm(),
+                        round.getRoundItemDefinitions(), null);
+                sender().tell(msg, self());
+            } else {
+                super.apply(message);
+            }
+        }
+    }
+
+    /**
+     * Common behaviour for {@link RoundPhase#PHASE_RESULT} state
+     */
+    private class ShowResultBehaviour extends CommonStartedBehaviour {
+        @Override
+        public void apply(Object message) {
+            if (message instanceof UserReady) {
+                handleUserReady(((UserReady) message), sender());
+                if (round.isFastEnd(PHASE_RESULT)) {
+                    cancelLatch();
+                    setState(PHASE_RESPONSE);
+                }
+            } else if (message instanceof Latch) {
+                if (round.extendPhase(PHASE_RESULT)) {
+                    final long extended = startLatchExtend(PHASE_RESULT);
+                    sendUsers(new ExtendTime(extended));
+                } else {
+                    setState(PHASE_RESPONSE);
+                }
+            } else if (message instanceof RegisterUser) {
+                handleRegisterUser((RegisterUser) message, sender());
+                final ItemDefinition defId = TermDefinition.createItemDefinition(round.getCorrectDefinition());
+                final long phaseMillisLeft = getPhaseMillisLeft(round.getPhaseDurationInMillis(PHASE_RESULT));
+                final RegisterUserInShowScores msg = new RegisterUserInShowScores(
+                        phaseMillisLeft, round.getPreviousTerm(), round.getRoundItemDefinitions(),
+                        null, round.createPlayersScores(), defId);
+                sender().tell(msg, self());
+            } else {
+                super.apply(message);
+            }
+        }
     }
 }

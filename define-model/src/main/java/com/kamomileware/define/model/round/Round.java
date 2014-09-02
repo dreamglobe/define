@@ -6,6 +6,7 @@ import com.kamomileware.define.model.PlayerScore;
 import com.kamomileware.define.model.match.MatchConfiguration;
 import com.kamomileware.define.model.match.MatchResolver;
 import com.kamomileware.define.model.term.Term;
+import com.kamomileware.define.model.term.TermCategory;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -33,15 +34,13 @@ public class Round<REF> implements DefinitionResolver {
 
     /**
      * First round constructor
-     * @param matchConf
      */
-    public Round(MatchConfiguration matchConf, Term term) {
+    private Round() {
         this.roundNumber = 0;
         this.previousTerm = null;
-        this.term = term;
         this.roundPlayers = new RoundPlayers<REF>();
-        this.matchConf = matchConf;
-        this.roundDefinitions = new ArrayList<>();
+        this.roundDefinitions = null;
+        this.term = null;
         this.matchStartTime = this.roundStartTime = System.currentTimeMillis();
     }
 
@@ -49,15 +48,19 @@ public class Round<REF> implements DefinitionResolver {
      * Consecutive round constructor
      * @param previousRound
      */
-    public Round(Round<REF> previousRound, Term term) {
+    private Round(Round<REF> previousRound, Term term) {
         this.roundNumber = previousRound.roundNumber+1;
         this.previousTerm = previousRound.getTerm();
         this.term = term;
         this.matchConf = previousRound.matchConf;
-        this.roundPlayers = previousRound.prepareNextRoundPlayers(this);
         this.roundDefinitions = new ArrayList<>();
         this.matchStartTime = previousRound.matchStartTime;
         this.roundStartTime = System.currentTimeMillis();
+        this.roundPlayers = previousRound.prepareNextRoundPlayers(this);
+    }
+
+    public Round<REF> createNext(Term nextTerm) {
+        return new Round(this, nextTerm);
     }
 
     public int getRoundNumber() {
@@ -96,6 +99,12 @@ public class Round<REF> implements DefinitionResolver {
 
     public PlayerData<REF> getNextHandPlayer() {
         return roundPlayers.get((roundNumber + 1) % roundPlayers.size());
+    }
+
+    public TermCategory getNextHandCategory() {
+        int score = this.getNextHandPlayer().getScore().getTotalScore();
+        int pos = score % TermCategory.categories.length;
+        return TermCategory.categories[pos];
     }
 
     public String getPlayerPid(REF ref) {
@@ -248,9 +257,9 @@ public class Round<REF> implements DefinitionResolver {
     }
 
     public void endRound(){
-        this.roundPlayers.clear();
-        this.roundDefinitions.clear();
-        this.result.clear();
+//        this.roundPlayers.clear();
+//        this.roundDefinitions.clear();
+//        this.result.clear();
     }
 
     public boolean isFastEnd(RoundPhase phase) {
@@ -276,5 +285,9 @@ public class Round<REF> implements DefinitionResolver {
         if(phaseConf.isExtended()) {
             phaseConf.setExtended(false);
         }
+    }
+
+    public static <REF> Round<REF> createEmptyRound() {
+        return new Round<>();
     }
 }

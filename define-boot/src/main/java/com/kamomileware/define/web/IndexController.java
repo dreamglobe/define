@@ -1,4 +1,4 @@
-package com.kamomileware.define.match.web;
+package com.kamomileware.define.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

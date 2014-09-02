@@ -32,7 +32,7 @@ public class PlayerData<REF> implements MessageInfoFactory {
         this.name = name;
         this.pid = pid;
         this.resolver = round;
-        this.score = new Score(resolver);
+        this.score = new Score();
     }
 
     void vote(Integer definitionId) {
@@ -124,26 +124,24 @@ public class PlayerData<REF> implements MessageInfoFactory {
     }
 
     public class Score{
-        final MatchConfiguration matchConf;
         private int turnScore = 0;
         private int totalScore = 0;
         private int lastTurnScore = 0;
         private boolean correctVote;
         List<String> voters = new ArrayList<>();
 
-        Score(DefinitionResolver resolver){
-            matchConf = resolver.getMatchConf();
+        Score(){
         }
 
         public int voteObtained(String voterPid){
-            turnScore += matchConf.getVoteValue();
+            turnScore += resolver.getMatchConf().getVoteValue();
             voters.add(voterPid);
             return turnScore;
         }
 
         public int correctVote(){
             correctVote = true;
-            turnScore += matchConf.getCorrectVoteValue();
+            turnScore += resolver.getMatchConf().getCorrectVoteValue();
             return turnScore;
         }
 
@@ -177,7 +175,7 @@ public class PlayerData<REF> implements MessageInfoFactory {
         }
 
         public int getVoteScore() {
-            return correctVote? turnScore - matchConf.getCorrectVoteValue() : turnScore;
+            return correctVote? turnScore - resolver.getMatchConf().getCorrectVoteValue() : turnScore;
         }
 
         public int getLastTurnScore() {

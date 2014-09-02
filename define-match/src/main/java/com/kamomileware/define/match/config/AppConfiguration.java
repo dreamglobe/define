@@ -40,7 +40,7 @@ class AppConfiguration {
     @Bean
     @Named("matchActor")
     public ActorRef crossGateActor() {
-        return actorSystem().actorOf(MatchActor.props(), "match");
+        return actorSystem().actorOf(SpringExtension.SpringExtProvider.get(actorSystem()).props("crossgate"),"match");
     }
 
 
@@ -49,7 +49,7 @@ class AppConfiguration {
     public ActorRef dbWorkersRouter() {
         final SupervisorStrategy strategy = new OneForOneStrategy(5, Duration.create(1, TimeUnit.MINUTES),
                         Collections.<Class<? extends Throwable>>singletonList(Exception.class));
-        return actorSystem().actorOf(DBWorker.props()
+        return actorSystem().actorOf(SpringExtension.SpringExtProvider.get(actorSystem()).props("workerRouter")
                         .withRouter(FromConfig.getInstance()
                                 .withSupervisorStrategy(strategy))
                         .withDispatcher("db-workers-dispatcher"),

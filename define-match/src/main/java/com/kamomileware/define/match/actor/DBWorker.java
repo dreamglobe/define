@@ -8,6 +8,9 @@ import com.kamomileware.define.model.MessageTypes;
 import com.kamomileware.define.model.term.TermCard;
 import com.kamomileware.define.term.repository.TermCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,9 @@ import static com.kamomileware.define.model.MessageTypes.DBGetCards;
 /**
  * Created by pepe on 31/08/14.
  */
+@Service
+@Component("workerRouter")
+@Scope("prototype")
 public class DBWorker extends UntypedActor{
 
     Random random = new Random();

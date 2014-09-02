@@ -7,13 +7,16 @@
         <version>0.4-SNAPSHOT</version>
     </parent>
     <artifactId>define-boot</artifactId>
-    <packaging>pom</packaging>
     <scm>
         <connection>smc:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</connection>
         <developerConnection>smc:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</developerConnection>
         <url>http://karma-server/svn/define/branches/term-services/${project.artifactId}</url>
     </scm>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
