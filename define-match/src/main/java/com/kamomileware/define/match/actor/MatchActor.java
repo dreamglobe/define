@@ -25,8 +25,6 @@ import java.util.List;
 
 import static com.kamomileware.define.model.MessageTypes.*;
 import static com.kamomileware.define.model.round.RoundPhase.*;
-import static com.kamomileware.define.term.repository.StaticTermRepository.get;
-import static com.kamomileware.define.term.repository.StaticTermRepository.shuffleAndGet;
 
 /**
  * Match Actor for coordinating and operate the match state. Match state refers to
