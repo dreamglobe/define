@@ -26,6 +26,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>define-model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>define-boot</artifactId>
+        </dependency>
         <!-- externals -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

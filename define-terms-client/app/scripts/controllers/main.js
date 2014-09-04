@@ -59,6 +59,10 @@ angular.module('defineTermsClientApp')
             $scope.page = getPage();
             TermService.getList($scope.page).then(loadTerms).catch(alertError);
 
+            $scope.searchByName = function(name){
+                TermService.searchByName(name).then(loadTerms).catch(alertError);
+            };
+
             $scope.loadCard = function (term) {
                 $scope.card = TermService.getCard(term)
                     .then(loadCardOrder)
