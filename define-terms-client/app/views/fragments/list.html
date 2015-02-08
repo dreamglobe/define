@@ -1,0 +1,10 @@
+<table class="table table-bordered table-condensed table-hover table-striped">
+    <tr ng-repeat="term in terms" ng-click="loadCard(term)">
+        <td>[<span ng-bind="term.category"></span>]</td>
+        <td><span ng-bind="term.name"></span></td>
+    </tr>
+    <tr ng-repeat="i in [] | range: terms.length: page.size">
+        <td>--</td>
+        <td>--</td>
+    </tr>
+</table>

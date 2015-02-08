@@ -4,16 +4,8 @@
     <parent>
         <groupId>com.kamomileware.define</groupId>
         <artifactId>define-project</artifactId>
-        <version>0.2-SNAPSHOT</version>
-
+        <version>0.4</version>
     </parent>
     <artifactId>define-stats</artifactId>
-    <packaging>jar</packaging>
-
-    <scm>
-        <connection>scm:svn:http://karma-server/svn/define/trunk/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/${project.artifactId}</developerConnection>
-        <url>[ http://karma-server/websvn/listing.php?repname=define&amp;path=%2Ftrunk%2F${project.artifactId}%2F</url>
-    </scm>
-
+    <packaging>pom</packaging>
 </project>

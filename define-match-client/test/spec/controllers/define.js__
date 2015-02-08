@@ -1,0 +1,42 @@
+'use strict';
+
+describe('Controller: DefineCtrl', function () {
+
+  // load the controller's module
+  beforeEach(module('defineMatchClientApp'));
+
+  var DefineCtrl,
+    scope;
+  var Timer = {
+      start: function(){}
+  };
+  var MatchServer = {
+      sendDefinicion: function(definition){
+      }
+  };
+  var Definition = {
+      getTerm: function(){
+          return {
+              name:'name',
+              category:'category'
+          };
+      }
+  };
+  var Player = {
+      getPlayers : function(){
+          return [];
+      }
+  };
+
+  // Initialize the controller and a mock scope
+  beforeEach(inject(function ($controller, $rootScope) {
+    scope = $rootScope.$new();
+    DefineCtrl = $controller('DefineCtrl', {
+      $scope: scope
+    });
+  }));
+
+  it('', function () {
+    //expect().toBe();
+  });
+});

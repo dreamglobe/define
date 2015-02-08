@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2 match-result">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h2 class="panel-title"><strong>Resultados de la partida</strong>
+                <span class=" pull-right glyphicon glyphicon-star"></span></h2></div>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr class="info">
+                    <td width="12%" class="text-right"><strong>Posición</strong></td>
+                    <td><strong>Jugador</strong></td>
+                    <td width="18%" class="text-right"><strong>Puntos</strong><span class="caret"></span></td>
+                    <td width="12%" class="text-right"><strong>Turno</strong></td>
+                </tr>
+                </thead>
+                <tr ng-repeat="score in scores | orderBy:'-totalScore'" ng-class="{success: score.pid == me.pid}">
+                    <td class="text-right">{{$index +1}}</td>
+                    <td><span ng-bind="score.player.name"></span></td>
+                    <td class="text-right"><span ng-bind="score.totalScore"></span></td>
+                    <td class="text-right"><span ng-bind="score.turnScore"></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-1 col-sm-offset-11">
+        <button ng-click="finish()" class="pull-right btn btn-primary">Terminar</button>
+    </div>
+</div>
+<div ng-include="'views/fragment/term.html'"></div>
+<div ng-include="'views/fragment/result.html'"></div>

@@ -1,0 +1,11 @@
+<div ng-include="'views/fragment/term.html'"></div>
+<div ng-include="'views/fragment/progress.html'"></div>
+<div ng-include="'views/fragment/result.html'"></div>
+<div class="row">
+    <div class="col-sm-1 col-sm-offset-11">
+        <button class="btn btn-primary pull-right"
+                ng-class="{active:me.isReady, btn:true}"
+                ng-click="toggleReady()" ng-bind="readyText"></button>
+    </div>
+</div>
+

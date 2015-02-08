@@ -1,6 +1,6 @@
 package com.kamomileware.akka.pattern.dispatcher;
 
-import com.kamomileware.define.actor.Player.ClientHandler;
+import com.kamomileware.define.match.actor.PlayerActor.ClientHandler;
 import org.junit.Before;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;

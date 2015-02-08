@@ -1,0 +1,74 @@
+<div ng-include="'views/fragment/term.html'"></div>
+<div ng-include="'views/fragment/progress.html'"></div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-primary">
+            <form role="form" name="defineForm" class="" ng-submit="sendDefinition()">
+                <!--div class="panel-heading"><h4 class="panel-title">Tu definición</h4></div-->
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="playerDefinition" class="sr-only">Escribe aquí la definición</label>
+                            <input id="playerDefinition" class="form-control" spellcheck="true"
+                                   placeholder="Definición para {{term.name}}"
+                                   ngbk-focus ng-model="definition"
+                                   required>
+
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary"
+                                        ng-disabled="defineForm.$invalid">
+                                    <span class="glyphicon glyphicon glyphicon-play"></span></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div ng-show="lastDefinition">
+                        <span class="label label-primary">Última definición dada</span>
+
+                        <div class="well well-sm">
+                            <span ng-bind="lastDefinition" spellcheck="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="rooster col-sm-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Jugadores</strong>
+                    <span class=" pull-right glyphicon glyphicon-list"></span>
+                </h3>
+            </div>
+            <table class="table table-bordered table-striped text-info">
+                <thead class="text-info">
+                <tr class="info sortable">
+                    <td width="12%"ng-click="sortTable('pos()')">
+                        #
+                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='pos()'}"></i></i>
+                    </td>
+                    <td ng-click="sortTable('name')">
+                        <strong>Nombre</strong>
+                        <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='name'}"></i></i>
+                    </td>
+                    <td width="21%" ng-click="sortTable('-turnScore')">
+                        <strong>Turno</strong>
+                        <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-turnScore'}"></i></i>
+                    </td>
+                    <td width="20%" ng-click="sortTable('-totalScore')">
+                        <strong>Total</strong>
+                        <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-totalScore'}"></i></i>
+                    </td>
+                </tr>
+                </thead>
+                <tr ng-repeat='player in players | orderBy: sortField: sortOrder'
+                    ng-class="{warning : playerReady(player) && player.pid != me.pid, success: player.pid == me.pid}">
+                    <td ng-bind="player.pos() +1" align="right"></td>
+                    <td ng-bind="player.name"></td>
+                    <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'" align="right"></td>
+                    <td ng-bind="player.totalScore" align="right"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,6 @@
+package com.kamomileware.define.model.round;
+
+/**
+* Created by pepe on 10/07/14.
+*/
+public enum RoundPhase { STOPPED, CONFIG, PHASE_RESPONSE, PHASE_VOTE, PHASE_RESULT, END_MATCH; }

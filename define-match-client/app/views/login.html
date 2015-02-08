@@ -1,0 +1,38 @@
+<div ng-hide="user.isLoged" class="row ">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+        <div class=" panel panel-primary">
+            <div class="panel-heading">
+                <h2 class="panel-title">Acceso a partida <strong>Define</strong>
+                    <span class=" pull-right glyphicon glyphicon-book"></span>
+                </h2>
+            </div>
+            <div class="panel-body text-center">
+                <form name="userLogin" ng-submit="doLogin()" role="form" class="form form-inline">
+                    <div class="form-group form-group-sm">
+                        <label for="name" class="sr-only control-label ">Nombre</label>
+
+                        <input id="name" class="form-control" type="text" size="20"
+                               ng-model="user.name"
+                               ngbk-focus="true"
+                               placeholder="Nombre de usuario"
+                               required>
+                    </div>
+                    <div class="form-group form-group-sm ">
+                        <label for="pass" class="sr-only control-label">Nombre</label>
+                        <input id="pass" class="form-control" type="text" size="10"
+                               ng-model="user.password"
+                               placeholder="Contraseña">
+
+                    </div>
+                    <div class="pull-right">
+                    <button type="submit" class="btn btn-primary " ng-disabled="!userLogin.$valid">Log in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-show="message" ng-bind="message" class="alert"></div>
+<div ng-show="user.isLoged" class="row ">
+    <p class="alert alert-warning" role="alert">Se ha idenitificado en el sistema como <i ng-bind="user.name"></i>.</p>
+</div>

@@ -1,0 +1,77 @@
+<div ng-include="'views/fragment/term.html'"></div>
+<div ng-include="'views/fragment/progress.html'"></div>
+<div class="row">
+    <div class="poll col-sm-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Definiciones</strong>
+                    <span class=" pull-right glyphicon glyphicon-question-sign"></span></h3>
+            </div>
+            <table class="table table-condensed table-hover">
+                <!-- Definiciones candidatas -->
+                <tr ng-repeat='item in definitions'
+                    ng-class="{info:isMyVote(item.defId)}"
+                    ng-click="isShowVote(item.defId) && vote(item.defId)">
+                    <td width="10%">
+                        <button class="btn btn-sm bg-primary" ng-disabled="!isShowVote(item.defId)"
+                                ng-click="vote(item.defId)"><span ng-bind="letter(item.defId)"></span>
+                        </button>
+                    </td>
+                    <td class="vert-align"><span ng-bind="item.text"></span></td>
+                </tr>
+                <!-- Deselección -->
+                <tr>
+                    <td colspan="2" ng-click="(canVote && me.vote) && unvote()">
+                        <button class="btn pull-right btn-sm bg-primary" ng-disabled="!canVote || !me.vote ">No
+                            votar
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="rooster col-sm-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Jugadores</strong>
+                    <span class=" pull-right glyphicon glyphicon-list"></span></h3>
+            </div>
+            <table class="table table-bordered table-striped">
+                <thead class="">
+            <tr class="info sortable">
+                <td width="12%"ng-click="sortTable('pos()')">
+                    #
+                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='pos()'}"></i></i>
+                </td>
+                <td ng-click="sortTable('name')">
+                    <strong>Nombre</strong>
+                    <i ng-class="{dropup : !sortOrder}"><i ng-class="{caret: sortField==='name'}"></i></i>
+                </td>
+                <td width="19%" ng-click="sortTable('-vote')">
+                    <strong>Voto</strong>
+                    <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-vote'}"></i></i>
+                </td>
+                <td width="21%" ng-click="sortTable('-turnScore')">
+                    <strong>Turno</strong>
+                    <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-turnScore'}"></i></i>
+                </td>
+                <td width="19%" ng-click="sortTable('-totalScore')">
+                    <strong>Total</strong>
+                    <i ng-class="{dropup : sortOrder}"><i ng-class="{caret: sortField==='-totalScore'}"></i></i>
+                </td>
+            </tr>
+            </thead>
+            <tr ng-repeat='player in players | orderBy: sortField: sortOrder'
+                ng-class="{warning : playerVote(player) && player.pid !== me.pid, success: player.pid === me.pid}">
+                <td ng-bind="player.pos() +1" class="text-right"></td>
+                <td ng-bind="player.name"></td>
+                <td class="text-center">
+                    <span ng-show="hasVoteForMe(player.vote)" class="glyphicon glyphicon-ok"></span>
+                    <span ng-bind="playerVote(player)"></span>
+                </td>
+                <td ng-bind="player.turnScore>0?'+'+player.turnScore:'-'" class="text-right"></td>
+                <td ng-bind="player.totalScore" class="text-right"></td>
+            </tr>
+        </div>
+    </div>
+</div>
