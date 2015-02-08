@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.kamomileware.maven</groupId>
@@ -9,13 +8,14 @@
     </parent>
     <groupId>com.kamomileware.define</groupId>
     <artifactId>define-project</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4</version>
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:git@github.com:dreamglobe/define.git</connection>
         <developerConnection>scm:git:git@github.com:dreamglobe/define.git</developerConnection>
         <url>https://github.com/dreamglobe/define.git</url>
-    </scm>
+      <tag>v.0.4</tag>
+  </scm>
     <modules>
         <module>define-boot</module>
         <module>define-match</module>
