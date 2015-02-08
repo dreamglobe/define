@@ -43,27 +43,27 @@ angular
             })
             .when('/define', {
                 title: 'Definición',
-                templateUrl: 'views/define.html',
+                templateUrl: 'views/match-define.html',
                 controller: 'DefineCtrl'
             })
             .when('/vote', {
                 title: 'Votación',
-                templateUrl: 'views/vote.html',
+                templateUrl: 'views/match-vote.html',
                 controller: 'VoteCtrl'
             })
             .when('/score', {
                 title: 'Puntuación',
-                templateUrl: 'views/score.html',
+                templateUrl: 'views/match-score.html',
                 controller: 'ScoreCtrl'
             })
             .when('/start', {
                 title: 'Inicio',
-                templateUrl: 'views/start.html',
+                templateUrl: 'views/match-start.html',
                 controller: 'StartCtrl'
             })
             .when('/final', {
                 title: 'Resultado',
-                templateUrl: 'views/final.html',
+                templateUrl: 'views/match-final.html',
                 controller: 'ScoreCtrl'
             })
             .otherwise({
