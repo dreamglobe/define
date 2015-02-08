@@ -8,13 +8,13 @@
     </parent>
     <groupId>com.kamomileware.define</groupId>
     <artifactId>define-project</artifactId>
-    <version>0.4</version>
+    <version>0.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:git@github.com:dreamglobe/define.git</connection>
         <developerConnection>scm:git:git@github.com:dreamglobe/define.git</developerConnection>
         <url>https://github.com/dreamglobe/define.git</url>
-      <tag>v.0.4</tag>
+      <tag>HEAD</tag>
   </scm>
     <modules>
         <module>define-boot</module>

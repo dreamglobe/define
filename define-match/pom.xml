@@ -4,7 +4,7 @@
     <parent>
         <artifactId>define-project</artifactId>
         <groupId>com.kamomileware.define</groupId>
-        <version>0.4</version>
+        <version>0.5-SNAPSHOT</version>
     </parent>
     <artifactId>define-match</artifactId>
     <properties>
