@@ -7,11 +7,6 @@
         <version>0.4-SNAPSHOT</version>
     </parent>
     <artifactId>define-boot</artifactId>
-    <scm>
-        <connection>smc:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</connection>
-        <developerConnection>smc:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</developerConnection>
-        <url>http://karma-server/svn/define/branches/term-services/${project.artifactId}</url>
-    </scm>
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>

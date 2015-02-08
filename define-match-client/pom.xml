@@ -5,17 +5,8 @@
         <groupId>com.kamomileware.define</groupId>
         <artifactId>define-project</artifactId>
         <version>0.4-SNAPSHOT</version>
-
     </parent>
     <artifactId>define-match-client</artifactId>
-    <packaging>jar</packaging>
-
-    <scm>
-        <connection>smc:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</connection>
-        <developerConnection>smc:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</developerConnection>
-        <url>http://karma-server/svn/define/branches/term-services/${project.artifactId}</url>
-    </scm>
-
     <build>
         <plugins>
             <plugin>

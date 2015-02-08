@@ -8,15 +8,6 @@
         <version>0.4-SNAPSHOT</version>
     </parent>
     <artifactId>define-terms</artifactId>
-    <packaging>jar</packaging>
-
-    <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}
-        </developerConnection>
-        <url>http://karma-server/svn/define/branches/term-services/${project.artifactId}</url>
-    </scm>
-
     <properties>
         <start-class>com.kamomileware.define.term.TermRestApp</start-class>
     </properties>
@@ -59,7 +50,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -100,8 +90,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-        </plugins>
-    </build>
 </project>

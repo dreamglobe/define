@@ -7,17 +7,9 @@
         <version>0.4-SNAPSHOT</version>
     </parent>
     <artifactId>define-match</artifactId>
-
-    <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/branches/term-services/${project.artifactId}</developerConnection>
-        <url>http://karma-server/svn/define/branches/term-services/${project.artifactId}</url>
-    </scm>
-
     <properties>
         <start-class>com.kamomileware.define.match.MatchServer</start-class>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

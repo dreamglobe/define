@@ -12,9 +12,9 @@
     <version>0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <scm>
-        <connection>scm:svn:http://karma-server/svn/define/branches/term-services</connection>
-        <developerConnection>scm:svn:http://karma-server/svn/define/branches/term-services</developerConnection>
-        <url>http://karma-server/svn/define/branches/term-services</url>
+        <connection>scm:git:git@github.com:dreamglobe/define.git</connection>
+        <developerConnection>scm:git:git@github.com:dreamglobe/define.git</developerConnection>
+        <url>https://github.com/dreamglobe/define.git</url>
     </scm>
     <modules>
         <module>define-boot</module>
