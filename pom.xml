@@ -24,6 +24,8 @@
         <module>define-stats</module>
         <module>define-match-client</module>
         <module>define-terms-client</module>
+        <module>define-match-runner</module>
+        <module>define-terms-runner</module>
     </modules>
     <properties>
         <encoding>UTF-8</encoding>
@@ -54,7 +56,6 @@
                 <artifactId>define-match-client</artifactId>
                 <version>${project.version}</version>
                 <classifier>resources</classifier>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
@@ -65,6 +66,12 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>define-terms</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>define-terms-client</artifactId>
+              <version>${project.version}</version>
+              <classifier>resources</classifier>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
