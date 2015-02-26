@@ -17,6 +17,12 @@
             <artifactId>define-model</artifactId>
         </dependency>
         <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>define-terms-client</artifactId>
+          <classifier>resources</classifier>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>define-boot</artifactId>
         </dependency>
