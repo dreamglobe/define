@@ -12,9 +12,9 @@
     <packaging>pom</packaging>
     <scm>
         <connection>scm:git:git@github.com:dreamglobe/define.git</connection>
-        <developerConnection>scm:git:git@github.com:dreamglobe/define.git</developerConnection>
+        <developerConnection>scm:git:git@dg.github.com:dreamglobe/define.git</developerConnection>
         <url>https://github.com/dreamglobe/define.git</url>
-      <tag>HEAD</tag>
+      <tag>lobby-entry</tag>
   </scm>
     <modules>
         <module>define-boot</module>
